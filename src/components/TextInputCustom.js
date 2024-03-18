@@ -1,0 +1,50 @@
+import { StyleSheet, View, Text } from "react-native";
+import { TextInput, DefaultTheme } from "react-native-paper";
+import { useState } from "react";
+
+const theme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#15803D', 
+      underlineColor: '#abaaaa', 
+    },
+};
+
+function TextInputCustom({ label, required, placeholder, value, onChange, customStyle, keyboardType, onPressIn }) {
+    const [focus, setFocus] = useState(false);
+
+    return ( 
+        <View>
+            <Text style={{ color: focus ? '#15803D' : '#7a7a7a', fontWeight: '600' }}>{label}
+                {required && <Text style={{color: 'red' }}> *</Text>}
+            </Text>
+
+            <TextInput
+                theme={theme}
+                placeholder={placeholder}
+                placeholderTextColor='#abaaaa'
+                style={[styles.input_style, customStyle]}
+                value={value}
+                onChangeText={onChange}
+                underlineColor="#abaaaa"
+                onFocus={() => setFocus(true)}
+                onBlur={() => setFocus(false)}
+                keyboardType={keyboardType}
+                onPressIn={onPressIn}
+            />
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    input_style:{
+        height: 40, 
+        backgroundColor: 'transparent', 
+        fontSize: 14, 
+        paddingHorizontal: 0, 
+        paddingBottom: 5
+    },
+})
+
+export default TextInputCustom;
