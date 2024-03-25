@@ -1,9 +1,10 @@
 import { View, StyleSheet, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import ButtonCustom from "../components/ButtonCustom";
+import { useNavigation } from "@react-navigation/native";
 
 
 function PaymentDetail() {
-
+    const navigation = useNavigation();
 
     return ( 
         <View style={styles.container}>

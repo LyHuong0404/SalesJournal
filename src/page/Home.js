@@ -1,5 +1,8 @@
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity  } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { useNavigation, DrawerActions  } from '@react-navigation/native';
+import { Badge } from 'react-native-paper';
+
+const windowWidth = Dimensions.get('window').width;
 
 function Home() {
   const navigation = useNavigation();
@@ -9,7 +12,7 @@ function Home() {
 
   return (
     <View style={styles.container}>   
-      <View style={[styles.header, { marginBottom: 10 }]}>
+      <View style={[styles.header, { marginBottom: 10, paddingTop: 30 }]}>
         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ display: 'flex', flexDirection: 'row' }}>
             <TouchableOpacity onPress={openDrawer}>
@@ -99,6 +102,7 @@ function Home() {
 
               <TouchableOpacity onPress={() => navigation.navigate('Order')} style={{flex: 1, marginHorizontal: 5, backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent:'center', borderRadius: 7}}>
                 <Image source={require('../assets/images/order_fill.png')} style={{width: 40, height: 30, objectFit: 'contain'}} />
+                <Badge style={{ position: 'absolute', top: 5, right: 25 }}>3</Badge>
                 <Text style={styles.text}>Đơn hàng</Text>
               </TouchableOpacity>
             </View>
@@ -144,7 +148,6 @@ function Home() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
     flex: 1,
     backgroundColor: '#F1F3F5',
   },
@@ -175,7 +178,7 @@ const styles = StyleSheet.create({
   boxes: {
     flex: 1,
     backgroundColor: '#ffffff',
-    width: '90%',
+    width: windowWidth - 30,
     alignSelf: 'center',
     borderRadius: 10,
   },

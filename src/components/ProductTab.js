@@ -3,10 +3,12 @@ import SegmentedControlTab from 'react-native-segmented-control-tab';
 import { useState } from "react";
 import VerticalProduct from "./VerticalProduct";
 import { FAB } from 'react-native-paper';
+import { useNavigation } from "@react-navigation/native";
 
 
 
 function ProductTab() {
+    const navigation = useNavigation();
     const [selectedIndex, setSelectedIndex] = useState(0);
 
     const handleIndexChange = (index) => {
@@ -29,7 +31,7 @@ function ProductTab() {
                 icon="plus"
                 label="Tạo sản phẩm"
                 style={styles.fab}
-                onPress={() => console.log('Pressed')}
+                onPress={() => navigation.navigate('CreateProduct')}
                 color='white'
             />
             <ScrollView>

@@ -146,7 +146,7 @@ function OrderDetail() {
                     
                 </View>
             </ScrollView>
-            <TwoButtonBottom title1="Hủy" title2="Đã giao" />
+            <TwoButtonBottom titleLeft="Hủy" titleRight="Đã giao" buttonColorLeft='transparent' textColorLeft='#575757' buttonColorRight='#15803D' borderColorLeft='#575757' />
         </View>
     );
 }

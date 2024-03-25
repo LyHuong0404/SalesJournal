@@ -3,6 +3,11 @@ import { Camera } from "expo-camera";
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import TwoButtonBottom from "../components/TwoButtonBottom";
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 
 function QRScanner({ route }) {
   const { onScanSuccess } = route.params;
@@ -46,7 +51,7 @@ function QRScanner({ route }) {
             onBarCodeScanned={handleBarCodeScanned}
           />)}
 
-          <TwoButtonBottom onBack={() => navigation.goBack()} title1="Tạo thêm" title2="Hoàn tất" />
+          <TwoButtonBottom onBack={() => navigation.goBack()} titleLeft="Tạo thêm" titleRight="Hoàn tất" textColorLeft='#575757' buttonColorLeft='transparent' buttonColorRight='#15803D' borderColorLeft='#575757'/>
         </View>
     );
 }

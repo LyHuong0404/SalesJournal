@@ -26,12 +26,33 @@ export const remove = async (url, data, options = {}) => {
     return response.data;
 };
 
-// httprequest.interceptors.request.use(function (config) {
-//     const token = 'Bearer ' + JSON.parse(AsyncStorage.getItem('user'))?.accessToken;
-//     if (token) {
-//         config.headers.Authorization = token;
-//     }
-//     return config;
-// });
 
+//AsyncStorage must use with async/await
+const getAccessToken = async () => {
+    try {
+        const userData = await AsyncStorage.getItem('user');
+        const userJson = JSON.parse(userData);
+        const accessToken = userJson?.accessToken;
+        return accessToken;
+    } catch (error) {
+        console.error('Error getting access token from AsyncStorage:', error);
+        return null;
+    }
+};
+
+
+// Interceptor để thêm accessToken vào headers của mỗi yêu cầu
+httprequest.interceptors.request.use(
+    async (config) => {
+        const accessToken = await getAccessToken();
+
+        if (accessToken) {
+            config.headers.Authorization = `Bearer ${accessToken}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
 export default httprequest;

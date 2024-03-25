@@ -32,6 +32,7 @@
     "react-native-element-dropdown": "^2.10.1",
     "react-native-gesture-handler": "^2.14.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
+    "react-native-masked-text": "^1.13.0",
     "react-native-modal-datetime-picker": "^17.1.0",
     "react-native-modalize": "^2.1.1",
     "react-native-paper": "^5.12.3",

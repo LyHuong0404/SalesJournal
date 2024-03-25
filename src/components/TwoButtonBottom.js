@@ -1,28 +1,29 @@
 import { StyleSheet, View, Text } from "react-native";
 import { Button } from "react-native-paper";
 
-function TwoButtonBottom({onBack, title1, title2}) {
+function TwoButtonBottom({onBack, textColorLeft, titleLeft, buttonColorLeft, iconLeft, buttonColorRight, borderColorLeft, titleRight }) {
     return (  
         <View style={styles.button_group}>
-                <View style={styles.display}>
-                    <Button 
-                        mode="outlined" 
-                        textColor="#575757" 
-                        buttonColor='transparent' 
-                        onPress={onBack} 
-                        style={[styles.button, { borderColor: '#575757' }]}>
-                        {title1}
-                    </Button>
-                    <Button  
-                        // onPress={onPress}
-                        mode="contained" 
-                        buttonColor="#15803D" 
-                        style={styles.button}
-                    >
-                        {title2}
-                    </Button>
-                </View>
+            <View style={styles.display}>
+                <Button 
+                    icon={iconLeft}
+                    mode="outlined" 
+                    textColor={textColorLeft} 
+                    buttonColor={buttonColorLeft} 
+                    onPress={onBack}
+                    style={[styles.button, { borderColor: borderColorLeft }]}>
+                    {titleLeft}
+                </Button>
+                <Button  
+                    // onPress={onPress}
+                    mode="contained" 
+                    buttonColor={buttonColorRight} 
+                    style={styles.button}
+                >
+                    {titleRight}
+                </Button>
             </View>
+        </View>
     );
 }
 
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
     },
     button: {
         width: '48%',
-        borderWidth: 2,
+        borderWidth: 1,
         borderColor: '#15803D',
         borderRadius: 7,
         // margin: 10, 

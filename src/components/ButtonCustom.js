@@ -5,7 +5,8 @@ import { Button } from "react-native-paper";
 function ButtonCustom({ title, disabled, onPress, customStyle }) {
     return ( 
         <View style={styles.container}>
-            <Button disabled={disabled} 
+            <Button 
+                disabled={disabled} 
                 onPress={onPress}
                 mode="contained" 
                 buttonColor="#15803D" 

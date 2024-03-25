@@ -11,7 +11,7 @@ const theme = {
     },
 };
 
-function TextInputCustom({ label, required, placeholder, value, onChange, customStyle, keyboardType, onPressIn }) {
+function TextInputCustom({ label, rightIcon, required, placeholder, value, onChange, customStyle, keyboardType, onPressIn }) {
     const [focus, setFocus] = useState(false);
 
     return ( 
@@ -21,6 +21,7 @@ function TextInputCustom({ label, required, placeholder, value, onChange, custom
             </Text>
 
             <TextInput
+                right={rightIcon}
                 theme={theme}
                 placeholder={placeholder}
                 placeholderTextColor='#abaaaa'

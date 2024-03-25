@@ -13,7 +13,7 @@ export const getCodeSignUp = async ({ username, email }) =>{
         const response = await httprequest.post('get-code-signup', { username, email }, config);
         return response;
     } catch (err) {
-        console.log(err);
+        console.log("Error when getting code to sign up: ", err);
     }
 }
 
@@ -27,7 +27,7 @@ export const checkCodeSignUp = async ({ username, code }) =>{
         const response = await httprequest.post('check-code-signup', { username, code }, config);
         return response;
     } catch (err) {
-        console.log(err);
+        console.log("Error when checking code to sign up: ", err);
     }
 }
 
@@ -42,7 +42,7 @@ export const signUp = async ({ username, password, email }) =>{
         const response = await httprequest.post('signup', { username, password, email }, config);
         return response;
     } catch (err) {
-        console.log(err);
+        console.log("Error when signup: ", err);
     }
 } 
 
@@ -57,7 +57,7 @@ export const getCodeForgotPassword = async ({ username }) =>{
         const response = await httprequest.post('get-code-forgot-password', { username }, config);
         return response;
     } catch (err) {
-        console.log(err);
+        console.log("Error when getting code to recovery password: ", err);
     }
 } 
 
@@ -71,7 +71,7 @@ export const checkCodeForgotPassword = async ({ username, code }) =>{
         const response = await httprequest.post('check-code-forgot-password', { username, code }, config);
         return response;
     } catch (err) {
-        console.log(err);
+        console.log("Error when checking code to recovery password: ", err);
     }
 }
 
@@ -85,7 +85,7 @@ export const recoverPassword = async ({ username, newPassword }) =>{
         const response = await httprequest.post('forgot-password', { username, newPassword }, config);
         return response;
     } catch (err) {
-        console.log(err);
+        console.log("Error when recovering password: ", err);
     }
 } 
 
@@ -97,7 +97,7 @@ export const login = createAsyncThunk('auth', async ({ username, password }, { r
             'Content-Type': 'application/json',
             },
         };
-    
+
         const { data, success } = await httprequest.post('auth', { username, password }, config);
         
         if (success) {
@@ -105,7 +105,7 @@ export const login = createAsyncThunk('auth', async ({ username, password }, { r
             return data;
         }
     } catch (error) {
-        console.log(error);
+        console.log("Error when login: ", err);
     }
 });
 

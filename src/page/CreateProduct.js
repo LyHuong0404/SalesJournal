@@ -1,30 +1,37 @@
-import { StyleSheet, View, TouchableOpacity, Image, Text, ScrollView } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Image, Text, ScrollView, ToastAndroid } from "react-native";
 import { Button } from "react-native-paper";
 import { useState, useRef } from "react";
-import ButtonCustom from "../components/ButtonCustom";
-import TextInputCustom from "../components/TextInputCustom";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { format } from 'date-fns';
 import RBSheet from "react-native-raw-bottom-sheet";
+import { useNavigation, useRoute } from "@react-navigation/native";
+
+import TextInputPrice from "../components/TextInputPrice";
 import ModalCreateCategory from "../components/ModalCreateCategory";
 import ModalSelectCategory from "../components/ModalSelectCategory";
-import { RNCamera } from 'react-native-camera';
-import { useNavigation } from "@react-navigation/native";
+import ButtonCustom from "../components/ButtonCustom";
+import TextInputCustom from "../components/TextInputCustom";
+import { addProduct } from "../actions/seller/productActions";
+import TwoButtonBottom from "../components/TwoButtonBottom";
+import ModalConfirmation from "../components/ModalConfirmation";
 
 
 function CreateProduct() {
+    const route = useRoute();
     const navigation = useNavigation();
     const refRBSheet = useRef();
     const [createCategory, setCreateCategory] = useState('');
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [capitalPrice, setCapitalPrice] = useState('');
-    const [category, setCategory] = useState('');
-    const [inputDay, setInputDay] = useState(format(new Date(Date.now()), 'dd/MM/yyyy'));
+    const [bonusPrice, setBonusPrice] = useState('');
+    const [category, setCategory] = useState({});
+    const [inputDay, setInputDay] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
     const [expirationDate, setExpirationDate] = useState('');
     const [QR, setQR] = useState('');
     const [isDatePickerInputVisible, setDatePickerInputVisibility] = useState(false);
     const [isDatePickerExpirationDateVisible, setIsDatePickerExpirationDateVisible] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
     const handleScanQRCode = () => {
         navigation.navigate('QRScanner', {
@@ -32,8 +39,7 @@ function CreateProduct() {
             setQR(data);
           },
         });
-      };
-
+    };
 
     const hideDatePicker = () => {
         if (isDatePickerInputVisible) {
@@ -41,14 +47,51 @@ function CreateProduct() {
         } else setIsDatePickerExpirationDateVisible(false);
     };
 
-    const handleConfirm = (date) => {
+    const handleConfirmDatePicker = (date) => {
         if (isDatePickerInputVisible) {
-            setInputDay(format(new Date(date), 'dd/MM/yyyy'));
+            setInputDay(format(new Date(date), 'yyyy-MM-dd'));
         } else {
-            setExpirationDate(format(new Date(date), 'dd/MM/yyyy'));
+            setExpirationDate(format(new Date(date), 'yyyy-MM-dd'));
         }
         hideDatePicker();
     };
+    
+    const handleCategory = (category) => {
+        setCategory(category);
+        refRBSheet.current.close();
+    }
+    
+    const handleRandomBarCode = () => {
+        const randomNumberArray = Array.from({ length: 10 }, () => 
+            Math.floor(Math.random() * 10)
+        );
+        setQR(randomNumberArray.join(' '));
+    }
+
+    const submitForm = () => {
+        const formData = new FormData();
+        formData.append("code", QR);
+        formData.append("name", name);
+        formData.append("expireAt", expirationDate);
+        formData.append("importPrice", capitalPrice);
+        formData.append("salePrice", price);
+        formData.append("importAmount", 10);
+        formData.append("abbreviation", "VT");
+        formData.append("description", "Description");
+        formData.append("categoryId", category.id);
+
+        try {
+            const fetchData = async() => {
+                const response = await addProduct(formData);
+                if (response?.code == 0) {
+                    ToastAndroid.show('Tạo sản phẩm thành công', ToastAndroid.SHORT);
+                }
+            }
+            fetchData();
+        }catch (e) {
+            ToastAndroid.show('Tạo sản phẩm thất bại', ToastAndroid.SHORT);
+        }
+    }
 
     return ( 
         <View style={styles.container}>
@@ -79,26 +122,32 @@ function CreateProduct() {
                         required={true}
                         keyboardType='default' />
                     
-                    <View style={[styles.display, { justifyContent: 'space-between' }]}>
+                    <View style={[styles.display, { justifyContent: 'space-between', marginBottom: 20 }]}>
                         <View style={{ width: '45%' }}>
-                            <TextInputCustom 
-                                label='Giá bán' 
-                                placeholder="0.000" 
-                                value={price} 
-                                onChange={(text) => setPrice(text)} 
-                                customStyle={{ marginBottom: 20 }}
-                                required={true}
-                                keyboardType='numeric' />
-                        </View>
-                        <View style={{ width: '45%' }}>
-                            <TextInputCustom 
+                            <TextInputPrice 
                                 label='Giá vốn' 
-                                placeholder="0.000" 
                                 value={capitalPrice} 
                                 onChange={(text) => setCapitalPrice(text)} 
-                                customStyle={{ marginBottom: 20 }}
                                 required={true}
-                                keyboardType='numeric' />
+                            />
+                        </View>
+                        <View style={{ width: '45%' }}>
+                            <TextInputPrice 
+                                label='Giá bán' 
+                                value={price} 
+                                onChange={(text) => setPrice(text)} 
+                                required={true}
+                            />
+                        </View>
+                    </View>
+                    <View style={[styles.display, { justifyContent: 'space-between', marginBottom: 20 }]}>
+                        <View style={{ width: '45%' }}>
+                            <TextInputPrice 
+                                label='Giá khuyến mãi' 
+                                value={bonusPrice} 
+                                onChange={(text) => setBonusPrice(text)} 
+                                required={false}
+                            />
                         </View>
                     </View>
                     <Text style={{ color: '#7a7a7a', fontWeight: '600' }}>Danh mục</Text>
@@ -111,6 +160,10 @@ function CreateProduct() {
                                 setCreateCategory('select')}}>
                             <Image source={require('../assets/images/category.png')} style={{ width: 25, height: 25, marginRight: 15 }}/>
                         </TouchableOpacity>
+
+                        {Object.keys(category).length > 0 && <View style={styles.category}>
+                            <Text style={{ color: '#8e8e93'}}>{category.label}</Text>
+                        </View>}
                        
                         <Button 
                             icon="plus" buttonColor='#ffffff' textColor='#22539e' 
@@ -140,7 +193,7 @@ function CreateProduct() {
                     >
                         {createCategory == 'create' ? 
                             <ModalCreateCategory /> :
-                            <ModalSelectCategory />}
+                            <ModalSelectCategory onSetCategory={handleCategory}/>}
                     </RBSheet>
                 </View>
                 <View style={{ backgroundColor: '#f2f2f5', height: 12 }}></View>
@@ -158,7 +211,7 @@ function CreateProduct() {
                             <DateTimePicker
                                 isVisible={isDatePickerInputVisible}
                                 mode="date"
-                                onConfirm={handleConfirm}
+                                onConfirm={handleConfirmDatePicker}
                                 onCancel={hideDatePicker}
                             />
                         </View>
@@ -167,14 +220,14 @@ function CreateProduct() {
                             <TextInputCustom
                                 label='Ngày hết hạn'
                                 required={true}
-                                placeholder="Select a date"
+                                placeholder="Chọn ngày"
                                 value={expirationDate} 
                                 onPressIn={() => setIsDatePickerExpirationDateVisible(true)}
                             />
                             <DateTimePicker
                                 isVisible={isDatePickerExpirationDateVisible}
                                 mode="date"
-                                onConfirm={handleConfirm}
+                                onConfirm={handleConfirmDatePicker}
                                 onCancel={hideDatePicker}
                             />
                         </View>
@@ -188,7 +241,7 @@ function CreateProduct() {
                                 onChange={(text) => setQR(text)} 
                                 keyboardType='default' />
                         </View>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={handleRandomBarCode}>
                             <Image source={require('../assets/images/pen.png')} style={styles.image_qr} />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={handleScanQRCode}>
@@ -198,8 +251,26 @@ function CreateProduct() {
                 </View>
             </ScrollView>
             <View style={{ paddingHorizontal: 15 }}>
-                <ButtonCustom title="Hoàn tất" />
+                {/* <ButtonCustom title="Hoàn tất" onPress={submitForm}/> */}
+                <TwoButtonBottom 
+                    titleLeft="Xóa" 
+                    titleRight="Cập nhật" 
+                    buttonColorLeft='transparent' 
+                    buttonColorRight='#15803D' 
+                    borderColorLeft='#c71313' 
+                    textColorLeft='#c71313'
+                    onBack={() => setShowModal(true)}
+                />
             </View>
+            {showModal && 
+                <ModalConfirmation 
+                    title="Xóa sản phẩm?" 
+                    question="Bạn có chắc rằng muốn xóa sản phẩm?"
+                    textYes="Xóa"
+                    textNo="Quay lại"
+                    onPressCancel={() => setShowModal(false)}
+                />
+            }
         </View>
     );
 }
@@ -268,6 +339,17 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
         objectFit: 'contain',
+    },
+    category: {
+        width: 'auto',
+        height: '100%',
+        backgroundColor: '#f7f7fa',
+        borderRadius: 10,
+        paddingHorizontal: 15,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 15,
+        minWidth: 50
     }
 })
 

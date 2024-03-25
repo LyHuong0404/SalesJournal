@@ -50,7 +50,7 @@ function Register() {
     const isValidEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
-      };
+    };
       
     return ( 
         <View style={styles.container}>
@@ -132,6 +132,7 @@ function Register() {
                 <ButtonCustom 
                     disabled={confirmPassword == '' || passwordRef.current?.hasErrors() || password != confirmPassword} 
                     onPress={handleGetCodeSignUp} 
+                    customStyle={{ marginHorizontal: 15 }}
                     title="Đăng ký">
                 </ButtonCustom>
 

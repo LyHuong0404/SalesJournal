@@ -35,7 +35,8 @@ import PaymentDetail from './src/page/PaymentDetail';
 import Payment from './src/page/Payment';
 import OrderDetail from './src/page/OrderDetail';
 import QRScanner from './src/page/QRScanner';
-
+import TransactionDetails from './src/page/TransactionDetails';
+import UnderPayment from './src/page/UnderPayment';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -135,9 +136,12 @@ const BottomNavigator = () => (
 
 const HomeStack = () => (
   // <Stack.Navigator initialRouteName="BottomNavigator" screenOptions={{ headerShown: false }}>
-  <Stack.Navigator initialRouteName="Order" screenOptions={{ headerShown: false }}>
+  <Stack.Navigator initialRouteName="SettingStore" screenOptions={{ headerShown: false }}>
     <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
     <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
+    <Stack.Screen name="Order" component={Order} options={{ headerShown: false }}/>
+    <Stack.Screen name="Paybook" component={Paybook} options={{ headerShown: false }}/>
+    <Stack.Screen name="Warehouse" component={Warehouse} options={{ headerShown: false }}/>
     <Stack.Screen name="SettingStore" component={SettingStore} options={{ headerShown: false }}/>
     <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
     <Stack.Screen name="Sell" component={Sell} options={{ headerShown: false }}/>
@@ -151,7 +155,6 @@ const HomeStack = () => (
     <Stack.Screen name="CreateProduct" component={CreateProduct} options={{ headerShown: false }}/>
     <Stack.Screen name="ProductManagement" component={ProductManagement} options={{ headerShown: false }}/>
     <Stack.Screen name="ProductInCategory" component={ProductInCategory} options={{ headerShown: false }}/>
-    <Stack.Screen name="Order" component={Order} options={{ headerShown: false }}/>
     <Stack.Screen name="OrderConfirmation" component={OrderConfirmation} options={{ headerShown: false }}/>
     <Stack.Screen name="SettingProfile" component={SettingProfile} options={{ headerShown: false }}/>
     <Stack.Screen name="Customers" component={Customers} options={{ headerShown: false }}/>
@@ -159,6 +162,8 @@ const HomeStack = () => (
     <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }}/>
     <Stack.Screen name="OrderDetail" component={OrderDetail} options={{ headerShown: false }}/>
     <Stack.Screen name="QRScanner" component={QRScanner} options={{ headerShown: false }}/>
+    <Stack.Screen name="TransactionDetails" component={TransactionDetails} options={{ headerShown: false }}/>
+    <Stack.Screen name="UnderPayment" component={UnderPayment} options={{ headerShown: false }}/>
   </Stack.Navigator>
 );
 

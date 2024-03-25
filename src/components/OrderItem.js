@@ -21,7 +21,8 @@ function OrderItem() {
                 {/* <Text style={{ color: '#15803D', textAlign: 'right', fontSize: 12 }}>Đã thanh toán</Text> */}
                 {/* <Text style={{ color: '#eb9d0e', textAlign: 'right', fontSize: 12 }}>Thanh toán một phần</Text> */}
                 {/* <Text style={{ color: '#d61212', textAlign: 'right', fontSize: 12 }}>Chưa thanh toán</Text> */}
-                <Text style={{ color: '#d61212', textAlign: 'right', fontSize: 12 }}>Đã ghi nợ</Text>    {/*chưa thanh toán gì */}
+                {/*chưa thanh toán gì */}
+                <Text style={{ color: '#d61212', textAlign: 'right', fontSize: 12 }}>Đã ghi nợ</Text>    
             </View>
 
             {/* button */}

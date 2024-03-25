@@ -1,5 +1,7 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, ToastAndroid } from "react-native";
 import { TextInput, Button, DefaultTheme } from "react-native-paper";
+import { addCategory } from "../actions/seller/categoryActions";
+import { useState } from "react";
 
 const theme = {
     ...DefaultTheme,
@@ -10,7 +12,25 @@ const theme = {
     },
 };
 
-function ModalCreateCategory() {
+function ModalCreateCategory({onSetCategory}) {
+    const [name, setName] = useState('');
+
+    const submitForm = () => {
+        const formData = new FormData();
+        formData.append('name', name);
+
+        try {
+            const fetchApi = async() => {
+                const response = await addCategory(formData);
+                if (response?.code == 0) {
+                    ToastAndroid.show('Tạo danh mục thành công', ToastAndroid.SHORT);
+                }
+            }
+            fetchApi();
+        } catch(err) {
+            ToastAndroid.show('Tạo danh mục thất bại', ToastAndroid.SHORT);
+        }
+    }
     return ( 
         <View style={styles.container}>
             <Text style={{ fontWeight: '600', textAlign: 'center', borderBottomWidth: 1, borderBottomColor: '#f2f2f5', paddingBottom: 10 }}>Tạo danh mục</Text>
@@ -21,8 +41,14 @@ function ModalCreateCategory() {
                         theme={theme}
                         style={styles.input_style}
                         placeholder="Nhập tên danh mục" 
+                        value={name}
+                        onChangeText={(text) => setName(text)}
                         placeholderTextColor='#abaaaa' />
-                    <Button style={styles.button} textColor='#ffffff'>Tạo</Button>
+                    <Button 
+                        onPress={submitForm}
+                        disabled={!name} 
+                        style={styles.button} 
+                        textColor='#ffffff'>Tạo</Button>
                 </View>
             </View>
         </View>
