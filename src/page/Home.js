@@ -39,7 +39,7 @@ function Home() {
   const handleClose = () => {
     refRBSheet.current?.close();
   }
-  
+  console.log(JSON.stringify(navigation.getState()));
   return (
     <View style={styles.container}>   
       <View style={[styles.header, { marginBottom: 10, paddingTop: 30 }]}>
@@ -128,7 +128,7 @@ function Home() {
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', height: 90 }}>                              
               <TouchableOpacity style={{flex: 1, marginHorizontal: 5, backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent:'center', borderRadius: 7}}
                 onPress={() => refRBSheet.current?.open()} >
-                <Image source={require('../assets/images/store.png')} style={{width: 30, height: 30, objectFit: 'contain' }} />
+                <Image source={require('../assets/images/icon-store.png')} style={{width: 30, height: 30, objectFit: 'contain' }} />
                 <Text style={styles.text}>Bán hàng</Text>
               </TouchableOpacity>
 
