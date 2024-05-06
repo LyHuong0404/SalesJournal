@@ -310,6 +310,7 @@ function App() {
             <Drawer.Screen name="Cài đặt cá nhân" component={ProfileDrawer} options={{ headerShown: false }} />
           </Drawer.Navigator>
         ) : (
+          
           <Stack.Navigator initialRouteName="UsernameInput" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
             <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
