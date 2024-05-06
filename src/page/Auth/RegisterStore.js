@@ -17,7 +17,7 @@ const theme = {
     },
 };
 
-function Register() {
+function RegisterStore() {
     const navigation = useNavigation();
     const route = useRoute();
     const username = route.params?.username;
@@ -114,7 +114,7 @@ function Register() {
                                 </HelperText>
                             )}
 
-                            {/* <Text style={{ fontWeight: '600', marginTop: 20 }}>Thông tin thêm</Text>
+                            <Text style={{ fontWeight: '600', marginTop: 20 }}>Thông tin thêm</Text>
         
                             <View style={{ marginVertical: 20}}>
                                 <TextInputCustom 
@@ -123,7 +123,7 @@ function Register() {
                                     value={nameStore}
                                     onChange={onChangeNameStore}
                                 />
-                            </View> */}
+                            </View>
                         </View>                  
                     </KeyboardAwareScrollView>
                 </View>
@@ -148,4 +148,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default Register;
+export default RegisterStore;

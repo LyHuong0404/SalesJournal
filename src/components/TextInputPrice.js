@@ -8,9 +8,9 @@ function TextInputPrice({ value, onChange, required, label, customStyle }) {
 
     return (  
         <View>
-            <Text style={{ color: focus ? '#15803D' : '#7a7a7a', fontWeight: '600' }}>{label}
+            {label && <Text style={{ color: focus ? '#15803D' : '#7a7a7a', fontWeight: '600' }}>{label}
                 {required && <Text style={{color: 'red' }}> *</Text>}
-            </Text>
+            </Text>}
 
             <TextInputMask
                 placeholder="0.000" 

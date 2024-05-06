@@ -1,7 +1,7 @@
 import * as httprequest from '../../utils/httprequest';
 
 
-export const createReceipt = async({ paymentMethod, receiptDetailExportModels }) => { 
+export const createReceipt = async({ paymentMethod, buyerEmail, useBonusPoint, receiptDetailExportModels }) => { 
     const config = {
         headers: {
             'Content-Type': 'application/json',
@@ -9,7 +9,7 @@ export const createReceipt = async({ paymentMethod, receiptDetailExportModels })
     };
 
     try {
-        const response = await httprequest.post('receipt-export', {paymentMethod, receiptDetailExportModels}, config);
+        const response = await httprequest.post('receipt-export', {paymentMethod, buyerEmail, useBonusPoint, receiptDetailExportModels}, config);
         return response;
     }catch(err) {
         console.log("Error when creating product: ", err);

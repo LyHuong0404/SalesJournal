@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import TwoButtonBottom from "../components/TwoButtonBottom";
 import { LogBox } from 'react-native';
+import Loading from "../components/Loading";
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
@@ -27,12 +28,6 @@ function QRScanner({ route }) {
     onScanSuccess(data);
   };
 
-  if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
 
     return ( 
       <View style={styles.container}>
@@ -42,8 +37,8 @@ function QRScanner({ route }) {
             </TouchableOpacity>
             <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center'}}>Mã sản phẩm</Text>
         </View>
-        {hasPermission === false && <Text>No access to camera</Text>}
-        {hasPermission === null && <Text>Requesting for camera permission</Text>}
+        {hasPermission === false && <Loading />}
+        {hasPermission === null && <Loading />}
         {hasPermission === true && (
           <Camera
             style={styles.preview}

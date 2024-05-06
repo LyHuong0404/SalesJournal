@@ -4,16 +4,13 @@ import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useFonts } from 'expo-font';
-import { Provider as StoreProvider, useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { View, Image, Text, TouchableOpacity, Platform } from 'react-native';
 import { useState, useEffect, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CommonActions } from '@react-navigation/native';
 
-import store from './src/store';
 import Home from './src/page/Home';
 import Order from './src/page/Order/Order';
 import Paybook from './src/page/Paybook';
@@ -49,6 +46,9 @@ import SaleType from './src/page/Coupon/SaleType';
 import CreateCoupon from './src/page/Coupon/CreateCoupon';
 import SaleManagement from './src/page/Coupon/SaleManagement';
 import CouponDetail from './src/page/Coupon/CouponDetail';
+import ImportBook from './src/page/ImportBook';
+import ExportBook from './src/page/ExportBook';
+import ProfileUser from './src/page/ProfileUser';
 
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
@@ -192,6 +192,8 @@ const HomeStack = () => (
     <Stack.Screen name="SaleType" component={SaleType} options={{ headerShown: false }}/>
     <Stack.Screen name="CouponDetail" component={CouponDetail} options={{ headerShown: false }}/>
     <Stack.Screen name="ChangePassword" component={ChangePassword} options={{ headerShown: false }}/>
+    <Stack.Screen name="ImportBook" component={ImportBook} options={{ headerShown: false }}/>
+    <Stack.Screen name="ExportBook" component={ExportBook} options={{ headerShown: false }}/>
     {/* <Stack.Screen name="QRFullScreen" component={QRFullScreen} options={{ headerShown: false }}/> */}
   </Stack.Navigator>
 );
@@ -202,21 +204,28 @@ const ProfileDrawer = () => (
   </Stack.Navigator>
 );
 
+const ProfileUserDrawer = () => (
+  <Stack.Navigator initialRouteName="ProfileUser">
+      <Stack.Screen name="ProfileUser" component={ProfileUser} options={{ headerShown: false }}/>
+      <Stack.Screen name="UsernameInput" component={UsernameInput} options={{ headerShown: false }}/>
+  </Stack.Navigator>
+);
+
 const StoreDrawer = () => (
   <Stack.Navigator initialRouteName="SettingProfile" >
       <Stack.Screen name="SettingStore" component={SettingStore} options={{ headerShown: false }}/>
   </Stack.Navigator>
 );
 
-const CustomDrawerContent = ({ navigation }) => (
+const CustomDrawerContent = ({ user, navigation }) => (
   <DrawerContentScrollView>
     {/* Custom Header */}
     <View>
       <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16 }}>
         <Image source={require('./src/assets/images/store.jpg')} style={{ width: 60, height: 60, borderRadius: 100, objectFit: 'cover', marginRight: 10, marginBottom: 10 }} />
         <View style={{ justifyContent: 'center' }}>
-          <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Cửa Hàng Tạp Hóa</Text>
-          <Text style={{ fontSize: 12, color: 'gray' }}>Lý Hương</Text>
+          <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{user?.profile?.nameStore || 'null'}</Text>
+          <Text style={{ fontSize: 12, color: 'gray' }}>{user?.user?.username}</Text>
         </View>
       </View>
       <TouchableOpacity>
@@ -226,7 +235,7 @@ const CustomDrawerContent = ({ navigation }) => (
     {/* Drawer Items */}
       <DrawerItem
         label="Trang chủ"
-        icon={() => <FontAwesome5 name="home"  size={20} color='#15803D' />}
+        icon={() => <FontAwesome5 name="home" size={20} color='#15803D' />}
         onPress={() => navigation.navigate('Home')}
         labelStyle={{ color: '#474646'}}
       />
@@ -279,7 +288,7 @@ function App() {
     const getAccessToken = async () => {
       try {
           const userData = await AsyncStorage.getItem('user');
-          setUser(userData);
+          setUser(JSON.parse(userData));
           
           if (userData) {
             const parsedUserData = JSON.parse(userData);
@@ -292,7 +301,7 @@ function App() {
     };
     getAccessToken();
   }, []);
-  
+  console.log(user)
   return (
       <PaperProvider theme={DefaultTheme}>
         <NavigationContainer>
@@ -303,11 +312,23 @@ function App() {
                 marginTop: 20,
               },
             }}
-            drawerContent={(props) => <CustomDrawerContent {...props} />}
+            drawerContent={(props) => <CustomDrawerContent {...props} user={user}/>}
           >
             <Drawer.Screen name="Trang chủ" component={HomeStack} options={{ headerShown: false }}/>
-            <Drawer.Screen name="Cài đặt cửa hàng" component={StoreDrawer} options={{ headerShown: false }} />
-            <Drawer.Screen name="Cài đặt cá nhân" component={ProfileDrawer} options={{ headerShown: false }} />
+                <Drawer.Screen name="Cài đặt cửa hàng" component={StoreDrawer} options={{ headerShown: false }} />
+                <Drawer.Screen name="Cài đặt cá nhân" component={ProfileDrawer} options={{ headerShown: false }} />
+            {/* {!user?.profile?.id ? 
+              <>
+                <Drawer.Screen name="Trang chủ" component={HomeStack} options={{ headerShown: false }}/>
+                <Drawer.Screen name="Cài đặt cửa hàng" component={StoreDrawer} options={{ headerShown: false }} />
+                <Drawer.Screen name="Cài đặt cá nhân" component={ProfileDrawer} options={{ headerShown: false }} />
+              </>
+              : 
+              <>
+                <Drawer.Screen name="Thông tin cá nhân" component={ProfileUserDrawer} options={{ headerShown: false }} />
+              </> */}
+             
+          
           </Drawer.Navigator>
         ) : (
           <Stack.Navigator initialRouteName="UsernameInput" screenOptions={{ headerShown: false }}>
@@ -317,6 +338,7 @@ function App() {
             <Stack.Screen name="OTP" component={OTP} options={{ headerShown: false }}/>
             <Stack.Screen name="RecoveryPassword" component={RecoveryPassword} options={{ headerShown: false }}/>
             <Stack.Screen name="BottomNavigator" component={BottomNavigator} options={{ headerShown: false }}/>
+            <Stack.Screen name="ProfileUser" component={ProfileUser} options={{ headerShown: false }}/>
           </Stack.Navigator>
         )}
         </NavigationContainer>

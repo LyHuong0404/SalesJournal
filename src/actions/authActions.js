@@ -1,7 +1,8 @@
-import * as httprequest from "../utils/httprequest";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAction } from '@reduxjs/toolkit';
+
+import * as httprequest from "../utils/httprequest";
 
 //signUp
 export const getCodeSignUp = async ({ username, email }) =>{
@@ -33,14 +34,14 @@ export const checkCodeSignUp = async ({ username, code }) =>{
 }
 
 
-export const signUp = async ({ username, password, email, nameStore }) =>{
+export const signUp = async ({ username, password, email }) =>{
     try {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
             },
         }
-        const response = await httprequest.post('signup', { username, password, email, nameStore }, config);
+        const response = await httprequest.post('signup', { username, password, email }, config);
         return response;
     } catch (err) {
         console.log("Error when signup: ", err);
@@ -111,15 +112,6 @@ export const login = createAsyncThunk('auth', async ({ username, password }, { r
         console.log("Error when login: ", error);
     }
 });
-
-export const getData = async () => {
-    try {
-        const response = await httprequest.get('todos/1');
-        return response;
-    } catch (err) {
-        console.log(err);
-    }
-};
 
 
 export const updateUser = createAction('auth/updateUser');

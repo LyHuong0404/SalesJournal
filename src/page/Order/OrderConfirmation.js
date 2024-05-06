@@ -13,7 +13,16 @@ import { getProductByCode } from "../../actions/seller/productActions";
 import { createReceipt } from "../../actions/seller/receiptActions";
 import QRFullScreen from "../QRFullScreen";
 import ModalInputProductCode from "../../components/Modal/ModalInputProductCode";
+import { Switch } from "react-native-switch";
 
+const theme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#15803D', 
+      underlineColor: '#888888', 
+    },
+};
 
 function OrderConfirmation({ onBack }) {
     const navigation = useNavigation();
@@ -28,6 +37,10 @@ function OrderConfirmation({ onBack }) {
     const [products, setProducts] = useState([1,2]);
     const [createDay, setCreateDay] = useState(format(new Date(Date.now()), 'dd/MM/yyyy'));
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [isEnabled, setIsEnabled] = useState(false);
+    const [buyerEmail, setBuyerEmail] = useState('');
+
+    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
     const hideDatePicker = () => {
         setDatePickerVisibility(false);
@@ -59,7 +72,7 @@ function OrderConfirmation({ onBack }) {
                 amount: item.amount
             }));
             const fetchAPI = async() => {
-                const response = await createReceipt({ paymentMethod: "DIRECT" , receiptDetailExportModels: newArray });
+                const response = await createReceipt({ paymentMethod: "DIRECT" , buyerEmail, useBonusPoint: isEnabled, receiptDetailExportModels: newArray });
                 if (response?.code == 0) {
                     navigation.navigate("PaymentDetail", { data: response?.data });
                 } else {
@@ -202,22 +215,45 @@ function OrderConfirmation({ onBack }) {
                     </View>
                 )}
             </View>
-
-            {/* <TouchableOpacity onPress={() => navigation.navigate("Customers")}>
-                <View style={{ paddingHorizontal: 15, backgroundColor: '#ffffff', marginVertical: 5 }}>
-                    <Text style={{ color: '#7a7a7a', fontWeight: '600' }}>Khách hàng</Text>
-                    <TextInput
-                        theme={theme}
-                        placeholder='Chọn khách hàng'
-                        placeholderTextColor='#abaaaa'
-                        style={styles.input_style}
-                        underlineColor="#abaaaa"
-                        right={<TextInput.Icon icon="account-circle-outline" color='#888888' onPress={() => refRBSheet.current?.open()} />}
-                    />
-                </View>
-            </TouchableOpacity> */}
+            <View style={styles.horizontalLine}></View>
+            {/* <TouchableOpacity onPress={() => navigation.navigate("Customers")}> */}
+                    <View>
+                        <Text style={{ fontWeight: '600', margin: 15, marginBottom: 10 }}>Thông tin khách hàng</Text>
+                        <View style={{ paddingHorizontal: 15, backgroundColor: '#ffffff' }}>
+                            {/* <TextInput
+                                theme={theme}
+                                placeholder='Nhập mail khách hàng'
+                                placeholderTextColor='#abaaaa'
+                                style={styles.input_style}
+                                underlineColor="#abaaaa"
+                                value={buyerEmail}
+                                onChangeText={(text) => setBuyerEmail(text)}
+                                // right={<TextInput.Icon icon="account-circle-outline" color='#888888' onPress={() => refRBSheet.current?.open()} />}
+                            /> */}
+                            <TextInputCustom 
+                                label="Mail khách hàng" 
+                                placeholder="Ví dụ: nguyena@gmail.com" 
+                                value={buyerEmail} 
+                                onChange={(text) => setBuyerEmail(text)}
+                            />
+                            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 10 }}>
+                                <Text style={{ color: '#7a7a7a', fontWeight: '600' }}>Dùng điểm tích lũy</Text>
+                                <Switch 
+                                    onValueChange={toggleSwitch} 
+                                    value={isEnabled} 
+                                    activeText={''}
+                                    inActiveText={''}  
+                                    circleSize={20}
+                                    barHeight={20} 
+                                    backgroundInactive={'#e9e7e7'}
+                                />
+                            </View>
+                        </View>
+                    </View>
+            {/* </TouchableOpacity> */}
 
             
+           
 
             {/* <View style={styles.total}>
                 <View style={[styles.display, { marginVertical: 12 }]}>

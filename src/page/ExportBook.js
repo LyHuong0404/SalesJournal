@@ -11,7 +11,7 @@ import Loading from "../components/Loading";
 
 const screenWidth = Dimensions.get('window').width;
 
-function Warehouse() {
+function ExportBook() {
     const refRBSheet = useRef();
     const navigation = useNavigation();
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -252,4 +252,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default Warehouse;
+export default ExportBook;

@@ -11,7 +11,7 @@ import Loading from "../components/Loading";
 
 const screenWidth = Dimensions.get('window').width;
 
-function Warehouse() {
+function ImportBook() {
     const refRBSheet = useRef();
     const navigation = useNavigation();
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -71,11 +71,9 @@ function Warehouse() {
         <View style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <Image source={require('../assets/images/right_arrow.png')} style={{ width: 17, height: 17, objectFit: 'contain' }}/>
-                        <Text style={{ fontWeight: 'bold', marginLeft: 10 }}>Kho hàng</Text>
-                    </View>
+                    <Image source={require('../assets/images/right_arrow.png')}  style={{ width: 17, height: 17, objectFit: 'contain', marginVertical: 15 }} />
                 </TouchableOpacity>
+                <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center'}}>Sổ nhập hàng</Text>
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', margin: 15, marginBottom: 0 }}>
                 <TouchableOpacity style={{ backgroundColor: 'white', borderRadius: 7, justifyContent: 'center', alignItems: 'center', width: 80, paddingVertical: 5, marginRight: 15 }}>
@@ -252,4 +250,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default Warehouse;
+export default ImportBook;

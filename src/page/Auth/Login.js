@@ -44,9 +44,12 @@ function Login() {
     const handleLogin = async() => {
         try {
             const response = await dispatch(login({ username, password }));
-
             if (response) {
-                navigation.navigate('BottomNavigator');              
+                if (response.payload.user.profile.id) {
+                    navigation.navigate('BottomNavigator');              
+                } else {
+                    navigation.navigate('ProfileUser');              
+                }
             } else {
                 ToastAndroid.show('Mật khẩu không đúng, vui lòng nhập lại!', ToastAndroid.SHORT);
             }

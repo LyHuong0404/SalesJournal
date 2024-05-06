@@ -49,7 +49,7 @@ function Home() {
               <Image source={require('../assets/images/store.jpg')} style={styles.image}/>
             </TouchableOpacity>
             <View style={{ marginLeft: 10}}>
-              <Text style={{ color: '#ffffff', fontSize: 14, fontWeight: 'bold' }}>{user?.nameStore}</Text>
+              <Text style={{ color: '#ffffff', fontSize: 14, fontWeight: 'bold' }}>{user?.profile?.nameStore}</Text>
               <Text style={{ color: '#ffffff', fontSize: 11 }}>Thông tin cửa hàng 
                 <Image source={require('../assets/images/left_arrow.png')} style={{ width: 12, height: 12, objectFit: 'contain' }}/>
               </Text>

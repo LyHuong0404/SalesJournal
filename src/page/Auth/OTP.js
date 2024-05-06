@@ -14,7 +14,6 @@ function OTP() {
     const [username, setUsername] = useState(route.params?.username || '');
     const email = route.params?.email || '';
     const password = route.params?.password || '';
-    const nameStore = route.params?.nameStore || '';
     const isForgotPw = route.params?.isForgotPw || false;
     const [OTP, setOTP] = useState(['', '', '', '', '', '']);
     const [timer, setTimer] = useState(60);
@@ -68,9 +67,9 @@ function OTP() {
             else if (code.length === 6 && !isForgotPw){
                 const response = await checkCodeSignUp({username, code});
                 if (response?.code == 0) {
-                    await signUp({ username, password, email, nameStore });
+                    await signUp({ username, password, email });
                     ToastAndroid.show('Đăng ký thành công, vui lòng đăng nhập lại', ToastAndroid.SHORT);
-                    navigation.navigate("UsernameInput");
+                    navigation.navigate("Pro");
                 } else {
                     ToastAndroid.show('Sai mã OTP', ToastAndroid.SHORT);
                 }

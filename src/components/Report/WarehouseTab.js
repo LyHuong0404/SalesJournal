@@ -63,8 +63,7 @@ function WarehouseTab() {
     }, [active])
 
     const handleChangeTime = (data) => {
-        const time = setDateFormat(data.buttonType, data.startDate, data.endDate);
-    
+        const time = setDateFormat(data.buttonType, data.startDate, data.endDate);    
         setStartDate(time[0]);
         setEndDate(time[1]);
         setButtonTimeType(data.buttonType);
