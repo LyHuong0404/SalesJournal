@@ -2,14 +2,15 @@ import { StyleSheet, View, TouchableOpacity, Image, Text, useWindowDimensions  }
 import { TabView, TabBar  } from 'react-native-tab-view';
 import { useState, useRef } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import ProductTab from "../../components/ProductTab";
-import CategoryTab from "../../components/CategoryTab";
-import ModalArrange from "../../components/Modal/ModalArrange";  
 import RBSheet from "react-native-raw-bottom-sheet";
 import { Searchbar } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
+
+import ProductTab from "../../components/ProductTab";
+import CategoryTab from "../../components/CategoryTab";
+import ModalArrange from "../../components/Modal/ModalArrange";  
 import useDebounce from "../../hooks";
-import QRFullScreen from "../QRFullScreen";
+import QRDemo from "../QRDemo";
 
 
 const CustomTabBar = (props) => {
@@ -164,7 +165,10 @@ function ProductManagement() {
                     }
                 }}
             >
-                <QRFullScreen action='ProductDetail' onScanSuccess={() => refRBSheet.current?.close()} close={() => refRBSheet.current?.close()}/>
+                <QRDemo action='ProductDetail' 
+                    onScanSuccess={() => refRBSheet.current?.close()} 
+                    close={() => refRBSheet.current?.close()}
+                />
             </RBSheet>
 
             <TabView

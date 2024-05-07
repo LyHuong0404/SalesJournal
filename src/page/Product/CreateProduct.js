@@ -7,7 +7,6 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import TextInputPrice from "../../components/TextInputPrice";
-import ModalCreateCategory from "../../components/Modal/ModalCreateCategory";
 import ModalSelectCategory from "../../components/Modal/ModalSelectCategory";
 import ButtonCustom from "../../components/ButtonCustom";
 import TextInputCustom from "../../components/TextInputCustom";
@@ -16,6 +15,7 @@ import TwoButtonBottom from "../../components/TwoButtonBottom";
 import ModalConfirmation from "../../components/Modal/ModalConfirmation";
 import Loading from "../../components/Loading";
 import { convertTimeStamp } from "../../utils/helper";
+import QRDemo from "../QRDemo";
 
 
 function CreateProduct() {
@@ -23,6 +23,7 @@ function CreateProduct() {
     const navigation = useNavigation();
     const product = route.params?.product;
     const refRBSheet = useRef();
+    const refRBSheetCamera = useRef();
     const [name, setName] = useState(product?.name || '');
     const [price, setPrice] = useState('');
     const [inputDay, setInputDay] = useState(convertTimeStamp(product?.importedAt, 'yyyy-MM-dd') || format(new Date(Date.now()), 'yyyy-MM-dd'));   
@@ -36,13 +37,6 @@ function CreateProduct() {
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const handleScanQRCode = () => {
-        navigation.navigate('QRScanner', {
-          onScanSuccess: (data) => {
-            setQR(data);
-          },
-        });
-    };
 
     const hideDatePicker = () => {
         if (isDatePickerInputVisible) {
@@ -82,7 +76,8 @@ function CreateProduct() {
                     response = await updateProduct({
                         code: QR, 
                         name, 
-                        expireAt: expirationDate, 
+                        // expireAt: expirationDate, 
+                        expireAt: '2024-08-06', 
                         importPrice: capitalPrice.replace('.',''), 
                         importAmount,
                         productId: category.value,
@@ -137,6 +132,7 @@ function CreateProduct() {
     
     return ( 
         <View style={styles.container}>
+            <View style={{ height: 20, width: '100%', backgroundColor: 'transparent'}}></View>
             <TouchableOpacity onPress={() => navigation.goBack()}>
                 <View style={styles.header}>
                         <Image source={require('../../assets/images/right_arrow.png')} style={{ width: 17, height: 17, objectFit: 'contain' }}/>
@@ -172,37 +168,7 @@ function CreateProduct() {
                                 required={true}
                             />
                         </View>
-                        {/* <View style={{ width: '45%' }}>
-                            <TextInputPrice 
-                                label='Giá bán' 
-                                value={price} 
-                                onChange={(text) => setPrice(text)} 
-                                required={true}
-                            />
-                        </View> */}
                     </View>
-                    {/* <View style={[styles.display, { justifyContent: 'space-between', marginBottom: 20 }]}>
-                        <View style={{ width: '45%' }}>
-                            <TextInputPrice 
-                                label='Giá khuyến mãi' 
-                                value={bonusPrice} 
-                                onChange={(text) => setBonusPrice(text)} 
-                                required={false}
-                            />
-                        </View>
-                    </View> */}
-                    {/* <View style={[styles.display, { justifyContent: 'space-between', marginBottom: 20 }]}>
-                        <View style={{ width: '45%' }}>
-                            <TextInputCustom 
-                                label='Số lượng'
-                                placeholder='0'
-                                keyboardType='numeric'
-                                value={importAmount} 
-                                onChange={(text) => setImportAmount(text)} 
-                                required={true}
-                            />
-                        </View>
-                    </View> */}
                     <Text style={{ color: '#7a7a7a', fontWeight: '600' }}>Danh mục <Text style={{color: 'red' }}> *</Text></Text>
                     <View style={[styles.display, { alignItems: 'center', paddingVertical: 10 }]}>
                         <TouchableOpacity onPress={() => refRBSheet.current.open()}>
@@ -270,7 +236,7 @@ function CreateProduct() {
                                 onPressIn={() => setIsDatePickerExpirationDateVisible(true)}
                             />
                             <DateTimePicker
-                                isVisible={isDatePickerExpirationDateVisible}
+                                isVisible={true}
                                 mode="date"
                                 onConfirm={handleConfirmDatePicker}
                                 onCancel={hideDatePicker}
@@ -289,7 +255,7 @@ function CreateProduct() {
                         <TouchableOpacity onPress={handleRandomBarCode}>
                             <Image source={require('../../assets/images/pen.png')} style={styles.image_qr} />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={handleScanQRCode}>
+                        <TouchableOpacity onPress={() => refRBSheetCamera?.current.open()}>
                             <Image source={require('../../assets/images/qr_code.png')} style={styles.image_qr} />
                         </TouchableOpacity>
                     </View>
@@ -325,13 +291,29 @@ function CreateProduct() {
                     onPressConfirm={handleDeleteProduct}
                 />
             }
+            <RBSheet
+                ref={refRBSheetCamera}
+                customStyles={{               
+                    container: {
+                    height: '100%'
+                    }
+                }}
+            >
+                <QRDemo 
+                    action='ScanQR' 
+                    onScanSuccess={(data) => {
+                        setQR(data);
+                        refRBSheetCamera.current?.close();
+                    }} 
+                    close={() => refRBSheetCamera.current?.close()}
+                />
+            </RBSheet>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 20,
         flex: 1,
         backgroundColor: '#ffffff',
     },

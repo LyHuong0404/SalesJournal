@@ -19,8 +19,8 @@ function SettingProfile() {
                 <View style={styles.box_content}>
                     <Image source={require('../../assets/images/avatar.jpg')} style={styles.avatar} />
                     <View style={{ alignSelf: 'center' }}>
-                        <Text style={{ color: '#575757', fontWeight: '500' }}>{user.username}</Text>
-                        <Text style={{ color: "#8e8e93"}}>{user.email}</Text>
+                        <Text style={{ color: '#575757', fontWeight: '500' }}>{user?.username}</Text>
+                        <Text style={{ color: "#8e8e93"}}>{user?.email}</Text>
                         <Text style={{ color: "#15803D", fontWeight: '500', fontSize: 13}} onPress={() => navigation.navigate("Profile")}>Chỉnh sửa thông tin</Text>
                     </View>
                 </View>

@@ -20,6 +20,7 @@ function Sell() {
 
     return ( 
         <View style={styles.container}>
+            <View style={{ height: 20, width: '100%', backgroundColor: 'transparent'}}></View>
             <View style={{ backgroundColor: '#ffffff'}}>
                 <View style={styles.header}>
                     <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -136,7 +137,6 @@ function Sell() {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 20,
         flex: 1,
         backgroundColor: '#f6f7f8',
     },

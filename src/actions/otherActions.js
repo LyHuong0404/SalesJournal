@@ -1,4 +1,6 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import * as httprequest from "../utils/httprequest";
+
 
 export const notifications = async({ pushToken, title, message }) => { 
     const config = {
@@ -15,20 +17,21 @@ export const notifications = async({ pushToken, title, message }) => {
     }
 }
 
-export const updateStore = async({ profileId, nameStore, allowCustomerAccumulate, exchangePointToMoney, exchangeMoneyToPoint }) => { 
-    const config = {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    };
-    
-    try {
-        const filters = { profileId, nameStore, allowCustomerAccumulate, exchangePointToMoney, exchangeMoneyToPoint };
-        const filteredParams = Object.fromEntries(Object.entries(filters).filter(([_, value]) => value != null));
-        const response = await httprequest.post('update-profile', { filteredParams } , config);
-        return response;
-    } catch(err) {
-        console.log("Error when updating store: ", err);
-    }
-}
 
+export const updateStore = createAsyncThunk('update-profile', async ({ profileId, nameStore, allowCustomerAccumulate, exchangePointToMoney, exchangeMoneyToPoint }, { rejectWithValue }) => {
+    try {
+        const config = {
+            headers: {
+            'Content-Type': 'application/json',
+            },
+        };
+        const response = await httprequest.post('update-profile', { profileId, nameStore, allowCustomerAccumulate, exchangePointToMoney, exchangeMoneyToPoint } , config);
+        if (response?.code == 0) {
+            return response?.data;
+        } else {
+            return rejectWithValue('Thất bại');
+        }
+    } catch (error) {
+        console.log("Error when updating store: ", error);
+    }
+});

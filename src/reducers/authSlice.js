@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { login, updateUser } from '../actions/authActions';
+import { login } from '../actions/authActions';
+import { updateStore } from '../actions/otherActions';
+import { updateProfile } from '../actions/user/authActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const initialState = {
@@ -29,6 +31,20 @@ const loadUserDataFromStorage = async () => {
   }
 };
 
+const updateDateFromAsyncStorage = async (payload) => {
+  try {
+    const userJson = await AsyncStorage.getItem('user');
+    const userData = JSON.parse(userJson);
+    
+    userData.user.profile = payload;
+    AsyncStorage.setItem('user', JSON.stringify(userData));
+
+  } catch (error) {
+    console.error('Error updating user data from AsyncStorage:', error);
+  }
+};
+
+
 const initialStateWithStorage = {
   ...initialState,
   ...loadUserDataFromStorage(),
@@ -55,6 +71,31 @@ const userSlice = createSlice({
         state.isAuthenticated = true;
       })
       .addCase(login.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload;
+      })
+      .addCase(updateStore.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateStore.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.user.profile = payload;
+        updateDateFromAsyncStorage(payload);
+      })
+      .addCase(updateStore.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload;
+      })
+      .addCase(updateProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProfile.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.user = payload;
+      })
+      .addCase(updateProfile.rejected, (state, { payload }) => {
         state.loading = false;
         state.error = payload;
       });

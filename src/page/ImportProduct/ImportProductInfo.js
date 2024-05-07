@@ -11,12 +11,14 @@ import ButtonCustom from "../../components/ButtonCustom";
 import TextInputCustom from "../../components/TextInputCustom";
 import { addProduct } from "../../actions/seller/productActions";
 import Loading from "../../components/Loading";
+import QRDemo from "../QRDemo";
 
 
 function ImportProductInfo() {
     const route = useRoute();
     const navigation = useNavigation();
     const product = route.params?.product;
+    const refRBSheet = useRef();
     const [name, setName] = useState(product?.name || '');
     const [inputDay, setInputDay] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));   
     const [capitalPrice, setCapitalPrice] = useState(product?.importPrice || '');
@@ -31,13 +33,6 @@ function ImportProductInfo() {
     const [isDatePickerExpirationDateVisible, setIsDatePickerExpirationDateVisible] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const handleScanQRCode = () => {
-        navigation.navigate('QRScanner', {
-          onScanSuccess: (data) => {
-            setQR(data);
-          },
-        });
-    };
 
     const hideDatePicker = () => {
         if (isDatePickerInputVisible) {
@@ -147,28 +142,6 @@ function ImportProductInfo() {
                             />
                         </View>
                     </View>
-                    {/* <View style={[styles.display, { justifyContent: 'space-between', marginBottom: 20 }]}>
-                        <View style={{ width: '45%' }}>
-                            <TextInputPrice 
-                                label='Giá khuyến mãi' 
-                                value={bonusPrice} 
-                                onChange={(text) => setBonusPrice(text)} 
-                                required={false}
-                            />
-                        </View>
-                    </View> */}
-                    {/* <View style={[styles.display, { justifyContent: 'space-between', marginBottom: 20 }]}>
-                        <View style={{ width: '45%' }}>
-                            <TextInputCustom 
-                                label='Số lượng'
-                                placeholder='0'
-                                keyboardType='numeric'
-                                value={importAmount} 
-                                onChange={(text) => setImportAmount(text)} 
-                                required={true}
-                            />
-                        </View>
-                    </View> */}
                     <View style={[styles.display, { alignItems: 'center', paddingVertical: 10 }]}>
                         <Text style={{ color: '#7a7a7a', fontWeight: '600' }}>Danh mục <Text style={{color: 'red' }}> * </Text></Text>
                         {Object.keys(category).length > 0 && 
@@ -226,7 +199,7 @@ function ImportProductInfo() {
                         <TouchableOpacity onPress={handleRandomBarCode}>
                             <Image source={require('../../assets/images/pen.png')} style={styles.image_qr} />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={handleScanQRCode}>
+                        <TouchableOpacity onPress={() => refRBSheet.current?.open()}>
                             <Image source={require('../../assets/images/qr_code.png')} style={styles.image_qr} />
                         </TouchableOpacity>
                     </View>
@@ -239,6 +212,23 @@ function ImportProductInfo() {
                     onPress={submitForm}
                 />               
             </View>
+            <RBSheet
+                ref={refRBSheet}
+                customStyles={{               
+                    container: {
+                    height: '100%'
+                    }
+                }}
+            >
+                <QRDemo 
+                    action='ScanQR' 
+                    onScanSuccess={(data) => {
+                        setQR(data);
+                        refRBSheet.current?.close();
+                    }} 
+                    close={() => refRBSheet.current?.close()}
+                />
+            </RBSheet>
             {loading && <Loading />}
         </View>
     );

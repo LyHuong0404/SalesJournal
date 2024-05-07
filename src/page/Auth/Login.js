@@ -44,10 +44,12 @@ function Login() {
     const handleLogin = async() => {
         try {
             const response = await dispatch(login({ username, password }));
-            if (response) {
-                if (response.payload.user.profile.id) {
-                    navigation.navigate('BottomNavigator');              
+            if (response) {            
+                if (response?.payload?.user?.profile) {
+                    console.log('vendor')
+                    navigation.navigate('DrawerNav');              
                 } else {
+                    console.log('user')
                     navigation.navigate('ProfileUser');              
                 }
             } else {

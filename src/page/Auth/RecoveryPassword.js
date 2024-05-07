@@ -22,7 +22,7 @@ function RecoveryPassword() {
             const fetchApi = await recoverPassword({username, newPassword});
             if (fetchApi?.code == 0) {
                 ToastAndroid.show('Đổi mật khẩu thành công, vui lòng đăng nhập lại', ToastAndroid.SHORT);
-                navigation.navigate("UsernameInput");
+                navigation.navigate("LoginNav");
             } else {
                 ToastAndroid.show('Đổi mật khẩu thất bại', ToastAndroid.SHORT);
             }

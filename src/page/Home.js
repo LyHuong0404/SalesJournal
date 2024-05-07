@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Dimensions, ToastAndroid } from 'react-native';
 import { useNavigation, DrawerActions  } from '@react-navigation/native';
-import { Badge } from 'react-native-paper';
+import { Badge, Button } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { format } from 'date-fns';
 import { filterReport } from '../actions/seller/receiptActions';
 import { useState, useEffect, useRef } from 'react';
 import RBSheet from "react-native-raw-bottom-sheet";
-import QRFullScreen from './QRFullScreen';
+import QRDemo from './QRDemo';
+import { convertTimeStamp } from '../utils/helper';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -39,10 +40,10 @@ function Home() {
   const handleClose = () => {
     refRBSheet.current?.close();
   }
-  console.log(JSON.stringify(navigation.getState()));
+  // console.log(JSON.stringify(navigation.getState()));
   return (
     <View style={styles.container}>   
-      <View style={[styles.header, { marginBottom: 10, paddingTop: 30 }]}>
+      <View style={[styles.header, { marginBottom: 10, paddingTop: 20 }]}>
         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ display: 'flex', flexDirection: 'row' }}>
             <TouchableOpacity onPress={openDrawer}>
@@ -64,7 +65,7 @@ function Home() {
         </View>   
       </View> 
       <ScrollView> 
-        <View style={[styles.boxes, { padding: 15 }]}>         
+        <View style={[styles.boxes, { padding: 15, borderWidth: 1, borderColor: '#e2e5ea' }]}>         
           <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={{ color: '#808080', fontWeight: 'bold', fontSize: 11 }}>Hôm nay</Text>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -103,13 +104,23 @@ function Home() {
                   <Text style={{ color: '#808080', fontWeight: 'bold', fontSize: 11, marginBottom: 10 }}>Lợi nhuận</Text>
                   <Text style={{ color: '#000000', fontWeight: 'bold' }}>{revenue?.length > 0 ? `${revenue[0]?.totalRevenue}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : 0}</Text>
                 </View> 
-                  {/* <View style={styles.verticalLine} /> */}
               </View>       
             </View>
           </ScrollView>
         </View>
+        <View style={[styles.boxes, { backgroundColor: '#faeed6', padding: 15, borderWidth: 1, borderColor: '#da9413', width: windowWidth - 60, marginTop: 10 }]}>         
+          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+            <Image source={require('../assets/images/crown.png')} style={{ width: 35, height: 35, objectFit: 'contain', marginRight: 10 }}/>
+            <Text style={{ fontWeight: '500', color: '#cb870b'}}>Gói miễn phí <Text style={{ fontWeight: '400' }}>của bạn sẽ hết hạn {'\n'} vào ngày {`${convertTimeStamp(user?.profile?.expireAt, 'dd/MM/yyyy')}`}</Text></Text>
+          </View>
+          <Button  
+              mode="contained" 
+              buttonColor='#c5830c' 
+              style={{ borderRadius: 10, marginTop: 10 }}
+          >Gia hạn</Button>
+        </View>
         <View style={{ marginBottom: 20 }}>
-          <Text style={{margin: 20, marginBottom: 10, color: '#000000', fontWeight: 'bold'}}>Quản lý thông minh cùng Sổ</Text>
+          <Text style={{ margin: 20, marginBottom: 0, color: '#000000', fontWeight: 'bold'}}>Quản lý thông minh cùng Sổ</Text>
           {/* <View style={styles.centeredBox}>
             <View style={[styles.box, { backgroundColor: '#107f10',  display: 'flex', flexDirection: 'column', justifyContent: 'center', alignContent: 'center', height: 150 }]}>              
               <View style={{width: '90%', height: 30, backgroundColor: '#ffffff', margin: 10, borderRadius: 5}}>
@@ -204,7 +215,7 @@ function Home() {
                 }
             }}
         >
-            <QRFullScreen onScanSuccess={() => refRBSheet.current?.close()} close={handleClose}/>
+            <QRDemo onScanSuccess={() => refRBSheet.current?.close()} close={handleClose}/>
         </RBSheet>
       </ScrollView>
     </View>

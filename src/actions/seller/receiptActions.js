@@ -8,6 +8,7 @@ export const createReceipt = async({ paymentMethod, buyerEmail, useBonusPoint, r
         },
     };
 
+    console.log(paymentMethod, buyerEmail, useBonusPoint, receiptDetailExportModels)
     try {
         const response = await httprequest.post('receipt-export', {paymentMethod, buyerEmail, useBonusPoint, receiptDetailExportModels}, config);
         return response;

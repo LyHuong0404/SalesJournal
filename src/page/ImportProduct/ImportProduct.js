@@ -8,8 +8,8 @@ import RBSheet from "react-native-raw-bottom-sheet";
 
 import { filterProduct } from "../../actions/seller/productActions";
 import useDebounce from "../../hooks";
-import QRFullScreen from "../QRFullScreen";
 import Loading from "../../components/Loading";
+import QRDemo from "../QRDemo";
 
 function ImportProduct() {
     const refRBSheet = useRef();
@@ -145,7 +145,10 @@ function ImportProduct() {
                     }
                 }}
             >
-                <QRFullScreen action="ImportProductDetail" onScanSuccess={() => refRBSheet.current?.close()} close={() => refRBSheet.current?.close()}/>
+                <QRDemo action="ImportProductDetail" 
+                    onScanSuccess={() => refRBSheet.current?.close()} 
+                    close={() => refRBSheet.current?.close()}
+                />
             </RBSheet>
             {loading && <Loading />}
         </View> 

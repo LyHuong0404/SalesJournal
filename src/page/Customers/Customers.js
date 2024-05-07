@@ -55,12 +55,12 @@ function Customers() {
 
             <View style={{ flex: 1, backgroundColor: 'white', paddingHorizontal: 10 }}>
 
-                <View style={styles.content_noitem}>
+                {/* <View style={styles.content_noitem}>
                     <Image source={require('../../assets/images/circle_customer.png')} style={{ width: 200, height: 200, objectFit: 'contain' }}/>
                     <Text style={{ color: '#8e8e93', textAlign: 'center', marginBottom: 15, marginTop: 25 }}>Bạn chưa có khách hàng nào, hãy tạo ngay khách hàng đầu tiên nhé</Text>
-                </View>
+                </View> */}
             
-                {/* <ScrollView>
+                <ScrollView>
                     <View style={styles.horizontalLine} />
                     <Button icon="account-plus-outline" mode="outlined" textColor="#22539e" buttonColor='transparent' onPress={() => refRBSheet.current?.open()} style={styles.button}>
                         Thêm khách hàng mới
@@ -83,7 +83,7 @@ function Customers() {
                             <Text style={{ color: '#949191', fontSize: 14, fontWeight: '500' }}>0123456789</Text>
                         </View>
                     </View>
-                </ScrollView> */}
+                </ScrollView>
             </View>
             {/* <View style={styles.no_result_container}>
                 <Image source={require('../../assets/images/noresults.png')} style={styles.image_no_result}/>

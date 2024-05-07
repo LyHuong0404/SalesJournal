@@ -1,7 +1,7 @@
 import { View, StyleSheet, Text, TouchableOpacity, Image, ToastAndroid } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Switch } from "react-native-switch";
 
 import TextInputCustom from "../../components/TextInputCustom";
@@ -13,37 +13,36 @@ import Loading from "../../components/Loading";
 
 function SettingStore() {
     const navigation = useNavigation();
-    const [profileId, setProfileId] = useState('');
-    const [name, setName] = useState('');
+    const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.auth);
+    const [profileId, setProfileId] = useState(user?.profile?.id || '');
+    const [name, setName] = useState(user?.profile?.nameStore || '');
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
-    const { user } = useSelector((state) => state.auth);
-    const [isEnabled, setIsEnabled] = useState(false);
-    const [exchangeMoneyToPoint, setExchangeMoneyToPoint] = useState('1000');
-    const [exchangePointToMoney, setExchangePointToMoney] = useState('1000');
+    const [isEnabled, setIsEnabled] = useState(user?.profile?.allowCustomerAccumulate || false);
+    const [exchangeMoneyToPoint, setExchangeMoneyToPoint] = useState(user?.profile?.exchangeMoneyToPoint || '1000');
+    const [exchangePointToMoney, setExchangePointToMoney] = useState(user?.profile?.exchangePointToMoney || '1000');
     const [loading, setLoading] = useState(false);
 
-
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
     const handleUpdateStore = () => {
         try{
             const fetchAPI = async() => {
                 setLoading(true);
-                const response = await updateStore({
+                const response = await dispatch(updateStore({
                     profileId,
                     nameStore: name,
                     allowCustomerAccumulate: isEnabled,
                     exchangePointToMoney: isEnabled ? exchangePointToMoney.replace('.','') : null,
                     exchangeMoneyToPoint: isEnabled ? exchangeMoneyToPoint.replace('.','') : null
-                })
-                if(response.code == 0) {
+                }))
+                if(response) {
                     ToastAndroid.show('Cập nhật cửa hàng thành công', ToastAndroid.SHORT);
                 } else {
                     ToastAndroid.show('Cập nhật cửa hàng thất bại', ToastAndroid.SHORT);
                 }
                 setLoading(false);
-            } 
+            }
             fetchAPI();
         } catch(err) {
             setLoading(false);
@@ -60,12 +59,13 @@ function SettingStore() {
                 </View>
             </TouchableOpacity>
             <View style={styles.horizontalLine} />
-            <View style={{ flex: 1, marginHorizontal: 15 }}>
+            <View style={{ flex: 1, marginHorizontal: 15, marginTop: 10 }}>
                 <TextInputCustom
                     label='Tên cửa hàng'
-                    value={user.nameStore}
+                    value={name}
                     onChange={(text) => setName(text)}
                     placeholder="Tên cửa hàng"
+                    required={true}
                 />
                 <View style={styles.gap}></View>
                 {/* <TextInputCustom
@@ -83,11 +83,11 @@ function SettingStore() {
                 /> */}
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
                     <View style={{ flex: 0.8 }}>
-                        <Text style={styles.label}>Ưu đãi khi mua nhiều</Text>             
+                        <Text style={styles.label}>Tích điểm khách hàng</Text>             
                         <Text style={styles.text_light}>Tích điểm khi khách mua hàng và sử dụng điểm để giảm giá cho những đơn tiếp theo</Text> 
                     </View>
                     <Switch 
-                        onValueChange={toggleSwitch} 
+                        onValueChange={() => setIsEnabled(previousState => !previousState)} 
                         value={isEnabled} 
                         activeText={''}
                         inActiveText={''}  

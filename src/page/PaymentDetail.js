@@ -12,10 +12,11 @@ function PaymentDetail() {
     const { user } = useSelector((state) => state.auth);
     const route = useRoute();
     const [data, setData] = useState(route.params?.data || {});
+    const [buyerEmail, setBuyerEmail] = useState(route.params?.buyerEmail || '');
 
     return ( 
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => navigation.navigate('BottomNavigator')}>
+            <TouchableOpacity onPress={() => navigation.navigate('DrawerNav')}>
                 <View style={styles.header}>
                     <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center'}}>Chi tiết hóa đơn</Text>
                 </View>
@@ -33,12 +34,12 @@ function PaymentDetail() {
                             />
                         </View>
                         <View style={{ alignSelf: 'center'}}>
-                            <Text style={{ fontWeight: 'bold', color: '#3a3a3a' }}>{user?.nameStore}</Text>
+                            <Text style={{ fontWeight: 'bold', color: '#3a3a3a' }}>{user?.profile?.nameStore}</Text>
                             <View style={[styles.display, {alignItems: 'center'}]}>
                                 <Image source={require('../assets/images/earth.png')}  style={{ width: 17, height: 17, objectFit: 'contain', marginRight: 5 }} />
-                                <Text style={{ fontStyle: 'italic', color: '#565555' }}>0123456789.taphoa.so</Text>
+                                <Text style={{ fontStyle: 'italic', color: '#565555' }}>{user?.email}</Text>
                             </View>
-                            <Text style={{ color: '#565555' }}>0123456789</Text>
+                            {/* <Text style={{ color: '#565555' }}>0123456789</Text> */}
                         </View>
                     </View>
                     <View style={{ paddingVertical: 10, borderBottomWidth: 0.5, }}>
@@ -49,12 +50,12 @@ function PaymentDetail() {
                         <View style={{ marginVertical: 5 }}>
                             <View style={[styles.display, { marginBottom: 5 }]}>
                                 <Text style={{ flex: 0.4, color: '#565555'}}>Khách:</Text>
-                                <Text style={[styles.text, { flex: 1 }]}>Thu</Text>
+                                <Text style={[styles.text, { flex: 1 }]}>{buyerEmail}</Text>
                             </View>
-                            <View style={styles.display}>
+                            {/* <View style={styles.display}>
                                 <Text style={{ flex: 0.4, color: '#565555'}}>SĐT:</Text>
                                 <Text style={[styles.text, { flex: 1 }]}>0888484545</Text>
-                            </View>
+                            </View> */}
                         </View>
                     </View>
                     <View style={{ paddingVertical: 20, borderBottomWidth: 1, borderStyle: 'dashed' }}>
@@ -123,7 +124,7 @@ function PaymentDetail() {
                         </View>
                     </View>
                     <View style={{ paddingVertical: 10, borderBottomWidth: 1, borderStyle: 'dashed' }}>
-                        <Text style={[styles.text_light, { textAlign: 'center' }]}>Thanh toán tiền mặt hoặc chuyển khoản</Text>
+                        <Text style={[styles.text_light, { textAlign: 'center' }]}>Thanh toán tiền mặt</Text>
                     </View>
                     <View style={{ paddingVertical: 20, alignSelf: 'center' }}>
                         <Text style={{color: '#565555', fontSize: 12 }}>Bán hàng chuyên nghiệp bằng ứng dụng</Text>  
@@ -138,7 +139,7 @@ function PaymentDetail() {
             <ButtonCustom 
                 title="Trang chủ" 
                 customStyle={{ marginHorizontal: 15 }} 
-                onPress={() => navigation.navigate('BottomNavigator')}
+                onPress={() => navigation.navigate('BottomNavigatorPage')}
             />
         </View>
     );

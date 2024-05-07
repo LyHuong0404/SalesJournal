@@ -2,18 +2,19 @@
 import React from 'react';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useDispatch } from 'react-redux';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useDispatch, useSelector } from 'react-redux';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { View, Image, Text, TouchableOpacity, Platform } from 'react-native';
 import { useState, useEffect, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SplashScreen from 'react-native-splash-screen';
 
+import RegisterStore from './src/page/Auth/RegisterStore';
 import Home from './src/page/Home';
 import Order from './src/page/Order/Order';
-import Paybook from './src/page/Paybook';
 import Warehouse from './src/page/Warehouse';
 import Sell from './src/page/Sell';
 import Register from './src/page/Auth/Register';
@@ -34,7 +35,6 @@ import SettingStore from './src/page/Auth/SettingStore';
 import PaymentDetail from './src/page/PaymentDetail';
 import Payment from './src/page/Payment';
 import OrderDetail from './src/page/Order/OrderDetail';
-import QRScanner from './src/page/QRScanner';
 import TransactionDetails from './src/page/TransactionDetails';
 import UnderPayment from './src/page/UnderPayment';
 import Report from './src/page/Report/Report';
@@ -49,6 +49,7 @@ import CouponDetail from './src/page/Coupon/CouponDetail';
 import ImportBook from './src/page/ImportBook';
 import ExportBook from './src/page/ExportBook';
 import ProfileUser from './src/page/ProfileUser';
+import Logout from './src/page/Logout';
 
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
@@ -62,9 +63,9 @@ Notifications.setNotificationHandler({
   }),
 });
 
-const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-const Drawer = createDrawerNavigator();
+const Stack = createNativeStackNavigator();
+
 
 const CustomTabIcon = ({ route, focused }) => {
   let iconSource;
@@ -79,11 +80,6 @@ const CustomTabIcon = ({ route, focused }) => {
         iconSource = focused
           ? require('./src/assets/images/bottom2_active.png')
           : require('./src/assets/images/bottom2.png');
-        break;
-      case 'Sổ nợ':
-        iconSource = focused
-          ? require('./src/assets/images/bottom3_active.png')
-          : require('./src/assets/images/bottom3.png');
         break;
       case 'Kho hàng':
         iconSource = focused
@@ -134,17 +130,6 @@ const BottomNavigator = () => (
       })}
     />
     <Tab.Screen
-      name="Sổ nợ"
-      component={Paybook}
-      options={({ route }) => ({
-        tabBarLabel: 'Sổ nợ',
-        headerShown: false,
-        tabBarIcon: ({ focused }) => (
-          <CustomTabIcon route={route} focused={focused} />
-        ),
-      })}
-    />
-    <Tab.Screen
       name="Kho hàng"
       component={Warehouse}
       options={({ route }) => ({
@@ -158,73 +143,26 @@ const BottomNavigator = () => (
   </Tab.Navigator>
 );
 
-const HomeStack = () => (
-  // <Stack.Navigator initialRouteName="BottomNavigator" screenOptions={{ headerShown: false }}>
-  <Stack.Navigator initialRouteName="BottomNavigator" screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
-    <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
-    <Stack.Screen name="Order" component={Order} options={{ headerShown: false }}/>
-    <Stack.Screen name="Paybook" component={Paybook} options={{ headerShown: false }}/>
-    <Stack.Screen name="Warehouse" component={Warehouse} options={{ headerShown: false }}/>
-    <Stack.Screen name="SettingStore" component={SettingStore} options={{ headerShown: false }}/>
-    <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
-    <Stack.Screen name="Sell" component={Sell} options={{ headerShown: false }}/>
-    <Stack.Screen name="Search" component={Search} options={{ headerShown: false }}/>
-    <Stack.Screen name="CreateProduct" component={CreateProduct} options={{ headerShown: false }}/>
-    <Stack.Screen name="ProductManagement" component={ProductManagement} options={{ headerShown: false }}/>
-    <Stack.Screen name="ProductInCategory" component={ProductInCategory} options={{ headerShown: false }}/>
-    <Stack.Screen name="OrderConfirmation" component={OrderConfirmation} options={{ headerShown: false }}/>
-    <Stack.Screen name="SettingProfile" component={SettingProfile} options={{ headerShown: false }}/>
-    <Stack.Screen name="Customers" component={Customers} options={{ headerShown: false }}/>
-    <Stack.Screen name="PaymentDetail" component={PaymentDetail} options={{ headerShown: false }}/>
-    <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }}/>
-    <Stack.Screen name="OrderDetail" component={OrderDetail} options={{ headerShown: false }}/>
-    <Stack.Screen name="QRScanner" component={QRScanner} options={{ headerShown: false }}/>
-    <Stack.Screen name="TransactionDetails" component={TransactionDetails} options={{ headerShown: false }}/>
-    <Stack.Screen name="UnderPayment" component={UnderPayment} options={{ headerShown: false }}/>
-    <Stack.Screen name="Report" component={Report} options={{ headerShown: false }}/>
-    <Stack.Screen name="CreateCategory" component={CreateCategory} options={{ headerShown: false }}/>
-    <Stack.Screen name="CameraScreen" component={CameraScreen} options={{ headerShown: false }}/>
-    <Stack.Screen name="ImportProduct" component={ImportProduct} options={{ headerShown: false }}/>
-    <Stack.Screen name="ImportProductInfo" component={ImportProductInfo} options={{ headerShown: false }}/>
-    <Stack.Screen name="SaleManagement" component={SaleManagement} options={{ headerShown: false }}/>
-    <Stack.Screen name="CreateCoupon" component={CreateCoupon} options={{ headerShown: false }}/>
-    <Stack.Screen name="SaleType" component={SaleType} options={{ headerShown: false }}/>
-    <Stack.Screen name="CouponDetail" component={CouponDetail} options={{ headerShown: false }}/>
-    <Stack.Screen name="ChangePassword" component={ChangePassword} options={{ headerShown: false }}/>
-    <Stack.Screen name="ImportBook" component={ImportBook} options={{ headerShown: false }}/>
-    <Stack.Screen name="ExportBook" component={ExportBook} options={{ headerShown: false }}/>
-    {/* <Stack.Screen name="QRFullScreen" component={QRFullScreen} options={{ headerShown: false }}/> */}
-  </Stack.Navigator>
-);
-
 const ProfileDrawer = () => (
   <Stack.Navigator initialRouteName="SettingProfile" >
       <Stack.Screen name="SettingProfile" component={SettingProfile} options={{ headerShown: false }}/>
   </Stack.Navigator>
 );
 
-const ProfileUserDrawer = () => (
-  <Stack.Navigator initialRouteName="ProfileUser">
-      <Stack.Screen name="ProfileUser" component={ProfileUser} options={{ headerShown: false }}/>
-      <Stack.Screen name="UsernameInput" component={UsernameInput} options={{ headerShown: false }}/>
-  </Stack.Navigator>
-);
-
 const StoreDrawer = () => (
-  <Stack.Navigator initialRouteName="SettingProfile" >
+  <Stack.Navigator initialRouteName="SettingStore" >
       <Stack.Screen name="SettingStore" component={SettingStore} options={{ headerShown: false }}/>
   </Stack.Navigator>
 );
 
 const CustomDrawerContent = ({ user, navigation }) => (
+  
   <DrawerContentScrollView>
-    {/* Custom Header */}
     <View>
       <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16 }}>
         <Image source={require('./src/assets/images/store.jpg')} style={{ width: 60, height: 60, borderRadius: 100, objectFit: 'cover', marginRight: 10, marginBottom: 10 }} />
         <View style={{ justifyContent: 'center' }}>
-          <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{user?.profile?.nameStore || 'null'}</Text>
+          <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{user?.user?.profile?.nameStore || 'null'}</Text>
           <Text style={{ fontSize: 12, color: 'gray' }}>{user?.user?.username}</Text>
         </View>
       </View>
@@ -232,7 +170,6 @@ const CustomDrawerContent = ({ user, navigation }) => (
         <Image source={require('./src/assets/images/improve_pro.jpg')} style={{ width: '100%', height: 90, objectFit: 'cover', marginVertical: 10 }} />
       </TouchableOpacity>
     </View>
-    {/* Drawer Items */}
       <DrawerItem
         label="Trang chủ"
         icon={() => <FontAwesome5 name="home" size={20} color='#15803D' />}
@@ -251,22 +188,133 @@ const CustomDrawerContent = ({ user, navigation }) => (
         icon={() => <FontAwesome5 name="user" size={20} color='#15803D' />}
         onPress={() => navigation.navigate('SettingProfile')}
       />
-      {/* <DrawerItem
+      <DrawerItem
         label="Đăng xuất"
-        icon={() => <FontAwesome5 name="user" size={20} color='#15803D' />}
-      /> */}
-    {/* Add other Drawer items as needed */}
+        labelStyle={{ color: '#474646'}}
+        icon={() => <FontAwesome5 name="sign-out-alt" size={20} color='#15803D' />}
+        onPress={() => navigation.navigate('Logout')}
+      />
   </DrawerContentScrollView>
 );
+
+const DrawerNav = ({user}) => {
+  const Drawer = createDrawerNavigator();
+  const getData = async() => {
+    let data = await AsyncStorage.getItem('user');
+    if (data) {
+      data = JSON.parse(data);
+      if (data?.user?.profile != null) {
+    console.log(1)
+        return true
+      }
+    } 
+    console.log(2)
+    return false;
+  }
+  return (
+    <Drawer.Navigator
+        screenOptions={{
+          drawerStyle: {
+            marginTop: 20,
+          },
+        }}
+        drawerContent={(props) => <CustomDrawerContent {...props} user={user}/>}
+        initialRouteName={getData() == true ? "StackNav" : "ProfileUser"}
+        // initialRouteName="StackNav"
+      >
+        <Drawer.Screen name="StackNav" component={StackNav} options={{ headerShown: false }}/>
+        <Drawer.Screen name="StoreDrawer" component={StoreDrawer} options={{ headerShown: false }} />
+        <Drawer.Screen name="ProfileDrawer" component={ProfileDrawer} options={{ headerShown: false }} />
+        <Drawer.Screen name="ProfileUser" component={ProfileUser} options={{ headerShown: false }}/>
+        <Drawer.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
+        <Drawer.Screen name="RegisterStore" component={RegisterStore} options={{ headerShown: false }} />
+        <Drawer.Screen name="LoginNav" component={LoginNav} options={{ headerShown: false }}/>
+    </Drawer.Navigator>
+  )
+}
+
+const LoginNav = () => {
+
+  return (
+    <Stack.Navigator initialRouteName="UsernameInput" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="UsernameInput" component={UsernameInput} options={{ headerShown: false }}/>
+        <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
+        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
+        <Stack.Screen name="OTP" component={OTP} options={{ headerShown: false }}/>
+        <Stack.Screen name="RecoveryPassword" component={RecoveryPassword} options={{ headerShown: false }}/>
+        <Stack.Screen name="DrawerNav" component={DrawerNav}/>
+        <Stack.Screen name="ProfileUser" component={ProfileUser} options={{ headerShown: false }}/>
+        <Stack.Screen name="BottomNavigator" component={StackNav} options={{ headerShown: false }}/>
+    </Stack.Navigator>
+  )
+}
+
+const StackNav = () => {
+
+  return (
+      <Stack.Navigator initialRouteName="BottomNavigatorPage" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="BottomNavigatorPage" component={BottomNavigator} />
+        <Stack.Screen name="ProfileUser" component={ProfileUser} options={{ headerShown: false }}/>
+        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
+        <Stack.Screen name="Order" component={Order} options={{ headerShown: false }}/>
+        <Stack.Screen name="Warehouse" component={Warehouse} options={{ headerShown: false }}/>
+        <Stack.Screen name="SettingStore" component={SettingStore} options={{ headerShown: false }}/>
+        <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
+        <Stack.Screen name="Sell" component={Sell} options={{ headerShown: false }}/>
+        <Stack.Screen name="Search" component={Search} options={{ headerShown: false }}/>
+        <Stack.Screen name="CreateProduct" component={CreateProduct} options={{ headerShown: false }}/>
+        <Stack.Screen name="ProductManagement" component={ProductManagement} options={{ headerShown: false }}/>
+        <Stack.Screen name="ProductInCategory" component={ProductInCategory} options={{ headerShown: false }}/>
+        <Stack.Screen name="OrderConfirmation" component={OrderConfirmation} options={{ headerShown: false }}/>
+        <Stack.Screen name="SettingProfile" component={SettingProfile} options={{ headerShown: false }}/>
+        <Stack.Screen name="Customers" component={Customers} options={{ headerShown: false }}/>
+        <Stack.Screen name="PaymentDetail" component={PaymentDetail} options={{ headerShown: false }}/>
+        <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }}/>
+        <Stack.Screen name="OrderDetail" component={OrderDetail} options={{ headerShown: false }}/>
+        <Stack.Screen name="TransactionDetails" component={TransactionDetails} options={{ headerShown: false }}/>
+        <Stack.Screen name="UnderPayment" component={UnderPayment} options={{ headerShown: false }}/>
+        <Stack.Screen name="Report" component={Report} options={{ headerShown: false }}/>
+        <Stack.Screen name="CreateCategory" component={CreateCategory} options={{ headerShown: false }}/>
+        <Stack.Screen name="CameraScreen" component={CameraScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="ImportProduct" component={ImportProduct} options={{ headerShown: false }}/>
+        <Stack.Screen name="ImportProductInfo" component={ImportProductInfo} options={{ headerShown: false }}/>
+        <Stack.Screen name="SaleManagement" component={SaleManagement} options={{ headerShown: false }}/>
+        <Stack.Screen name="CreateCoupon" component={CreateCoupon} options={{ headerShown: false }}/>
+        <Stack.Screen name="SaleType" component={SaleType} options={{ headerShown: false }}/>
+        <Stack.Screen name="CouponDetail" component={CouponDetail} options={{ headerShown: false }}/>
+        <Stack.Screen name="ChangePassword" component={ChangePassword} options={{ headerShown: false }}/>
+        <Stack.Screen name="ImportBook" component={ImportBook} options={{ headerShown: false }}/>
+        <Stack.Screen name="ExportBook" component={ExportBook} options={{ headerShown: false }}/>
+        <Stack.Screen name="Logout" component={Logout} options={{ headerShown: false }}/>
+        <Stack.Screen name="LoginNav" component={LoginNav}/>
+      </Stack.Navigator>
+)};
 
 function App() {
   const dispatch = useDispatch();
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
-  const responseListener = useRef();
-  const [user, setUser] = useState('');
+  const responseListener = useRef(); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
 
+  useEffect(() => {
+    const getData = async() => {
+      const data = await AsyncStorage.getItem('user');
+      if (data) {
+        const parsedUserData = JSON.parse(data);
+        setIsLoggedIn(parsedUserData);
+        dispatch(updateUser(parsedUserData.user)); 
+      }
+    }
+    getData();
+
+    setTimeout(() => {
+      SplashScreen?.hide();
+    }, 900);
+  }, []);
+      
   useEffect(() => {
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
 
@@ -283,67 +331,12 @@ function App() {
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
-
-  useEffect(() => {
-    const getAccessToken = async () => {
-      try {
-          const userData = await AsyncStorage.getItem('user');
-          setUser(JSON.parse(userData));
-          
-          if (userData) {
-            const parsedUserData = JSON.parse(userData);
-            dispatch(updateUser(parsedUserData.user)); 
-          }
-      } catch (error) {
-          console.error('Error getting access token from AsyncStorage:', error);
-          return null;
-      }
-    };
-    getAccessToken();
-  }, []);
-  console.log(user)
+  
   return (
       <PaperProvider theme={DefaultTheme}>
         <NavigationContainer>
-          {user ? (
-          <Drawer.Navigator
-            screenOptions={{
-              drawerStyle: {
-                marginTop: 20,
-              },
-            }}
-            drawerContent={(props) => <CustomDrawerContent {...props} user={user}/>}
-          >
-            <Drawer.Screen name="Trang chủ" component={HomeStack} options={{ headerShown: false }}/>
-                <Drawer.Screen name="Cài đặt cửa hàng" component={StoreDrawer} options={{ headerShown: false }} />
-                <Drawer.Screen name="Cài đặt cá nhân" component={ProfileDrawer} options={{ headerShown: false }} />
-            {/* {!user?.profile?.id ? 
-              <>
-                <Drawer.Screen name="Trang chủ" component={HomeStack} options={{ headerShown: false }}/>
-                <Drawer.Screen name="Cài đặt cửa hàng" component={StoreDrawer} options={{ headerShown: false }} />
-                <Drawer.Screen name="Cài đặt cá nhân" component={ProfileDrawer} options={{ headerShown: false }} />
-              </>
-              : 
-              <>
-                <Drawer.Screen name="Thông tin cá nhân" component={ProfileUserDrawer} options={{ headerShown: false }} />
-              </> */}
-             
-          
-          </Drawer.Navigator>
-        ) : (
-          
-          <Stack.Navigator initialRouteName="UsernameInput" screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
-            <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
-            <Stack.Screen name="UsernameInput" component={UsernameInput} options={{ headerShown: false }}/>
-            <Stack.Screen name="OTP" component={OTP} options={{ headerShown: false }}/>
-            <Stack.Screen name="RecoveryPassword" component={RecoveryPassword} options={{ headerShown: false }}/>
-            <Stack.Screen name="BottomNavigator" component={BottomNavigator} options={{ headerShown: false }}/>
-            <Stack.Screen name="ProfileUser" component={ProfileUser} options={{ headerShown: false }}/>
-          </Stack.Navigator>
-        )}
+          {isLoggedIn ? <DrawerNav user={isLoggedIn}/> : <LoginNav />}
         </NavigationContainer>
-        
       </PaperProvider>
   );
 }

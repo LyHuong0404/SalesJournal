@@ -223,14 +223,14 @@ function ProfitTab() {
                                     <Text style={styles.text}>Giá vốn</Text>
                                     <Text style={{ color: '#3a3a3a'}}>{spentMoney}</Text>
                                 </View>
-                                <View>
+                                {/* <View>
                                     <Text></Text>
                                     <Text style={{ color: '#3a3a3a'}}>-</Text>
                                 </View>
                                 <View>
                                     <Text style={styles.text}>Lợi nhuận khác</Text>
                                     <Text style={{ color: '#3a3a3a'}}>20.000</Text>
-                                </View>
+                                </View> */}
                             </View>
                         </View>
                     </View>

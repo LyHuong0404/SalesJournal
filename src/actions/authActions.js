@@ -1,6 +1,5 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createAction } from '@reduxjs/toolkit';
 
 import * as httprequest from "../utils/httprequest";
 
@@ -113,5 +112,11 @@ export const login = createAsyncThunk('auth', async ({ username, password }, { r
     }
 });
 
+export const logout = async() => {
+    await AsyncStorage.removeItem('user');
+}
+
+
 
 export const updateUser = createAction('auth/updateUser');
+
