@@ -4,58 +4,57 @@ import { useSelector } from "react-redux";
 
 function SettingProfile() {
     const navigation = useNavigation();
-
     const { user } = useSelector((state) => state.auth);
 
     return ( 
         <View style={styles.container}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center',justifyContent: "flex-start", backgroundColor: 'green', height: 'auto', paddingVertical: 12 }}>
-                        <Image source={require('../../assets/images/right_arrow.png')} style={{ width: 17, height: 17, objectFit: 'contain', tintColor: '#ffffff' }}/>
+                    <Image source={require('../../assets/images/right_arrow.png')} style={{ width: 17, height: 17, objectFit: 'contain', tintColor: '#ffffff' }}/>
                     <Text style={{ flex: 1, color: '#ffffff', textAlign: 'center', fontWeight: 'bold', marginLeft: 10 }}>Thông tin cá nhân</Text>
                 </View>
             </TouchableOpacity>
             <View style={styles.box}>
                 <View style={styles.box_content}>
-                    <Image source={require('../../assets/images/avatar.jpg')} style={styles.avatar} />
+                    <Image source={user?.avatar ? { uri: user?.avatar } : require('../../assets/images/no_image.jpg')} style={styles.avatar} />
                     <View style={{ alignSelf: 'center' }}>
                         <Text style={{ color: '#575757', fontWeight: '500' }}>{user?.username}</Text>
-                        <Text style={{ color: "#8e8e93"}}>{user?.email}</Text>
+                        <Text style={{ color: '#8e8e93', maxWidth: 225 }}>{user?.email}</Text>
                         <Text style={{ color: "#15803D", fontWeight: '500', fontSize: 13}} onPress={() => navigation.navigate("Profile")}>Chỉnh sửa thông tin</Text>
                     </View>
                 </View>
             </View>
             <ScrollView style={{ flex: 1 }}>
-                <View style={styles.setting_item}>
+                <TouchableOpacity style={styles.setting_item} onPress={() => navigation.navigate('ChangePassword')}>
                     <Image source={require('../../assets/images/lock.png')} style={styles.icon} />
                     <Text style={{ flex: 1, marginLeft: 10 }}>Đổi mật khẩu</Text>
                     <Image source={require('../../assets/images/left_arrow.png')} style={[styles.icon, { tintColor: '#d9d9d9' }]} />
-                </View>
-                <View style={styles.setting_item}>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.setting_item}>
                     <Image source={require('../../assets/images/message.png')} style={styles.icon} />
                     <Text style={{ flex: 1, marginLeft: 10 }}>Đóng góp ý kiến</Text>
                     <Image source={require('../../assets/images/left_arrow.png')} style={[styles.icon, { tintColor: '#d9d9d9' }]} />
-                </View>
-                <View style={styles.setting_item}>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.setting_item}>
                     <Image source={require('../../assets/images/info.png')} style={styles.icon} />
                     <Text style={{ flex: 1, marginLeft: 10 }}>Về ứng dụng</Text>
                     <Image source={require('../../assets/images/left_arrow.png')} style={[styles.icon, { tintColor: '#d9d9d9' }]} />
-                </View>
-                <View style={styles.setting_item}>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.setting_item}>
                     <Image source={require('../../assets/images/lock.png')} style={styles.icon} />
                     <Text style={{ flex: 1, marginLeft: 10 }}>Quy chế hoạt động</Text>
                     <Image source={require('../../assets/images/left_arrow.png')} style={[styles.icon, { tintColor: '#d9d9d9' }]} />
-                </View>
-                <View style={styles.setting_item}>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.setting_item}>
                     <Image source={require('../../assets/images/lock.png')} style={styles.icon} />
                     <Text style={{ flex: 1, marginLeft: 10 }}>Chính sách bảo mật</Text>
                     <Image source={require('../../assets/images/left_arrow.png')} style={[styles.icon, { tintColor: '#d9d9d9' }]} />
-                </View>
-                <View style={styles.setting_item}>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.setting_item}>
                     <Image source={require('../../assets/images/lock.png')} style={styles.icon} />
                     <Text style={{ flex: 1, marginLeft: 10 }}>Giải quyết khiếu nại</Text>
                     <Image source={require('../../assets/images/left_arrow.png')} style={[styles.icon, { tintColor: '#d9d9d9' }]} />
-                </View>
+                </TouchableOpacity>
                 
             </ScrollView>
             <View style={{ flex: 0.15, alignItems: 'center' }}>

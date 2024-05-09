@@ -41,16 +41,14 @@ function Home() {
   const handleLogout = () => {
     logout();
     navigation.navigate('LoginNav');
-}
+  }
   // console.log(JSON.stringify(navigation.getState()));
   return (
     <View style={styles.container}>   
       <View style={[styles.header, { marginBottom: 10, paddingTop: 20 }]}>
         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View style={{ display: 'flex', flexDirection: 'row' }}>
-            {/* <TouchableOpacity onPress={openDrawer}> */}
-              <Image source={require('../assets/images/store.jpg')} style={styles.image}/>
-            {/* </TouchableOpacity> */}
+          <View style={{ display: 'flex', flexDirection: 'row', flex: 0.7 }}>
+            <Image source={require('../assets/images/store.jpg')} style={styles.image}/>
             <View style={{ marginLeft: 10}}>
               <Text style={{ color: '#ffffff', fontSize: 14, fontWeight: 'bold' }}>{user?.profile?.nameStore}</Text>
               <Text style={{ color: '#ffffff', fontSize: 11 }}>Thông tin cửa hàng 
@@ -60,11 +58,14 @@ function Home() {
           </View>
           <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <TouchableOpacity onPress={() => navigation.navigate('Search')}> 
-              <Image source={require('../assets/images/search.png')} style={{ width: 22, height: 22, objectFit: 'contain', marginRight: 15 }}/>
+              <Image source={require('../assets/images/search.png')} style={{ width: 22, height: 22, objectFit: 'contain', marginLeft: 15 }}/>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleLogout}>
-              <Image source={require('../assets/images/chatting.png')} style={{ width: 25, height: 25, objectFit: 'contain' }} />
-              </TouchableOpacity>
+            <TouchableOpacity>
+              <Image source={require('../assets/images/chatting.png')} style={{ width: 25, height: 25, objectFit: 'contain', marginLeft: 15 }} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
+              <Image source={require('../assets/images/setting.png')} style={{ width: 25, height: 25, objectFit: 'contain', marginLeft: 15, tintColor: 'white' }} />
+            </TouchableOpacity>
           </View>
         </View>   
       </View> 

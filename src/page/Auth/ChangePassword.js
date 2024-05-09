@@ -1,10 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import { useState, useRef } from 'react';
-import { StyleSheet, TouchableOpacity, Image, View, Text, ScrollView } from 'react-native';
-// import { ScrollView } from 'react-native-gesture-handler';
+import { StyleSheet, TouchableOpacity, Image, View, Text, ScrollView, ToastAndroid } from 'react-native';
 import { HelperText } from 'react-native-paper';
+
 import ButtonCustom from '../../components/ButtonCustom';
 import PasswordInput from '../../components/PasswordInput';
+import { changePw } from '../../actions/user/authActions';
+import Loading from '../../components/Loading';
 
 
 function ChangePassword() {
@@ -18,8 +20,26 @@ function ChangePassword() {
     const currentPwRef = useRef(null);
     const newPwRef = useRef(null);
     const confirmPwRef = useRef(null);
-
-    const handleChangePassword = () => {}
+    const [loading, setLoading] = useState(false);
+ 
+    const handleChangePassword = () => {
+        try{
+            const fetchAPI = async() => {
+                setLoading(true);
+                const response = await changePw({ currentPassword, newPassword});
+                if (response?.code == 0) {
+                    ToastAndroid.show('Thay đổi mật khẩu thành công', ToastAndroid.SHORT);
+                } else {
+                    ToastAndroid.show('Thay đổi mật khẩu thất bại', ToastAndroid.SHORT);
+                }
+                setLoading(false);
+            }
+            fetchAPI();
+        } catch(err) {
+            setLoading(false);
+            ToastAndroid.show('Thay đổi mật khẩu thất bại', ToastAndroid.SHORT);
+        }
+    }
 
     return ( 
         <View style={styles.container}>
@@ -78,6 +98,7 @@ function ChangePassword() {
                     onPress={handleChangePassword} 
                     title="Hoàn tất">
             </ButtonCustom>
+            {loading && <Loading />}
         </View>
     );
 }

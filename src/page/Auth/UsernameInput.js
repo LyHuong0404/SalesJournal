@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import { View, StyleSheet, Text, Image, TouchableOpacity, ToastAndroid } from "react-native";
+import { View, StyleSheet, Text, Image, ToastAndroid } from "react-native";
 import { Button, TextInput, DefaultTheme  } from "react-native-paper";
 import { getCodeSignUp } from "../../actions/authActions";
 

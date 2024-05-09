@@ -1,14 +1,13 @@
 import { Text, View, Image, StyleSheet, TouchableOpacity, ToastAndroid } from "react-native";
-import { HelperText, TextInput, DefaultTheme } from "react-native-paper";
-import { useRef, useState } from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { getCodeSignUp } from "../../actions/authActions";
-import PasswordInput from "../../components/PasswordInput";
+
 import ButtonCustom from "../../components/ButtonCustom";
 import TextInputCustom from "../../components/TextInputCustom";
 import { useDispatch } from "react-redux";
 import { registerStore } from "../../actions/user/authActions";
+import Loading from "../../components/Loading";
 
 
 function RegisterStore() {
@@ -70,6 +69,7 @@ function RegisterStore() {
                 customStyle={{ marginHorizontal: 15 }}
                 title="Đăng ký">
             </ButtonCustom>
+            {loading && <Loading />}
         </View> 
     );
 }

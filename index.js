@@ -5,8 +5,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from 'react-redux';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import { FontAwesome5 } from '@expo/vector-icons';
 import { View, Image, Text, TouchableOpacity, Platform } from 'react-native';
 import { useState, useEffect, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -51,6 +49,7 @@ import ExportBook from './src/page/ExportBook';
 import ProfileUser from './src/page/Auth/ProfileUser';
 import Logout from './src/page/Logout';
 import ServicePackage from './src/page/ServicePackage';
+import Setting from './src/page/Auth/Setting';
 
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
@@ -217,6 +216,7 @@ const VendorNav = () => {
         <Stack.Screen name="ServicePackage" component={ServicePackage} options={{ headerShown: false }}/>
         <Stack.Screen name="SettingStore" component={SettingStore} options={{ headerShown: false }}/>
         <Stack.Screen name="SettingProfile" component={SettingProfile} options={{ headerShown: false }}/>
+        <Stack.Screen name="Setting" component={Setting} options={{ headerShown: false }}/>
       </Stack.Navigator>
   )
 }
