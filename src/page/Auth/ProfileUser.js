@@ -32,7 +32,7 @@ function ProfileUser() {
     const [hideCurrentPassword, setHideCurrentPassword] = useState(true);
     const [hideNewPassword, setHideNewPassword] = useState(true);
 
-    const handleLogout = async() => {
+    const handleLogout = () => {
         logout();
         navigation.navigate('UsernameInput');
     }

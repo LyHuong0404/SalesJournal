@@ -144,95 +144,6 @@ const BottomNavigator = () => (
   </Tab.Navigator>
 );
 
-const ProfileDrawer = () => (
-  <Stack.Navigator initialRouteName="SettingProfile" >
-      <Stack.Screen name="SettingProfile" component={SettingProfile} options={{ headerShown: false }}/>
-  </Stack.Navigator>
-);
-
-const StoreDrawer = () => (
-  <Stack.Navigator initialRouteName="SettingStore" >
-      <Stack.Screen name="SettingStore" component={SettingStore} options={{ headerShown: false }}/>
-  </Stack.Navigator>
-);
-
-const CustomDrawerContent = ({ user, navigation }) => (
-  
-  <DrawerContentScrollView>
-    <View>
-      <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16 }}>
-        <Image source={require('./src/assets/images/store.jpg')} style={{ width: 60, height: 60, borderRadius: 100, objectFit: 'cover', marginRight: 10, marginBottom: 10 }} />
-        <View style={{ justifyContent: 'center' }}>
-          <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{user?.user?.profile?.nameStore || 'null'}</Text>
-          <Text style={{ fontSize: 12, color: 'gray' }}>{user?.user?.username}</Text>
-        </View>
-      </View>
-      <TouchableOpacity>
-        <Image source={require('./src/assets/images/improve_pro.jpg')} style={{ width: '100%', height: 90, objectFit: 'cover', marginVertical: 10 }} />
-      </TouchableOpacity>
-    </View>
-      <DrawerItem
-        label="Trang chủ"
-        icon={() => <FontAwesome5 name="home" size={20} color='#15803D' />}
-        onPress={() => navigation.navigate('Home')}
-        labelStyle={{ color: '#474646'}}
-      />
-      <DrawerItem
-        label="Cài đặt cửa hàng"
-        labelStyle={{ color: '#474646'}}
-        icon={() => <FontAwesome5 name="cogs" size={20} color='#15803D' />}
-        onPress={() => navigation.navigate('SettingStore')}
-      />
-      <DrawerItem
-        label="Cài đặt cá nhân"
-        labelStyle={{ color: '#474646'}}
-        icon={() => <FontAwesome5 name="user" size={20} color='#15803D' />}
-        onPress={() => navigation.navigate('SettingProfile')}
-      />
-      <DrawerItem
-        label="Đăng xuất"
-        labelStyle={{ color: '#474646'}}
-        icon={() => <FontAwesome5 name="sign-out-alt" size={20} color='#15803D' />}
-        onPress={() => navigation.navigate('Logout')}
-      />
-  </DrawerContentScrollView>
-);
-
-const DrawerNav = ({user}) => {
-  const Drawer = createDrawerNavigator();
-  return (
-    <Drawer.Navigator
-        screenOptions={{
-          drawerStyle: {
-            marginTop: 20,
-          },
-        }}
-        drawerContent={(props) => <CustomDrawerContent {...props} user={user}/>}
-      >
-        {user && user?.user?.profile != null ? 
-          <>
-            <Drawer.Screen name="StackNav" component={StackNav} options={{ headerShown: false }}/>
-            <Drawer.Screen name="RegisterStore" component={RegisterStore} options={{ headerShown: false }} />
-            <Drawer.Screen name="StoreDrawer" component={StoreDrawer} options={{ headerShown: false }} />
-            <Drawer.Screen name="ProfileDrawer" component={ProfileDrawer} options={{ headerShown: false }} />
-            <Drawer.Screen name="ProfileUser" component={ProfileUser} options={{ headerShown: false }}/>
-            <Drawer.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
-            <Drawer.Screen name="LoginNav" component={LoginNav} options={{ headerShown: false }}/>
-            <Drawer.Screen name="ServicePackage" component={ServicePackage} options={{ headerShown: false }}/>
-          </>
-          : 
-          <>
-            <Drawer.Screen name="ProfileUser" component={ProfileUser} options={{ headerShown: false }}/>
-            <Drawer.Screen name="RegisterStore" component={RegisterStore} options={{ headerShown: false }} />
-            <Drawer.Screen name="StackNav" component={StackNav} options={{ headerShown: false }}/>
-            <Drawer.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
-            <Drawer.Screen name="ServicePackage" component={ServicePackage} options={{ headerShown: false }}/>
-          </>
-         
-        }
-    </Drawer.Navigator>
-  )
-}
 
 const LoginNav = () => {
 
@@ -243,25 +154,37 @@ const LoginNav = () => {
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
         <Stack.Screen name="OTP" component={OTP} options={{ headerShown: false }}/>
         <Stack.Screen name="RecoveryPassword" component={RecoveryPassword} options={{ headerShown: false }}/>
-        <Stack.Screen name="DrawerNav" component={DrawerNav}/>
         <Stack.Screen name="ProfileUser" component={ProfileUser} options={{ headerShown: false }}/>
-        <Stack.Screen name="BottomNavigator" component={StackNav} options={{ headerShown: false }}/>
+        <Stack.Screen name="VendorNav" component={VendorNav} options={{ headerShown: false }}/>
         <Stack.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
-        <Stack.Screen name="ServicePackage" component={ServicePackage} options={{ headerShown: false }} />
     </Stack.Navigator>
   )
 }
 
-const StackNav = () => {
+const UserLoggedNav = () => {
 
   return (
-      <Stack.Navigator initialRouteName="BottomNavigatorPage" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="BottomNavigatorPage" component={BottomNavigator} />
+    <Stack.Navigator initialRouteName="ProfileUser" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="UsernameInput" component={UsernameInput} options={{ headerShown: false }}/>
+        <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
+        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
+        <Stack.Screen name="OTP" component={OTP} options={{ headerShown: false }}/>
+        <Stack.Screen name="RecoveryPassword" component={RecoveryPassword} options={{ headerShown: false }}/>
         <Stack.Screen name="ProfileUser" component={ProfileUser} options={{ headerShown: false }}/>
+        <Stack.Screen name="VendorNav" component={VendorNav} options={{ headerShown: false }}/>
+        <Stack.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
+    </Stack.Navigator>
+  )
+}
+
+const VendorNav = () => {
+  
+  return (
+    <Stack.Navigator initialRouteName="BottomNavigatorPage" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="BottomNavigatorPage" component={BottomNavigator} />
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
         <Stack.Screen name="Order" component={Order} options={{ headerShown: false }}/>
         <Stack.Screen name="Warehouse" component={Warehouse} options={{ headerShown: false }}/>
-        <Stack.Screen name="SettingStore" component={SettingStore} options={{ headerShown: false }}/>
         <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
         <Stack.Screen name="Sell" component={Sell} options={{ headerShown: false }}/>
         <Stack.Screen name="Search" component={Search} options={{ headerShown: false }}/>
@@ -269,7 +192,6 @@ const StackNav = () => {
         <Stack.Screen name="ProductManagement" component={ProductManagement} options={{ headerShown: false }}/>
         <Stack.Screen name="ProductInCategory" component={ProductInCategory} options={{ headerShown: false }}/>
         <Stack.Screen name="OrderConfirmation" component={OrderConfirmation} options={{ headerShown: false }}/>
-        <Stack.Screen name="SettingProfile" component={SettingProfile} options={{ headerShown: false }}/>
         <Stack.Screen name="Customers" component={Customers} options={{ headerShown: false }}/>
         <Stack.Screen name="PaymentDetail" component={PaymentDetail} options={{ headerShown: false }}/>
         <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }}/>
@@ -291,16 +213,20 @@ const StackNav = () => {
         <Stack.Screen name="Logout" component={Logout} options={{ headerShown: false }}/>
         <Stack.Screen name="LoginNav" component={LoginNav}/>
         <Stack.Screen name="ServicePackage" component={ServicePackage} options={{ headerShown: false }}/>
+        <Stack.Screen name="SettingStore" component={SettingStore} options={{ headerShown: false }}/>
+        <Stack.Screen name="SettingProfile" component={SettingProfile} options={{ headerShown: false }}/>
       </Stack.Navigator>
-)};
+  )
+}
 
+        
 function App() {
   const dispatch = useDispatch();
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef(); 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [data, setData] = useState('');
   
 
   useEffect(() => {
@@ -308,7 +234,7 @@ function App() {
       const data = await AsyncStorage.getItem('user');
       if (data) {
         const parsedUserData = JSON.parse(data);
-        setIsLoggedIn(parsedUserData);
+        setData(parsedUserData);
         dispatch(updateUser(parsedUserData.user)); 
       }
     }
@@ -339,7 +265,7 @@ function App() {
   return (
       <PaperProvider theme={DefaultTheme}>
         <NavigationContainer>
-          {isLoggedIn ? <DrawerNav user={isLoggedIn}/> : <LoginNav />}
+          {data?.user?.profile ? <VendorNav /> : data ? <UserLoggedNav /> : <LoginNav />}
         </NavigationContainer>
       </PaperProvider>
   );

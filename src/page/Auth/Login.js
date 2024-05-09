@@ -46,7 +46,7 @@ function Login() {
             const response = await dispatch(login({ username, password }));
             if (response) {            
                 if (response?.payload?.user?.profile) {
-                    navigation.navigate('DrawerNav');              
+                    navigation.navigate('VendorNav');              
                 } else {
                     navigation.navigate('ProfileUser');              
                 }

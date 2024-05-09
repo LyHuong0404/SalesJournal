@@ -24,7 +24,7 @@ function RegisterStore() {
                 setLoading(true);
                 const response = await dispatch(registerStore({ nameStore }));
                 if (response) {
-                    navigation.navigate('DrawerNav')
+                    navigation.navigate('VendorNav')
                     ToastAndroid.show('Đăng ký cửa hàng thành công', ToastAndroid.SHORT);
                 } else {
                     ToastAndroid.show('Đăng ký cửa hàng thất bại', ToastAndroid.SHORT);

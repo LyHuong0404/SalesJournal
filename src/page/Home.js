@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from 'react';
 import RBSheet from "react-native-raw-bottom-sheet";
 import QRDemo from './QRDemo';
 import { convertTimeStamp } from '../utils/helper';
+import { logout } from '../actions/authActions';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -17,9 +18,6 @@ function Home() {
   const refRBSheet = useRef();
   const [date, setDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
   const [revenue, setRevenue] = useState([]);
-  const openDrawer = () => {
-    navigation.dispatch(DrawerActions.openDrawer());  
-  };
 
   useEffect(() => {
     try{
@@ -28,27 +26,31 @@ function Home() {
             if (response) {
                 setRevenue(response);
             } else {
-                ToastAndroid.show('Lỗi tải không thành công', ToastAndroid.SHORT);
+                ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
             }
         }
         fetchAPI();
     } catch(e){
-        ToastAndroid.show('Lỗi tải không thành công', ToastAndroid.SHORT);
+        ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
     }
   }, [])
 
   const handleClose = () => {
     refRBSheet.current?.close();
   }
+  const handleLogout = () => {
+    logout();
+    navigation.navigate('LoginNav');
+}
   // console.log(JSON.stringify(navigation.getState()));
   return (
     <View style={styles.container}>   
       <View style={[styles.header, { marginBottom: 10, paddingTop: 20 }]}>
         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ display: 'flex', flexDirection: 'row' }}>
-            <TouchableOpacity onPress={openDrawer}>
+            {/* <TouchableOpacity onPress={openDrawer}> */}
               <Image source={require('../assets/images/store.jpg')} style={styles.image}/>
-            </TouchableOpacity>
+            {/* </TouchableOpacity> */}
             <View style={{ marginLeft: 10}}>
               <Text style={{ color: '#ffffff', fontSize: 14, fontWeight: 'bold' }}>{user?.profile?.nameStore}</Text>
               <Text style={{ color: '#ffffff', fontSize: 11 }}>Thông tin cửa hàng 
@@ -60,7 +62,9 @@ function Home() {
             <TouchableOpacity onPress={() => navigation.navigate('Search')}> 
               <Image source={require('../assets/images/search.png')} style={{ width: 22, height: 22, objectFit: 'contain', marginRight: 15 }}/>
             </TouchableOpacity>
-            <Image source={require('../assets/images/chatting.png')} style={{ width: 25, height: 25, objectFit: 'contain' }}/>
+            <TouchableOpacity onPress={handleLogout}>
+              <Image source={require('../assets/images/chatting.png')} style={{ width: 25, height: 25, objectFit: 'contain' }} />
+              </TouchableOpacity>
           </View>
         </View>   
       </View> 
