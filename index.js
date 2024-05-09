@@ -157,6 +157,7 @@ const LoginNav = () => {
         <Stack.Screen name="ProfileUser" component={ProfileUser} options={{ headerShown: false }}/>
         <Stack.Screen name="VendorNav" component={VendorNav} options={{ headerShown: false }}/>
         <Stack.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
+        <Stack.Screen name="RegisterStore" component={RegisterStore} options={{ headerShown: false }} />
     </Stack.Navigator>
   )
 }
@@ -173,6 +174,7 @@ const UserLoggedNav = () => {
         <Stack.Screen name="ProfileUser" component={ProfileUser} options={{ headerShown: false }}/>
         <Stack.Screen name="VendorNav" component={VendorNav} options={{ headerShown: false }}/>
         <Stack.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
+        <Stack.Screen name="RegisterStore" component={RegisterStore} options={{ headerShown: false }} />
     </Stack.Navigator>
   )
 }

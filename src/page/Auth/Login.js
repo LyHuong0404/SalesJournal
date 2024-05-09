@@ -2,10 +2,11 @@ import { Text, View, Image, StyleSheet, TouchableOpacity, ToastAndroid } from "r
 import { TextInput, Button, DefaultTheme } from "react-native-paper";
 import { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { getCodeForgotPassword } from "../../actions/authActions";
 import { useDispatch } from "react-redux";
-import { login } from "../../actions/authActions";
 
+import { getCodeForgotPassword } from "../../actions/authActions";
+import { login } from "../../actions/authActions";
+import Loading from "../../components/Loading";
 
 const theme = {
     ...DefaultTheme,
@@ -23,6 +24,8 @@ function Login() {
     const username = route.params?.username || '';
     const [password, setPassword] = useState('');
     const [hidePassword, setHidePassword] = useState(true);
+    const [loading, setLoading] = useState(false);
+
 
     const onChangePassword = text => setPassword(text);
     const onToggleHidePassword = () => setHidePassword(!hidePassword);
@@ -42,6 +45,7 @@ function Login() {
     }
 
     const handleLogin = async() => {
+        setLoading(true);
         try {
             const response = await dispatch(login({ username, password }));
             if (response) {            
@@ -53,7 +57,9 @@ function Login() {
             } else {
                 ToastAndroid.show('Mật khẩu không đúng, vui lòng nhập lại!', ToastAndroid.SHORT);
             }
+            setLoading(false);
         } catch(err) {
+            setLoading(false);
             ToastAndroid.show('Mật khẩu không đúng, vui lòng nhập lại!', ToastAndroid.SHORT);
         }
     };
@@ -95,6 +101,7 @@ function Login() {
                     Đăng nhập
                 </Button>
             </View>
+            {loading && <Loading />}
         </View> 
     );
 }

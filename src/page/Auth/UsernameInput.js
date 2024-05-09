@@ -4,6 +4,8 @@ import { View, StyleSheet, Text, Image, TouchableOpacity, ToastAndroid } from "r
 import { Button, TextInput, DefaultTheme  } from "react-native-paper";
 import { getCodeSignUp } from "../../actions/authActions";
 
+import Loading from "../../components/Loading";
+
 const theme = {
     ...DefaultTheme,
     colors: {
@@ -16,8 +18,10 @@ const theme = {
 function UsernameInput() {
     const navigation = useNavigation();
     const [username, setUsername] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleNavigation = async() => {
+        setLoading(true);
         try{
             const response = await getCodeSignUp({ username });
             if (response?.message == "OTP Sent") {
@@ -25,7 +29,9 @@ function UsernameInput() {
             } else {
                 navigation.navigate("Login", { username });
             }
+            setLoading(false);
         } catch(e){
+            setLoading(false);
             ToastAndroid.show('Thất bại!', ToastAndroid.SHORT);
         }
     }
@@ -56,6 +62,7 @@ function UsernameInput() {
                 <Text style={{ marginBottom: 20, fontSize: 11 }}>An toàn & bảo mật 100%</Text>
                 <Text style={{ color: '#888888' }}>Bằng việc ấn vào Tiếp tục, bạn đã đồng ý với <Text style={{ color: '#15803D'}}>Điều khoản và Điều kiện sử dụng </Text>của ứng dụng</Text>
             </View>
+            {loading && <Loading />}
         </View>
     );
 }
