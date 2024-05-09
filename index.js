@@ -48,8 +48,9 @@ import SaleManagement from './src/page/Coupon/SaleManagement';
 import CouponDetail from './src/page/Coupon/CouponDetail';
 import ImportBook from './src/page/ImportBook';
 import ExportBook from './src/page/ExportBook';
-import ProfileUser from './src/page/ProfileUser';
+import ProfileUser from './src/page/Auth/ProfileUser';
 import Logout from './src/page/Logout';
+import ServicePackage from './src/page/ServicePackage';
 
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
@@ -199,18 +200,6 @@ const CustomDrawerContent = ({ user, navigation }) => (
 
 const DrawerNav = ({user}) => {
   const Drawer = createDrawerNavigator();
-  const getData = async() => {
-    let data = await AsyncStorage.getItem('user');
-    if (data) {
-      data = JSON.parse(data);
-      if (data?.user?.profile != null) {
-    console.log(1)
-        return true
-      }
-    } 
-    console.log(2)
-    return false;
-  }
   return (
     <Drawer.Navigator
         screenOptions={{
@@ -219,16 +208,28 @@ const DrawerNav = ({user}) => {
           },
         }}
         drawerContent={(props) => <CustomDrawerContent {...props} user={user}/>}
-        initialRouteName={getData() == true ? "StackNav" : "ProfileUser"}
-        // initialRouteName="StackNav"
       >
-        <Drawer.Screen name="StackNav" component={StackNav} options={{ headerShown: false }}/>
-        <Drawer.Screen name="StoreDrawer" component={StoreDrawer} options={{ headerShown: false }} />
-        <Drawer.Screen name="ProfileDrawer" component={ProfileDrawer} options={{ headerShown: false }} />
-        <Drawer.Screen name="ProfileUser" component={ProfileUser} options={{ headerShown: false }}/>
-        <Drawer.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
-        <Drawer.Screen name="RegisterStore" component={RegisterStore} options={{ headerShown: false }} />
-        <Drawer.Screen name="LoginNav" component={LoginNav} options={{ headerShown: false }}/>
+        {user && user?.user?.profile != null ? 
+          <>
+            <Drawer.Screen name="StackNav" component={StackNav} options={{ headerShown: false }}/>
+            <Drawer.Screen name="RegisterStore" component={RegisterStore} options={{ headerShown: false }} />
+            <Drawer.Screen name="StoreDrawer" component={StoreDrawer} options={{ headerShown: false }} />
+            <Drawer.Screen name="ProfileDrawer" component={ProfileDrawer} options={{ headerShown: false }} />
+            <Drawer.Screen name="ProfileUser" component={ProfileUser} options={{ headerShown: false }}/>
+            <Drawer.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
+            <Drawer.Screen name="LoginNav" component={LoginNav} options={{ headerShown: false }}/>
+            <Drawer.Screen name="ServicePackage" component={ServicePackage} options={{ headerShown: false }}/>
+          </>
+          : 
+          <>
+            <Drawer.Screen name="ProfileUser" component={ProfileUser} options={{ headerShown: false }}/>
+            <Drawer.Screen name="RegisterStore" component={RegisterStore} options={{ headerShown: false }} />
+            <Drawer.Screen name="StackNav" component={StackNav} options={{ headerShown: false }}/>
+            <Drawer.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
+            <Drawer.Screen name="ServicePackage" component={ServicePackage} options={{ headerShown: false }}/>
+          </>
+         
+        }
     </Drawer.Navigator>
   )
 }
@@ -245,6 +246,8 @@ const LoginNav = () => {
         <Stack.Screen name="DrawerNav" component={DrawerNav}/>
         <Stack.Screen name="ProfileUser" component={ProfileUser} options={{ headerShown: false }}/>
         <Stack.Screen name="BottomNavigator" component={StackNav} options={{ headerShown: false }}/>
+        <Stack.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
+        <Stack.Screen name="ServicePackage" component={ServicePackage} options={{ headerShown: false }} />
     </Stack.Navigator>
   )
 }
@@ -287,6 +290,7 @@ const StackNav = () => {
         <Stack.Screen name="ExportBook" component={ExportBook} options={{ headerShown: false }}/>
         <Stack.Screen name="Logout" component={Logout} options={{ headerShown: false }}/>
         <Stack.Screen name="LoginNav" component={LoginNav}/>
+        <Stack.Screen name="ServicePackage" component={ServicePackage} options={{ headerShown: false }}/>
       </Stack.Navigator>
 )};
 

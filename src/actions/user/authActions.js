@@ -58,6 +58,34 @@ export const registerStore = createAsyncThunk('register-trial', async ({ nameSto
                 const userJson = await AsyncStorage.getItem('user');
                 const userData = JSON.parse(userJson);
                 
+                userData.user.profile = response?.data;
+                await AsyncStorage.setItem('user', JSON.stringify(userData));
+            }
+            updateInfoFromAsyncStorage();
+            
+            return response?.data;
+        } else {
+            return rejectWithValue('Thất bại');
+        }
+    } catch (error) {
+        console.log("Error when updating user's profile: ", error);
+    }
+});
+
+export const updateAvatar = createAsyncThunk('update-avatar', async ({ avatarFile }, { rejectWithValue }) => {
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        };
+        const response = await httprequest.post('update-avatar', { avatarFile } , config);
+
+        if (response?.code == 0) {
+            const updateInfoFromAsyncStorage = async() => {
+                const userJson = await AsyncStorage.getItem('user');
+                const userData = JSON.parse(userJson);
+                
                 userData.user = response?.data;
                 await AsyncStorage.setItem('user', JSON.stringify(userData));
             }

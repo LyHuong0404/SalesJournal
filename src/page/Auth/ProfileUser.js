@@ -3,10 +3,10 @@ import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, Image, TouchableOpacity, Text, ToastAndroid, ScrollView } from 'react-native';
 import { Button, TextInput, DefaultTheme, HelperText } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import { changePw, updateProfile } from '../actions/user/authActions';
+import { changePw, updateProfile } from '../../actions/user/authActions';
 import { useState } from 'react';
-import Loading from '../components/Loading';
-import { logout } from '../actions/authActions';
+import Loading from '../../components/Loading';
+import { logout } from '../../actions/authActions';
 
 const theme = {
     ...DefaultTheme,
@@ -34,7 +34,7 @@ function ProfileUser() {
 
     const handleLogout = async() => {
         logout();
-        navigation.navigate('LoginNav');
+        navigation.navigate('UsernameInput');
     }
 
     const handleUpdateInfo = () => {
@@ -113,20 +113,20 @@ function ProfileUser() {
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center',justifyContent: "flex-start", backgroundColor: 'green', height: 'auto', paddingVertical: 12, paddingHorizontal: 15 }}>
                     <Text style={{ flex: 1, color: '#ffffff', textAlign: 'center', fontWeight: 'bold', marginLeft: 10 }}>Tài khoản</Text>
                     <TouchableOpacity onPress={handleLogout}>
-                        <Image source={require('../assets/images/logout.png')} style={{ width: 20, height: 20, marginRight: 10, tintColor: 'white' }}/>
+                        <Image source={require('../../assets/images/logout.png')} style={{ width: 20, height: 20, marginRight: 10, tintColor: 'white' }}/>
                     </TouchableOpacity>
                    
                 </View>
             </View>
             <ScrollView style={{ flex: 1, marginBottom: 15 }}>
                 <TouchableOpacity>
-                    <Image source={user?.avatar ? { uri: user?.avatar } : require('../assets/images/no_image.jpg')} style={styles.avatar}/>
+                    <Image source={user?.avatar ? { uri: user?.avatar } : require('../../assets/images/no_image.jpg')} style={styles.avatar}/>
                 </TouchableOpacity>
                 <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', margin: 20, marginLeft: 15 }} onPress={() => setDropdownInfo(!dropdownInfo)}>
                     <Text style={{ fontWeight: '600', marginRight: 15 }}>Thông tin cá nhân</Text>
                     {dropdownInfo ? 
-                        <Image source={require('../assets/images/down_arrow.png')} style={{ width: 15, height: 15, objectFit: 'contain', tintColor: '#2083c5' }}/>
-                        : <Image source={require('../assets/images/up_arrow.png')} style={{ width: 15, height: 15, objectFit: 'contain', tintColor: '#2083c5' }}/>
+                        <Image source={require('../../assets/images/down_arrow.png')} style={{ width: 15, height: 15, objectFit: 'contain', tintColor: '#2083c5' }}/>
+                        : <Image source={require('../../assets/images/up_arrow.png')} style={{ width: 15, height: 15, objectFit: 'contain', tintColor: '#2083c5' }}/>
                     }
                 </TouchableOpacity>
                 
@@ -184,8 +184,8 @@ function ProfileUser() {
                 <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', margin: 20, marginLeft: 15 }} onPress={() => setDropdownPoint(!dropdownPoint)}>
                     <Text style={{ fontWeight: '600', marginRight: 55 }}>Điểm tích lũy</Text>
                     {dropdownPoint ? 
-                        <Image source={require('../assets/images/down_arrow.png')} style={{ width: 15, height: 15, objectFit: 'contain', tintColor: '#2083c5' }}/>
-                        : <Image source={require('../assets/images/up_arrow.png')} style={{ width: 15, height: 15, objectFit: 'contain', tintColor: '#2083c5' }}/>
+                        <Image source={require('../../assets/images/down_arrow.png')} style={{ width: 15, height: 15, objectFit: 'contain', tintColor: '#2083c5' }}/>
+                        : <Image source={require('../../assets/images/up_arrow.png')} style={{ width: 15, height: 15, objectFit: 'contain', tintColor: '#2083c5' }}/>
                     }
                 </TouchableOpacity>
                 
@@ -244,8 +244,8 @@ function ProfileUser() {
                     <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: 20 }} onPress={() => setDropdownPw(!dropdownPw)}>
                         <Text style={{ fontWeight: '600', marginRight: 55 }}>Đổi mật khẩu</Text>
                         {dropdownPw ? 
-                            <Image source={require('../assets/images/down_arrow.png')} style={{ width: 15, height: 15, objectFit: 'contain', tintColor: '#2083c5' }}/>
-                            : <Image source={require('../assets/images/up_arrow.png')} style={{ width: 15, height: 15, objectFit: 'contain', tintColor: '#2083c5' }}/>
+                            <Image source={require('../../assets/images/down_arrow.png')} style={{ width: 15, height: 15, objectFit: 'contain', tintColor: '#2083c5' }}/>
+                            : <Image source={require('../../assets/images/up_arrow.png')} style={{ width: 15, height: 15, objectFit: 'contain', tintColor: '#2083c5' }}/>
                         }
                     </TouchableOpacity>
                     {dropdownPw && <>
@@ -313,10 +313,11 @@ const styles = StyleSheet.create({
     },
     avatar: {
         alignSelf: 'center',
-        width: '32%',
-        height: 120,
+        width: '33%',
+        height: 130,
         borderRadius: 100,
-        marginVertical: 20
+        marginVertical: 20,
+        objectFit: 'contain'
     }
 })
 

@@ -117,6 +117,7 @@ function Home() {
               mode="contained" 
               buttonColor='#c5830c' 
               style={{ borderRadius: 10, marginTop: 10 }}
+              onPress={() => navigation.navigate('ServicePackage')}
           >Gia hạn</Button>
         </View>
         <View style={{ marginBottom: 20 }}>

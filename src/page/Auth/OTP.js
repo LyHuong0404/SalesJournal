@@ -69,7 +69,7 @@ function OTP() {
                 if (response?.code == 0) {
                     await signUp({ username, password, email });
                     ToastAndroid.show('Đăng ký thành công, vui lòng đăng nhập lại', ToastAndroid.SHORT);
-                    navigation.navigate("Pro");
+                    navigation.navigate("UsernameInput");
                 } else {
                     ToastAndroid.show('Sai mã OTP', ToastAndroid.SHORT);
                 }

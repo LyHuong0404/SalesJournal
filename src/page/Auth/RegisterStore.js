@@ -1,4 +1,4 @@
-import { Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View, Image, StyleSheet, TouchableOpacity, ToastAndroid } from "react-native";
 import { HelperText, TextInput, DefaultTheme } from "react-native-paper";
 import { useRef, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -7,29 +7,35 @@ import { getCodeSignUp } from "../../actions/authActions";
 import PasswordInput from "../../components/PasswordInput";
 import ButtonCustom from "../../components/ButtonCustom";
 import TextInputCustom from "../../components/TextInputCustom";
+import { useDispatch } from "react-redux";
+import { registerStore } from "../../actions/user/authActions";
 
-const theme = {
-    ...DefaultTheme,
-    colors: {
-      ...DefaultTheme.colors,
-      primary: '#15803D', 
-      underlineColor: '#888888', 
-    },
-};
 
 function RegisterStore() {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
     const [nameStore, setNameStore] = useState('');
+    const [loading, setLoading] = useState(false);
 
 
     const handleRegisterStore = () => {
-        // try{
-        //     const fetchAPI = async() => {
-        //         // const response =
-        //     }
-        // } catch(err){
-
-        // }
+        try{
+            const fetchAPI = async() => {
+                setLoading(true);
+                const response = await dispatch(registerStore({ nameStore }));
+                if (response) {
+                    navigation.navigate('DrawerNav')
+                    ToastAndroid.show('Đăng ký cửa hàng thành công', ToastAndroid.SHORT);
+                } else {
+                    ToastAndroid.show('Đăng ký cửa hàng thất bại', ToastAndroid.SHORT);
+                }
+                setLoading(false);
+            }
+            fetchAPI();
+        } catch(err){
+            setLoading(false);
+            ToastAndroid.show('Đăng ký cửa hàng thất bại', ToastAndroid.SHORT);
+        }
     }
       
     return ( 

@@ -18,20 +18,29 @@ export const notifications = async({ pushToken, title, message }) => {
 }
 
 
-export const updateStore = createAsyncThunk('update-profile', async ({ profileId, nameStore, allowCustomerAccumulate, exchangePointToMoney, exchangeMoneyToPoint }, { rejectWithValue }) => {
+export const filterServicePackage = async({ pageIndex, pageSize, orderBy }) => {
     try {
-        const config = {
-            headers: {
-            'Content-Type': 'application/json',
-            },
-        };
-        const response = await httprequest.post('update-profile', { profileId, nameStore, allowCustomerAccumulate, exchangePointToMoney, exchangeMoneyToPoint } , config);
-        if (response?.code == 0) {
-            return response?.data;
-        } else {
-            return rejectWithValue('Thất bại');
-        }
-    } catch (error) {
-        console.log("Error when updating store: ", error);
+        const filters = { pageSize, pageIndex, orderBy };
+        const filteredParams = Object.fromEntries(Object.entries(filters).filter(([_, value]) => value !== null));
+        const response = await httprequest.get('filter-service-package', { params: filteredParams });
+        return response?.data;
+    } catch (err) {
+        console.log("Error when filtering service package: ", err);
     }
-});
+}
+
+
+export const createURLPayment = async({ servicePackageId, bankCode }) => { 
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+    
+    try {
+        const response = await httprequest.post('create-url-payment', { servicePackageId, bankCode } , config);
+        return response;
+    } catch(err) {
+        console.log("Error when creating URL payment: ", err);
+    }
+}
