@@ -219,12 +219,12 @@ function CreateProduct() {
                                 value={inputDay} 
                                 onPressIn={() => setIsDatePickerExpirationDateVisible(true)}
                             />
-                            <DateTimePicker
+                            {isDatePickerExpirationDateVisible && <DateTimePicker
                                 isVisible={isDatePickerInputVisible}
                                 mode="date"
                                 onConfirm={handleConfirmDatePicker}
                                 onCancel={hideDatePicker}
-                            />
+                            />}
                         </View>
     
                         <View style={{ width: '45%' }}>
@@ -235,12 +235,12 @@ function CreateProduct() {
                                 value={expirationDate} 
                                 onPressIn={() => setIsDatePickerExpirationDateVisible(true)}
                             />
-                            <DateTimePicker
+                            {isDatePickerExpirationDateVisible && <DateTimePicker
                                 isVisible={true}
                                 mode="date"
                                 onConfirm={handleConfirmDatePicker}
                                 onCancel={hideDatePicker}
-                            />
+                            />}
                         </View>
                     </View>
                     <View style={[styles.display, { marginBottom: 15, justifyContent: 'space-between', alignItems: 'flex-end' }]}>

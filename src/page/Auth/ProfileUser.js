@@ -3,10 +3,15 @@ import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, Image, TouchableOpacity, Text, ToastAndroid, ScrollView } from 'react-native';
 import { Button, TextInput, DefaultTheme, HelperText } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import { useRef, useState } from 'react';
+import RBSheet from "react-native-raw-bottom-sheet";
+
+
 import { changePw, updateProfile } from '../../actions/user/authActions';
-import { useState } from 'react';
 import Loading from '../../components/Loading';
 import { logout } from '../../actions/authActions';
+import ModalConfirmCamera from '../../components/Modal/ModalConfirmCamera';
+import ModalCalendar from '../../components/Modal/ModalCalendar';
 
 const theme = {
     ...DefaultTheme,
@@ -31,6 +36,7 @@ function ProfileUser() {
     const [newPassword, setNewPassword] = useState('');
     const [hideCurrentPassword, setHideCurrentPassword] = useState(true);
     const [hideNewPassword, setHideNewPassword] = useState(true);
+    const refRBSheet = useRef();
 
     const handleLogout = () => {
         logout();
@@ -119,8 +125,9 @@ function ProfileUser() {
                 </View>
             </View>
             <ScrollView style={{ flex: 1, marginBottom: 15 }}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => refRBSheet?.current.open()}>
                     <Image source={user?.avatar ? { uri: user?.avatar } : require('../../assets/images/no_image.jpg')} style={styles.avatar}/>
+                    <Image source={require('../../assets/images/camera.png')} style={styles.smallImage} />
                 </TouchableOpacity>
                 <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', margin: 20, marginLeft: 15 }} onPress={() => setDropdownInfo(!dropdownInfo)}>
                     <Text style={{ fontWeight: '600', marginRight: 15 }}>Thông tin cá nhân</Text>
@@ -300,6 +307,25 @@ function ProfileUser() {
                     Đăng ký cửa hàng
                 </Button>
             </View>
+            <RBSheet
+                    ref={refRBSheet}
+                    closeOnDragDown={true}
+                    closeOnPressMask={true}
+                    customStyles={{
+                        wrapper: 
+                        {
+                            backgroundColor: "rgba(100, 100, 100, 0.5)",
+                        },
+                        draggableIcon: {
+                            backgroundColor: "grey"
+                        },
+                        container: {
+                            height: 300
+                        }
+                    }}
+                >
+                <ModalCalendar />
+            </RBSheet>
             {loading && <Loading />}
         </View>
     );
@@ -318,7 +344,14 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         marginVertical: 20,
         objectFit: 'contain'
-    }
+    },
+    smallImage: {
+        position: 'absolute',
+        bottom: 25,
+        right: 150,
+        width: 35,
+        height: 35,
+    },
 })
 
 export default ProfileUser;
