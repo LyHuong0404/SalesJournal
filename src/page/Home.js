@@ -8,7 +8,7 @@ import { useState, useEffect, useRef } from 'react';
 import RBSheet from "react-native-raw-bottom-sheet";
 import QRDemo from './QRDemo';
 import { convertTimeStamp } from '../utils/helper';
-import { logout } from '../actions/authActions';
+import { logout, profileInfo } from '../actions/authActions';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -18,6 +18,7 @@ function Home() {
   const refRBSheet = useRef();
   const [date, setDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
   const [revenue, setRevenue] = useState([]);
+  const [expirationDate, setExpirationDate] = useState('');
 
   useEffect(() => {
     try{
@@ -30,6 +31,16 @@ function Home() {
             }
         }
         fetchAPI();
+
+        const getExpirationDate = async()=> {
+          const response = await profileInfo();
+          if (response) {
+              setExpirationDate(response.expireAt);
+          } else {
+              ToastAndroid.show('Lỗi tải ngày hết hạn không thành công', ToastAndroid.SHORT);
+          }
+        }
+        getExpirationDate();
     } catch(e){
         ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
     }
@@ -38,10 +49,8 @@ function Home() {
   const handleClose = () => {
     refRBSheet.current?.close();
   }
-  const handleLogout = () => {
-    logout();
-    navigation.navigate('LoginNav');
-  }
+
+
   // console.log(JSON.stringify(navigation.getState()));
   return (
     <View style={styles.container}>   
@@ -116,7 +125,7 @@ function Home() {
         <View style={[styles.boxes, { backgroundColor: '#faeed6', padding: 15, borderWidth: 1, borderColor: '#da9413', width: windowWidth - 60, marginTop: 10 }]}>         
           <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <Image source={require('../assets/images/crown.png')} style={{ width: 35, height: 35, objectFit: 'contain', marginRight: 10 }}/>
-            <Text style={{ fontWeight: '500', color: '#cb870b'}}>Gói miễn phí <Text style={{ fontWeight: '400' }}>của bạn sẽ hết hạn {'\n'} vào ngày {`${convertTimeStamp(user?.profile?.expireAt, 'dd/MM/yyyy')}`}</Text></Text>
+            <Text style={{ fontWeight: '500', color: '#cb870b'}}>Gói gia hạn <Text style={{ fontWeight: '400' }}>của bạn sẽ hết hạn {'\n'} vào ngày {`${convertTimeStamp(expirationDate, 'dd/MM/yyyy')}`}</Text></Text>
           </View>
           <Button  
               mode="contained" 

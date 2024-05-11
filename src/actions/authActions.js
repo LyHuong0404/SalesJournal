@@ -136,6 +136,15 @@ export const updateStore = createAsyncThunk('update-profile', async ({ profileId
     }
 });
 
+export const profileInfo = async() => {
+    try {   
+        const response = await httprequest.get('profile-info');
+        return response?.data;
+    } catch (err) {
+        console.log("Error when gettting profile info: ", err);
+    }
+}
+
 
 export const updateUser = createAction('auth/updateUser');
 

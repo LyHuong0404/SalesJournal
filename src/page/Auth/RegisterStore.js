@@ -60,14 +60,14 @@ function RegisterStore() {
                         onChange={(text) => setNameStore(text)}
                     />
                     
-                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#15803D', marginTop: 40  }}>Điều khoản</Text>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#2d86bc', marginTop: 40  }}>Điều khoản</Text>
                     <View style={[styles.display, { marginTop: 20 }]}>
                         <Image source={require('../../assets/images/firework.png')} style={{ width: 17, height: 17, objectFit: 'contain', marginRight: 15 }} />
                         <Text>Chào mừng đến với <Text style={{ fontWeight: '500' }}>SoBanHang</Text></Text>
                     </View>
                     <View style={styles.display}>
                         <Image source={require('../../assets/images/free.png')} style={{ width: 20, height: 20, objectFit: 'contain', marginRight: 15 }} />
-                        <Text>Khi đăng ký bán hàng, tài khoản của bạn sẽ được miễn phí trong 30 ngày</Text>
+                        <Text>Khi đăng ký bán hàng, tài khoản của bạn sẽ được miễn phí trong <Text style={{ fontWeight: '500' }}>30 ngày</Text></Text>
                     </View>
                     <View style={styles.display}>
                         <Image source={require('../../assets/images/tick_circle.png')}  style={{ width: 17, height: 17, objectFit: 'contain', marginHorizontal: 15 }} />

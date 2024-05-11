@@ -166,7 +166,7 @@ const LoginNav = () => {
 const UserLoggedNav = () => {
 
   return (
-    <Stack.Navigator initialRouteName="RegisterStore" screenOptions={{ headerShown: false }}>
+    <Stack.Navigator initialRouteName="UsernameInput" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="UsernameInput" component={UsernameInput} options={{ headerShown: false }}/>
         <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
