@@ -42,7 +42,6 @@ export const signUp = async ({ username, password, email, notifyId }) =>{
         }
         notifyId = await AsyncStorage.getItem('notifyToken');
         notifyId = JSON.parse(notifyId);
-        console.log("notifyId  ", notifyId)
         const response = await httprequest.post('signup', { username, password, email, notifyId }, config);
         return response;
     } catch (err) {
