@@ -166,7 +166,7 @@ const LoginNav = () => {
 const UserLoggedNav = () => {
 
   return (
-    <Stack.Navigator initialRouteName="ProfileUser" screenOptions={{ headerShown: false }}>
+    <Stack.Navigator initialRouteName="RegisterStore" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="UsernameInput" component={UsernameInput} options={{ headerShown: false }}/>
         <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
@@ -256,7 +256,6 @@ function App() {
         const notifyToken = await AsyncStorage.getItem('notifyToken');
         if (!notifyToken) {
           const response = await addNotifyToken({ notifyToken: token });
-          console.log('res  ', response)
           if (response?.code !== 0) {
             console.log('Exception');
           }

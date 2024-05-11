@@ -6,7 +6,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { getCodeSignUp } from "../../actions/authActions";
 import PasswordInput from "../../components/PasswordInput";
 import ButtonCustom from "../../components/ButtonCustom";
-import TextInputCustom from "../../components/TextInputCustom";
 
 const theme = {
     ...DefaultTheme,
