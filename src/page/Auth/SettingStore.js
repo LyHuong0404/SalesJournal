@@ -54,7 +54,7 @@ function SettingStore() {
         <View style={styles.container}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
                 <View style={styles.header}>
-                        <Image source={require('../../assets/images/right_arrow.png')} style={{ width: 17, height: 17, objectFit: 'contain' }}/>
+                    <Image source={require('../../assets/images/right_arrow.png')} style={{ width: 17, height: 17, objectFit: 'contain' }}/>
                     <Text style={{ flex: 1, color: 'black', textAlign: 'center', fontWeight: 'bold', marginLeft: 10 }}>Cài đặt cửa hàng</Text>
                 </View>
             </TouchableOpacity>

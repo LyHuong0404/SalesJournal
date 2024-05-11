@@ -242,33 +242,6 @@ function SellTab() {
                             spacing={25}
                         />
                     </View>
-                    <View>
-                        <Text style={{ color: '#6f6f6f', fontWeight: '500', padding: 15, backgroundColor: '#f1f3f5' }}>Doanh thu theo phương thức thanh toán</Text>
-                        <View style={styles.no_content}>
-                            <Image source={require('../../assets/images/notes.png')} style={{ width: 80, height: 80, objectFit: 'contain', marginVertical: 10 }}/>
-                            <Text style={{ color: '#767676' }}>Bạn chưa có báo cáo nào được ghi lại.</Text>
-                        </View>
-                        {/* <DataTable.Row>
-                            <DataTable.Cell style={styles.cell}><Text style={styles.text_cell}>Tiền mặt</Text></DataTable.Cell>
-                            <DataTable.Cell numeric><Text style={styles.cell_text_number}>842.000</Text></DataTable.Cell>
-                        </DataTable.Row>
-                        <DataTable.Row>
-                            <DataTable.Cell style={styles.cell}><Text style={styles.text_cell}>Ngân hàng</Text></DataTable.Cell>
-                            <DataTable.Cell numeric><Text style={styles.cell_text_number}>842.000</Text></DataTable.Cell>
-                        </DataTable.Row>
-                        <DataTable.Row>
-                            <DataTable.Cell style={styles.cell}><Text style={styles.text_cell}>Ví điện tử</Text></DataTable.Cell>
-                            <DataTable.Cell numeric><Text style={styles.cell_text_number}>842.000</Text></DataTable.Cell>
-                        </DataTable.Row>
-                        <DataTable.Row>
-                            <DataTable.Cell style={styles.cell}><Text style={styles.text_cell}>Đã ghi nợ</Text></DataTable.Cell>
-                            <DataTable.Cell numeric><Text style={[styles.cell_text_number,{ color: '#d61212'}]}>842.000</Text></DataTable.Cell>
-                        </DataTable.Row>
-                        <DataTable.Row>
-                            <DataTable.Cell style={styles.cell}><Text style={styles.text_cell}>Chưa thanh toán</Text></DataTable.Cell>
-                            <DataTable.Cell numeric><Text style={[styles.cell_text_number,{ color: '#d61212'}]}>842.000</Text></DataTable.Cell>
-                        </DataTable.Row> */}
-                    </View>
                     <View style={[styles.display, { alignItems: 'center', paddingVertical: 15, backgroundColor: '#f1f3f5' }]}>
                         <Text style={{ color: '#6f6f6f', fontWeight: '500', marginRight: 10, paddingLeft: 15 }}>Doanh thu theo</Text>
                         <Dropdown

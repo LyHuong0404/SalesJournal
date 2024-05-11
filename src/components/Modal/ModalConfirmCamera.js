@@ -7,7 +7,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 
 import ModalCameraScreen from "../../components/Modal/ModalCameraScreen";
 
-function ModalConfirmCamera({ onUpdateAvatar }) {
+function ModalConfirmCamera({ onUpdateAvatar, actor }) {
     const navigation = useNavigation();
     const refRBSheet = useRef();
 
@@ -22,7 +22,10 @@ function ModalConfirmCamera({ onUpdateAvatar }) {
         
         if (result.canceled === false) {
             await onUpdateAvatar(result.assets[0].uri);
-            navigation.navigate('ProfileUser');
+            if (actor == 'vendor') {
+                navigation.navigate('Profile');
+            }
+            else navigation.navigate('ProfileUser');
         } else  {}
     };
 
@@ -50,7 +53,7 @@ function ModalConfirmCamera({ onUpdateAvatar }) {
                     }
                 }}
             >
-                <ModalCameraScreen onUpdateAvatar={handleUpdateAvatar} />
+                <ModalCameraScreen actor='vendor' onUpdateAvatar={handleUpdateAvatar} />
             </RBSheet>
         </View>
     );

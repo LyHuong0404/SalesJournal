@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import Loading from '../Loading';
 
 
-function ModalCameraScreen( { onUpdateAvatar }) {
+function ModalCameraScreen( { onUpdateAvatar, actor }) {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
 
@@ -16,7 +16,10 @@ function ModalCameraScreen( { onUpdateAvatar }) {
         const photo = await cameraRef.takePictureAsync(); 
         const url = photo.uri;
         onUpdateAvatar(url);
-        navigation.navigate('ProfileUser');
+        if (actor == 'vendor') {
+            navigation.navigate('Profile');
+        }
+        else navigation.navigate('ProfileUser');
     }
     setLoading(false);
   };

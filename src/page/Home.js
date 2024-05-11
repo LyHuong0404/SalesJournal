@@ -56,15 +56,15 @@ function Home() {
     <View style={styles.container}>   
       <View style={[styles.header, { marginBottom: 10, paddingTop: 20 }]}>
         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View style={{ display: 'flex', flexDirection: 'row', flex: 0.7 }}>
-            <Image source={require('../assets/images/store.jpg')} style={styles.image}/>
+          <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', flex: 0.7 }} onPress={() => navigation.navigate('SettingStore')}>
+            <Image source={require('../assets/images/store_circle.png')} style={styles.image}/>
             <View style={{ marginLeft: 10}}>
               <Text style={{ color: '#ffffff', fontSize: 14, fontWeight: 'bold' }}>{user?.profile?.nameStore}</Text>
               <Text style={{ color: '#ffffff', fontSize: 11 }}>Thông tin cửa hàng 
                 <Image source={require('../assets/images/left_arrow.png')} style={{ width: 12, height: 12, objectFit: 'contain' }}/>
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
           <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <TouchableOpacity onPress={() => navigation.navigate('Search')}> 
               <Image source={require('../assets/images/search.png')} style={{ width: 22, height: 22, objectFit: 'contain', marginLeft: 15 }}/>
