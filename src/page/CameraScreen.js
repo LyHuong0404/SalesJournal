@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Camera } from 'expo-camera'; 
 import { useNavigation } from '@react-navigation/native';
+
 import Loading from '../components/Loading';
 
 function CameraScreen() {

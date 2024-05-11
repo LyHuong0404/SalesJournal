@@ -72,15 +72,14 @@ export const registerStore = createAsyncThunk('register-trial', async ({ nameSto
     }
 });
 
-export const updateAvatar = createAsyncThunk('update-avatar', async ({ avatarFile }, { rejectWithValue }) => {
+export const updateAvatar = createAsyncThunk('update-avatar', async (formData, { rejectWithValue }) => {
     try {
         const config = {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
         };
-        const response = await httprequest.post('update-avatar', { avatarFile } , config);
-
+        const response = await httprequest.post('update-avatar', formData , config);
         if (response?.code == 0) {
             const updateInfoFromAsyncStorage = async() => {
                 const userJson = await AsyncStorage.getItem('user');
@@ -96,6 +95,6 @@ export const updateAvatar = createAsyncThunk('update-avatar', async ({ avatarFil
             return rejectWithValue('Thất bại');
         }
     } catch (error) {
-        console.log("Error when updating user's profile: ", error);
+        console.log("Error when updating user's avatar: ", error);
     }
 });

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { StyleSheet, View, Image, TouchableOpacity, Text, ToastAndroid, ScrollView } from 'react-native';
 import { Button, TextInput, DefaultTheme, HelperText } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,11 +7,10 @@ import { useRef, useState } from 'react';
 import RBSheet from "react-native-raw-bottom-sheet";
 
 
-import { changePw, updateProfile } from '../../actions/user/authActions';
+import { changePw, updateAvatar, updateProfile } from '../../actions/user/authActions';
 import Loading from '../../components/Loading';
 import { logout } from '../../actions/authActions';
 import ModalConfirmCamera from '../../components/Modal/ModalConfirmCamera';
-import ModalCalendar from '../../components/Modal/ModalCalendar';
 
 const theme = {
     ...DefaultTheme,
@@ -23,12 +22,13 @@ const theme = {
 };
 
 function ProfileUser() {
+    const route = useRoute();
+    const dispatch = useDispatch();
     const navigation = useNavigation();
     const { user } = useSelector((state) => state.auth);
-    const [phone, setPhone] = useState(user?.phone || '');
-    const [fullname, setFullname] = useState(user?.fullname || '');
+    const [phone, setPhone] = useState(user?.phone);
+    const [fullname, setFullname] = useState(user?.fullname);
     const [loading, setLoading] = useState(false);
-    const dispatch = useDispatch();
     const [dropdownInfo, setDropdownInfo] = useState(false);
     const [dropdownPoint, setDropdownPoint] = useState(false);
     const [dropdownPw, setDropdownPw] = useState(false);
@@ -62,6 +62,38 @@ function ProfileUser() {
         }
     }
     
+    const handleUpdateAvatar = (url) => {
+        let imageType = '';
+        const lastDotIndex = url.lastIndexOf(".");
+        if (lastDotIndex !== -1) {
+            imageType = url.substring(lastDotIndex + 1); 
+        } else {
+            console.log("Không tìm thấy dấu chấm trong chuỗi.");
+        }
+        const formData = new FormData();
+        formData.append('avatarFile', {
+            uri: url,
+            name: 'image.' + imageType,
+            type: 'image/' + imageType,
+        });
+        try{ 
+            const fetchApi = async() => {
+                setLoading(true);
+                const response = await dispatch(updateAvatar(formData));
+                if (response?.payload) {
+                    ToastAndroid.show('Lưu ảnh đại diện thành công', ToastAndroid.SHORT);
+                } else {
+                    ToastAndroid.show('Lưu ảnh đại diện thất bại', ToastAndroid.SHORT);
+                }
+                setLoading(false);
+            }
+            fetchApi();
+        } catch(err) {
+            setLoading(false);
+            ToastAndroid.show('Exp: Lưu ảnh đại diện thất bại', ToastAndroid.SHORT);
+        }
+        refRBSheet?.current.close();
+    }
 
     const handleChangePw = () => {
         try{
@@ -69,6 +101,8 @@ function ProfileUser() {
                 setLoading(true);
                 const response = await changePw({ currentPassword, newPassword});
                 if (response?.code == 0) {
+                    setNewPassword('');
+                    setCurrentPassword('');
                     ToastAndroid.show('Thay đổi mật khẩu thành công', ToastAndroid.SHORT);
                 } else {
                     ToastAndroid.show('Thay đổi mật khẩu thất bại', ToastAndroid.SHORT);
@@ -308,23 +342,24 @@ function ProfileUser() {
                 </Button>
             </View>
             <RBSheet
-                    ref={refRBSheet}
-                    closeOnDragDown={true}
-                    closeOnPressMask={true}
-                    customStyles={{
-                        wrapper: 
-                        {
-                            backgroundColor: "rgba(100, 100, 100, 0.5)",
-                        },
-                        draggableIcon: {
-                            backgroundColor: "grey"
-                        },
-                        container: {
-                            height: 300
-                        }
-                    }}
-                >
-                <ModalCalendar />
+                ref={refRBSheet}
+                closeOnDragDown={true}
+                closeOnPressMask={true}
+                customStyles={{
+                    wrapper: 
+                    {
+                        backgroundColor: "rgba(100, 100, 100, 0.5)",
+                    },
+                    draggableIcon: {
+                        backgroundColor: "grey"
+                    },
+                    container: {
+                        height: 140,
+                        backgroundColor: '#3a3a3a',
+                    }
+                }}
+            >
+                <ModalConfirmCamera onUpdateAvatar={handleUpdateAvatar} onClose={() => refRBSheet?.current.close()}/>
             </RBSheet>
             {loading && <Loading />}
         </View>
@@ -343,12 +378,13 @@ const styles = StyleSheet.create({
         height: 130,
         borderRadius: 100,
         marginVertical: 20,
-        objectFit: 'contain'
+        objectFit: 'contain',
+        backgroundColor: '#dad6d6'
     },
     smallImage: {
         position: 'absolute',
-        bottom: 25,
-        right: 150,
+        bottom: 20,
+        right: 140,
         width: 35,
         height: 35,
     },

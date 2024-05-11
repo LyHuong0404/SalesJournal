@@ -35,9 +35,9 @@ function CreateCategory() {
             quality: 1,
         });
         
-        if (!result.cancelled) {
+        if (result.canceled === false) {
             setUrl(result.assets[0].uri);
-        }
+        } else {}
     };
 
     

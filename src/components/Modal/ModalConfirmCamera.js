@@ -1,35 +1,67 @@
-import { View, StyleSheet, Text, ToastAndroid, Image  } from "react-native";
-import { useState } from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { Button, TextInput, DefaultTheme } from "react-native-paper";
-import { format, parse } from 'date-fns';
-import DateTimePicker from "react-native-modal-datetime-picker";
-import TwoButtonBottom from "../TwoButtonBottom";
+import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import * as ImagePicker from 'expo-image-picker';
+import { useRef } from "react";
+import RBSheet from "react-native-raw-bottom-sheet";
 
 
-function ModalConfirmCamera() {
+import ModalCameraScreen from "../../components/Modal/ModalCameraScreen";
 
+function ModalConfirmCamera({ onUpdateAvatar }) {
+    const navigation = useNavigation();
+    const refRBSheet = useRef();
 
+    const handleChooseImage = async () => {
+        
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+        
+        if (result.canceled === false) {
+            await onUpdateAvatar(result.assets[0].uri);
+            navigation.navigate('ProfileUser');
+        } else  {}
+    };
+
+    const handleUpdateAvatar = (url) => {
+        onUpdateAvatar(url);
+        refRBSheet.current.close();
+    }
+    
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={{ fontWeight: '600', textAlign: 'center', flex: 1 }}>Bộ lọc</Text>
-                <TouchableOpacity style={{ flex: 0.5}}>
-                    <Image source={require('../../assets/images/close.png')} style={{ width: 15, height: 15 }}/>
-                </TouchableOpacity>
-            </View>
-            <View style={{ display: 'flex', flexDirection: 'row' }}>
-                <Image source={require('../../assets/images/image_circle.png')} style={{ width: 15, height: 15 }}/>
-                <Text style={{ color: '#ffffff' }}>Chụp ảnh đại diện</Text>
-            </View>
+            <TouchableOpacity onPress={() => refRBSheet?.current.open()} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+                <Image source={require('../../assets/images/image_circle.png')} style={{ width: 40, height: 40, marginRight: 15 }}/>
+                <Text style={{ color: '#ffffff', fontWeight: '500', fontSize: 15 }}>Chụp ảnh đại diện</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleChooseImage} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                <Image source={require('../../assets/images/camera_circle.png')} style={{ width: 40, height: 40, marginRight: 15 }}/>
+                <Text style={{ color: '#ffffff', fontWeight: '500', fontSize: 15 }}>Tải ảnh đại diện</Text>
+            </TouchableOpacity>
+
+            <RBSheet
+                ref={refRBSheet}
+                customStyles={{               
+                    container: {
+                      height: '100%'
+                    }
+                }}
+            >
+                <ModalCameraScreen onUpdateAvatar={handleUpdateAvatar} />
+            </RBSheet>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-      backgroundColor: 'white',
-      marginHorizontal: 15
+        flex: 1,
+        backgroundColor: '#3a3a3a',
+        paddingHorizontal: 15,
+        justifyContent: 'center'
     },
     display: {
         display: 'flex',

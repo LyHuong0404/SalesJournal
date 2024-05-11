@@ -54,6 +54,7 @@ import Setting from './src/page/Auth/Setting';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { updateUser } from './src/actions/authActions';
+import { addNotifyToken } from './src/actions/otherActions';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -157,6 +158,7 @@ const LoginNav = () => {
         <Stack.Screen name="VendorNav" component={VendorNav} options={{ headerShown: false }}/>
         <Stack.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
         <Stack.Screen name="RegisterStore" component={RegisterStore} options={{ headerShown: false }} />
+        <Stack.Screen name="CameraScreen" component={CameraScreen} options={{ headerShown: false }}/>
     </Stack.Navigator>
   )
 }
@@ -174,6 +176,7 @@ const UserLoggedNav = () => {
         <Stack.Screen name="VendorNav" component={VendorNav} options={{ headerShown: false }}/>
         <Stack.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
         <Stack.Screen name="RegisterStore" component={RegisterStore} options={{ headerShown: false }} />
+        <Stack.Screen name="CameraScreen" component={CameraScreen} options={{ headerShown: false }}/>
     </Stack.Navigator>
   )
 }
@@ -248,7 +251,20 @@ function App() {
   }, []);
       
   useEffect(() => {
-    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+    registerForPushNotificationsAsync().then(token => {
+      const getNotifyToken = async() => {
+        const notifyToken = await AsyncStorage.getItem('notifyToken');
+        if (!notifyToken) {
+          const response = await addNotifyToken({ notifyToken: token });
+          console.log('res  ', response)
+          if (response?.code !== 0) {
+            console.log('Exception');
+          }
+        }
+      }
+      getNotifyToken();
+      setExpoPushToken(token)
+    });
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       setNotification(notification);
@@ -309,8 +325,8 @@ async function registerForPushNotificationsAsync() {
     }
     // Learn more about projectId:
     // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
+
     token = (await Notifications.getExpoPushTokenAsync({ projectId: '02b29ea0-5b32-4138-babf-8f739813e5a6' })).data;
-    console.log(token);
   } else {
     alert('Must use physical device for Push Notifications');
   }

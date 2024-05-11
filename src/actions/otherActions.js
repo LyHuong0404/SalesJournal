@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import * as httprequest from "../utils/httprequest";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 export const notifications = async({ pushToken, title, message }) => { 
@@ -42,5 +43,23 @@ export const createURLPayment = async({ servicePackageId, bankCode }) => {
         return response;
     } catch(err) {
         console.log("Error when creating URL payment: ", err);
+    }
+}
+
+export const addNotifyToken = async({ notifyToken}) => { 
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+    
+    try {
+        const response = await httprequest.post('add-notify-token', { notifyToken } , config);
+        if (response?.code == 0) {
+            await AsyncStorage.setItem('notifyToken', JSON.stringify(response?.data.id));
+        }
+        return response;
+    } catch(err) {
+        console.log("Error when getting notifyToken: ", err);
     }
 }
