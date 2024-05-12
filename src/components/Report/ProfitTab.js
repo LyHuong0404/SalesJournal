@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, Image, Dimensions, Text, ScrollView, ToastAndroid } from "react-native";
+import { View, StyleSheet, Image, Dimensions, Text, ScrollView, ToastAndroid, TouchableOpacity } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
 import { DataTable } from "react-native-paper";
 import { format } from 'date-fns';
@@ -8,23 +8,15 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { filterReceipt, filterReport, revenueOfProduct } from "../../actions/seller/receiptActions";
 import Loading from "../../components/Loading";
 import ModalCalendar from "../Modal/ModalCalendar";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { convertTimeStamp, setDateFormat } from "../../utils/helper";
 
 const screenWidth = Dimensions.get('window').width;
 
-const chartOptions = [
-    { label: 'Doanh thu', value: '1' },
-    { label: 'Đơn hàng', value: '2' },
-    { label: 'Khách hàng', value: '3' },
-];
 const revenueOptions = [
     { label: 'Danh mục', value: '1' },
     { label: 'Đơn hàng', value: '2' },
     { label: 'Ngày', value: '3' },
 ];
-
-
 
 function ProfitTab() {
     const refRBSheet = useRef();
@@ -370,22 +362,22 @@ function ProfitTab() {
                     <View style={{ height: 40, backgroundColor: '#f1f3f5'}}></View>
                 </View>
                 <RBSheet
-                ref={refRBSheet}
-                closeOnDragDown={true}
-                closeOnPressMask={true}
-                customStyles={{
-                    wrapper: 
-                    {
-                        backgroundColor: "rgba(100, 100, 100, 0.5)",
-                    },
-                    draggableIcon: {
-                        backgroundColor: "grey"
-                    },
-                    container: {
-                        height: 540
-                    }
-                }}
-            >
+                    ref={refRBSheet}
+                    closeOnDragDown={true}
+                    closeOnPressMask={true}
+                    customStyles={{
+                        wrapper: 
+                        {
+                            backgroundColor: "rgba(100, 100, 100, 0.5)",
+                        },
+                        draggableIcon: {
+                            backgroundColor: "grey"
+                        },
+                        container: {
+                            height: 540
+                        }
+                    }}
+                >
                 <ModalCalendar 
                     valueTimeFrom={fromDate} 
                     valueTimeTo={toDate}

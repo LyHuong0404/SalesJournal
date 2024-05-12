@@ -1,6 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { View, StyleSheet, Text, Button } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { View, StyleSheet, Text, Button, TouchableOpacity } from "react-native";
 
 import { convertTimeStamp } from "../../utils/helper";
 

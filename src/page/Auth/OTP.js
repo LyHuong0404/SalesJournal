@@ -40,10 +40,10 @@ function OTP() {
     const handleSendCodeAgain = async() => {
         try {
             if (username) {
-                const response = await getCodeForgotPassword({username});
+                const response = await getCodeForgotPassword({ username });
                 if (response?.code == 0) {
                     resetTimer();
-                    ToastAndroid.show('Đã gửi mã xác thực', ToastAndroid.SHORT);
+                    ToastAndroid.show('Đã gửi mã xác thực', ToastAndroi1d.SHORT);
                 } else {
                     ToastAndroid.show('Lỗi khi gửi mã xác thực', ToastAndroid.SHORT);
                 }

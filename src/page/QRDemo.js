@@ -1,5 +1,5 @@
 import { CameraView, useCameraPermissions } from 'expo-camera/next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View, Image, ToastAndroid } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 
@@ -14,18 +14,24 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
     const [error, setError] = useState(false);
 
     if (!permission) {
-        return <Loading />;
+        return <Loading />
     }
-
+    
     if (!permission.granted) {
-        return (
-            <View style={styles.container}>
-                <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
-                <Button onPress={requestPermission} title="grant permission" />
-            </View>
-        );
+        const checkCameraPermission = async () => {
+            try {
+              const status = await requestPermission();
+              if (status?.status === 'denied') {
+                close();
+              }
+            } catch (error) {
+              console.error('camera', error);
+            }
+        };        
+        checkCameraPermission();
     }
-
+    
+    
     const handleBarCodeScanned = (scanningResult) => {
         if(scanningResult) {
             if (action == 'ProductDetail') {
@@ -109,9 +115,6 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
         }
     };
 
-    function toggleCameraFacing() {
-        setFacing(current => (current === 'back' ? 'front' : 'back'));
-    }
 
     return (
         <View style={styles.container}>

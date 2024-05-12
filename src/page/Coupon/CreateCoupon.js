@@ -91,7 +91,7 @@ function CreateCoupon() {
                         response = await addCoupon({
                             couponCode, 
                             description: saleName,
-                            limitUse, 
+                            limitUse: limitUse.replace('.', ''), 
                             startDate, 
                             endDate, 
                             type: type == 1 ? 'NUMBER' : 'PERCENT', 
@@ -105,7 +105,7 @@ function CreateCoupon() {
                         response = await addCoupon({
                             couponCode, 
                             description: saleName,
-                            limitUse, 
+                            limitUse: limitUse.replace('.', ''), 
                             startDate, 
                             endDate, 
                             type: type == 1 ? 'NUMBER' : 'PERCENT', 

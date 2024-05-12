@@ -2,13 +2,12 @@ import { View, StyleSheet, ScrollView, Text, Image, TouchableOpacity, ToastAndro
 import { Button, ProgressBar } from 'react-native-paper';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useEffect, useRef, useState } from "react";
-import ModalCalendar from "../Modal/ModalCalendar";
 import { format } from 'date-fns';
 import moment from 'moment';
 
+import ModalCalendar from "../Modal/ModalCalendar";
 import { convertTimeStamp, setDateFormat } from "../../utils/helper";
 import { filterProduct } from "../../actions/seller/productActions";
-import Loading from "../Loading";
 import { useNavigation } from "@react-navigation/native";
 
 const buttonAction = [

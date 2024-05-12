@@ -1,8 +1,7 @@
-import { View, StyleSheet, Text, ToastAndroid, Image  } from "react-native";
+import { View, StyleSheet, Text, Image, TouchableOpacity  } from "react-native";
 import { useState } from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { Button, TextInput, DefaultTheme } from "react-native-paper";
-import { format, parse } from 'date-fns';
+import { format } from 'date-fns';
 import DateTimePicker from "react-native-modal-datetime-picker";
 import TwoButtonBottom from "../TwoButtonBottom";
 

@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useRef, useState } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollView} from "react-native";
-import { Searchbar } from "react-native-paper";
+import { Button, Searchbar } from "react-native-paper";
 import SegmentedControlTab from 'react-native-segmented-control-tab';
 import * as Animatable from 'react-native-animatable';
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -10,6 +10,7 @@ import { filterProduct } from "../../actions/seller/productActions";
 import useDebounce from "../../hooks";
 import Loading from "../../components/Loading";
 import QRDemo from "../QRDemo";
+
 
 function ImportProduct() {
     const refRBSheet = useRef();
@@ -51,12 +52,6 @@ function ImportProduct() {
         setSelectedIndex(index);
     }; 
 
-    // useLayoutEffect(
-    //     useCallback(() => {
-    //       getAllProduct();
-    //     }, [])
-    // );
-
     return ( 
         <View style={styles.container}>
             <View style={styles.header}>
@@ -76,6 +71,9 @@ function ImportProduct() {
                     </TouchableOpacity>)}
                     <TouchableOpacity onPress={() => refRBSheet.current?.open()}>
                         <Image source={require('../../assets/images/barcode.png')} style={{ width: 25, height: 25, objectFit: 'contain', marginRight: 15, tintColor: '#000000' }}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('CreateProduct')}>
+                        <Image source={require('../../assets/images/add_product.png')} style={{ width: 25, height: 25, objectFit: 'contain', marginRight: 15, tintColor: '#000000' }}/>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -135,6 +133,15 @@ function ImportProduct() {
                             </View>
                         </View>
                     )}
+                    <Button 
+                        icon="plus"
+                        mode="outlined" 
+                        textColor="#15803D" 
+                        buttonColor='transparent' 
+                        onPress={() => navigation.navigate('CreateProduct')} 
+                        style={{ borderWidth: 2, borderColor: '#15803D', borderRadius: 7,}}>
+                        Thêm sản phẩm
+                    </Button>
                 </ScrollView>
             }
             <RBSheet
@@ -145,7 +152,8 @@ function ImportProduct() {
                     }
                 }}
             >
-                <QRDemo action="ImportProductDetail" 
+                <QRDemo 
+                    action="ImportProductDetail" 
                     onScanSuccess={() => refRBSheet.current?.close()} 
                     close={() => refRBSheet.current?.close()}
                 />

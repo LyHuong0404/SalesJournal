@@ -6,7 +6,6 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import TextInputPrice from "../../components/TextInputPrice";
-import ModalSelectCategory from "../../components/Modal/ModalSelectCategory";
 import ButtonCustom from "../../components/ButtonCustom";
 import TextInputCustom from "../../components/TextInputCustom";
 import { addProduct } from "../../actions/seller/productActions";
@@ -35,17 +34,11 @@ function ImportProductInfo() {
 
 
     const hideDatePicker = () => {
-        if (isDatePickerInputVisible) {
-            setDatePickerInputVisibility(false);
-        } else setIsDatePickerExpirationDateVisible(false);
+        setIsDatePickerExpirationDateVisible(false);
     };
 
     const handleConfirmDatePicker = (date) => {
-        if (isDatePickerInputVisible) {
-            setInputDay(format(new Date(date), 'yyyy-MM-dd'));
-        } else {
-            setExpirationDate(format(new Date(date), 'yyyy-MM-dd'));
-        }
+        setExpirationDate(format(new Date(date), 'yyyy-MM-dd'));
         hideDatePicker();
     };
     
@@ -64,7 +57,7 @@ function ImportProductInfo() {
                     code: QR, 
                     name, 
                     expireAt: expirationDate, 
-                    importPrice: capitalPrice.replace('.', ''), 
+                    importPrice: capitalPrice.toString().replace('.', ''), 
                     importAmount,
                     productId: category.value
                 });
@@ -161,7 +154,7 @@ function ImportProductInfo() {
                                 label='Ngày nhập hàng'
                                 required={true}
                                 value={inputDay} 
-                                onPressIn={() => setIsDatePickerExpirationDateVisible(true)}
+                                disabled
                             />
                             <DateTimePicker
                                 isVisible={isDatePickerInputVisible}

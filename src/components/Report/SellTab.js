@@ -1,16 +1,14 @@
 import { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, Image, Dimensions, Text, ScrollView, ToastAndroid } from "react-native";
+import { View, StyleSheet, Image, Dimensions, Text, ScrollView, ToastAndroid, TouchableOpacity } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
 import { DataTable } from "react-native-paper";
 import { BarChart } from 'react-native-gifted-charts';
 import { format } from 'date-fns';
 import RBSheet from "react-native-raw-bottom-sheet";
-import numeral from 'numeral';
 
 import { filterReceipt, filterReport, revenueOfProduct } from "../../actions/seller/receiptActions";
 import Loading from "../../components/Loading";
 import ModalCalendar from "../Modal/ModalCalendar";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { convertTimeStamp, setDateFormat } from "../../utils/helper";
 
 const screenWidth = Dimensions.get('window').width;

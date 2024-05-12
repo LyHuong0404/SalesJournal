@@ -1,9 +1,8 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StyleSheet, View, Image, TouchableOpacity, Text, ToastAndroid, ScrollView } from 'react-native';
-import { Button, TextInput, DefaultTheme, HelperText } from 'react-native-paper';
+import { Button, TextInput, DefaultTheme, HelperText, DataTable } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import RBSheet from "react-native-raw-bottom-sheet";
 
 
@@ -11,6 +10,7 @@ import { changePw, updateAvatar, updateProfile } from '../../actions/user/authAc
 import Loading from '../../components/Loading';
 import { logout } from '../../actions/authActions';
 import ModalConfirmCamera from '../../components/Modal/ModalConfirmCamera';
+import { filterBonus } from '../../actions/user/otherActions';
 
 const theme = {
     ...DefaultTheme,
@@ -36,7 +36,22 @@ function ProfileUser() {
     const [newPassword, setNewPassword] = useState('');
     const [hideCurrentPassword, setHideCurrentPassword] = useState(true);
     const [hideNewPassword, setHideNewPassword] = useState(true);
+    const [points, setPoints] = useState([]);
     const refRBSheet = useRef();
+
+    useEffect(() => {
+        try {
+            const fetchAPI = async() => {
+                const response = await filterBonus({pageIndex: 0, pageSize: 1000});
+                if (response) {
+                    setPoints(response.content);
+                }
+            }
+            fetchAPI();
+        } catch(err) {
+            ToastAndroid.show('Lỗi khi tải danh mục', ToastAndroid.SHORT);
+        }
+    }, [])
 
     const handleLogout = () => {
         logout();
@@ -229,55 +244,28 @@ function ProfileUser() {
                         : <Image source={require('../../assets/images/up_arrow.png')} style={{ width: 15, height: 15, objectFit: 'contain', tintColor: '#2083c5' }}/>
                     }
                 </TouchableOpacity>
-                
-                {dropdownPoint &&
-                    <View style={{ flex: 1, paddingHorizontal: 15 }}>
-                        <TextInput
-                            theme={theme}
-                            style={{ fontSize: 13 }}
-                            mode="outlined"
-                            label="Tên tài khoản"
-                            placeholder="Tên tài khoản"
-                            value={user?.username}
-                            disabled
-                        />
-                        <TextInput
-                            theme={theme}
-                            style={{ fontSize: 13, marginTop: 15 }}
-                            mode="outlined"
-                            label="Email"
-                            placeholder="Email"
-                            value={user?.email}
-                            disabled
-                        />
-                        <TextInput
-                            theme={theme}
-                            style={{ fontSize: 13, marginTop: 15 }}
-                            mode="outlined"
-                            label="Số điện thoại"
-                            placeholder="Số điện thoại"
-                            value={user?.phone}
-                            onChangeText={(text) => setPhone(text)}
-                        />
-                        <TextInput
-                            theme={theme}
-                            style={{ fontSize: 13, marginTop: 15 }}
-                            mode="outlined"
-                            label="Họ tên"
-                            placeholder="Họ tên"
-                            value={user?.fullname}
-                            onChangeText={(text) => setFullname(text)}
-                        />
-                        <View style={{ alignSelf: 'flex-end', marginTop: 15 }}>
-                            <Button 
-                                mode="contained" 
-                                buttonColor="#15803D" 
-                                style={{ borderRadius: 7 }}
-                                >
-                                Cập nhật
-                            </Button>
+                {dropdownPoint && points.length == 0 && 
+                    <View style={styles.no_content}>
+                        <Image source={require('../../assets/images/notes.png')} style={{ width: 80, height: 80, objectFit: 'contain', marginVertical: 10 }}/>
+                        <Text style={{ color: '#767676' }}>Bạn chưa có báo cáo nào được ghi lại.</Text>
+                    </View>
+                }
+                {dropdownPoint && points.length > 0 &&
+                    <View style={{ marginHorizontal: 15 }}>
+                        <View style={{ display: 'flex', flexDirection: 'row' }}>
+                            <Image source={require('../../assets/images/firework.png')} style={{ width: 18, height: 18, objectFit: 'contain' }} />
+                            <Text style={{ marginLeft: 8, marginBottom: 15 }}>4 cửa hàng</Text>      
                         </View>
-        
+                        <DataTable.Header style={{ borderColor: '#e2e5ea', borderWidth: 1 }}>
+                            <DataTable.Title style={styles.cell}><Text style={styles.header_table}>TÊN CỬA HÀNG</Text></DataTable.Title>
+                            <DataTable.Title numeric><Text style={styles.header_table}>ĐIỂM</Text></DataTable.Title>
+                        </DataTable.Header>
+                        {points.map((item, index) => 
+                            <DataTable.Row key={index}>
+                                <DataTable.Cell style={styles.cell}><Text style={styles.cell_text_number}>{item.storeInfoDTO.nameStore}</Text></DataTable.Cell>
+                                <DataTable.Cell numeric><Text style={styles.cell_text_number}>{item.point}</Text></DataTable.Cell>
+                            </DataTable.Row>
+                        )}  
                     </View>
                 }
 
@@ -387,6 +375,24 @@ const styles = StyleSheet.create({
         right: 140,
         width: 35,
         height: 35,
+    },
+    cell: {
+        borderRightWidth: 0.8,
+        borderColor: '#e2e5ea',
+    },
+    no_content: {
+        backgroundColor: '#f4f4f4',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 15,
+        marginHorizontal: 15
+    },
+    cell_text_number: {
+        color: '#3a3a3a',
+        fontSize: 12
+    },
+    header_table: {
+        fontWeight: '500',
     },
 })
 

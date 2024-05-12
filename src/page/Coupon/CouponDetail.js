@@ -41,7 +41,8 @@ function CouponDetail() {
     const [saleName, setSaleName] = useState('');
     const [couponApplyProductDTOs,setCouponApplyProductDTOs] = useState([]);
     const [showModal, setShowModal] = useState(false);
-
+    const [activated, setActivated] = useState(false);
+ 
 
     const getDataCoupon = () => {
         try{
@@ -59,6 +60,7 @@ function CouponDetail() {
                     setLimitUse(data.limitUse.toString());
                     setUsedAmount(data.usedAmount.toString());
                     setSaleName(data.description);
+                    setActivated(data.activated);
                     setCouponApplyProductDTOs(data.couponApplyProductDTOs);
                     if (data.couponApplyProductDTOs.length > 0) {
                         let convertFormat = [];
@@ -371,10 +373,10 @@ function CouponDetail() {
                     </View> 
 
                     <View style={{ display: 'flex', flexDirection: 'row' }}>
-                        <Image source={require('../../assets/images/economy.png')} style={{ width: 20, height: 20, objectFit: 'contain' }}/>
+                        <Image source={require('../../assets/images/marriage.png')} style={{ width: 18, height: 18, objectFit: 'contain' }}/>
                         <View style={{ display: 'flex', flexDirection: 'column', marginTop: 2, marginLeft: 5, marginRight: 50}}>
-                            <Text style={{ color: '#767676', fontWeight: 'bold', fontSize: 11, marginBottom: 10 }}>Doanh thu</Text>
-                            <Text style={{ color: '#000000', fontWeight: 'bold' }}>{`${usedAmount}/${limitUse}`}</Text>
+                            <Text style={{ color: '#767676', fontWeight: 'bold', fontSize: 11, marginBottom: 10 }}>Trạng thái</Text>
+                            <Text style={{ color: '#000000', fontWeight: 'bold' }}>{activated ? 'Đang chạy' : 'Đã dừng'}</Text>
                         </View> 
                     </View>
 
@@ -429,6 +431,7 @@ function CouponDetail() {
                     </View>
                 </View> 
             </KeyboardAwareScrollView>
+            {activated && 
             <TwoButtonBottom 
                 titleLeft="Dừng" 
                 titleRight="Cập nhật" 
@@ -438,7 +441,7 @@ function CouponDetail() {
                 borderColorLeft='#8b8b8b' 
                 onBack={() => setShowModal(true)}
                 onPressRight={handleUpdate}
-            />
+            />}
             {showModal && 
                 <ModalConfirmation 
                     title="Dừng khuyến mãi?" 

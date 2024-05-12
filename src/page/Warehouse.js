@@ -78,12 +78,12 @@ function Warehouse() {
                 </TouchableOpacity>
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', margin: 15, marginBottom: 0 }}>
-                <TouchableOpacity style={{ backgroundColor: 'white', borderRadius: 7, justifyContent: 'center', alignItems: 'center', width: 80, paddingVertical: 5, marginRight: 15 }}>
+                <TouchableOpacity onPress={() => navigation.navigate('ImportBook')} style={{ backgroundColor: 'white', borderRadius: 7, justifyContent: 'center', alignItems: 'center', width: 80, paddingVertical: 5, marginRight: 15 }}>
                     <Image source={require('../assets/images/import_product.png')} style={{ width: 40, height: 40, objectFit: 'contain' }}/>
                     <Text style={{ textAlign: 'center', fontWeight: '500', fontSize: 11 }}>Sổ nhập hàng</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{ backgroundColor: 'white', borderRadius: 7, justifyContent: 'center', alignItems: 'center', width: 80, paddingVertical: 5 }}>
+                <TouchableOpacity onPress={() => navigation.navigate('ExportBook')} style={{ backgroundColor: 'white', borderRadius: 7, justifyContent: 'center', alignItems: 'center', width: 80, paddingVertical: 5 }}>
                     <Image source={require('../assets/images/export_product.png')} style={{ width: 40, height: 40, objectFit: 'contain' }}/>
                     <Text style={{ textAlign: 'center', fontWeight: '500', fontSize: 11 }}>Sổ xuất hàng</Text>
                 </TouchableOpacity>
