@@ -1,14 +1,13 @@
-import { StyleSheet, View, TouchableOpacity, Image, Text, ToastAndroid, Dimensions } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Image, Text, ToastAndroid, Dimensions, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as Animatable from 'react-native-animatable';
 import { Button, Searchbar } from "react-native-paper";
+import { useEffect, useRef, useState } from "react";
+import RBSheet from "react-native-raw-bottom-sheet";
 
 import Loading from "../components/Loading";
-import { useEffect, useRef, useState } from "react";
-import { ScrollView } from "react-native-gesture-handler";
 import useDebounce from "../hooks";
 import { filterServicePackage } from "../actions/otherActions";
-import RBSheet from "react-native-raw-bottom-sheet";
 import ModalServicePackage from "../components/Modal/ModalServicePackage";
 
 const screenWidth = Dimensions.get('window').width;
@@ -30,8 +29,9 @@ function ServicePackage() {
             const fetchAPI = async() => {
                 setLoading(true);
                 const response = await filterServicePackage({ pageIndex: 0, pageSize: 1000, orderBy: null });
-                if (response) {
-                    setServicePackage(response?.content);
+                if (response && (response?.content).length > 0) {
+                    response.content = response.content.filter((item) => item.activated)
+                    setServicePackage(response.content);
                 }
                 setLoading(false);
             }

@@ -14,14 +14,14 @@ const screenWidth = Dimensions.get('window').width;
 
 const revenueOptions = [
     { label: 'Danh mục', value: '1' },
-    { label: 'Đơn hàng', value: '2' },
+    { label: 'Hóa đơn', value: '2' },
     { label: 'Ngày', value: '3' },
 ];
 
 function ProfitTab() {
     const refRBSheet = useRef();
     const [revenueOption, setRevenueOption] = useState('1');
-    const [fromDate, setFromDate] = useState(format(new Date().setDate(new Date().getDate() - 1), 'yyyy-MM-dd'));
+    const [fromDate, setFromDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
     const [toDate, setToDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
     const [data, setData] = useState([]);
     const [revenue, setRevenue] = useState([]);
@@ -498,7 +498,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingVertical: 15,
-    }
+    },
+    
 })
 
 export default ProfitTab;

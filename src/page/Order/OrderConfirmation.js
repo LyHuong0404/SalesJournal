@@ -1,20 +1,19 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, TextInput as TextInputR, ToastAndroid } from "react-native";
-import { Button, DefaultTheme, ToggleButton, TextInput } from "react-native-paper";
+import { Button, DefaultTheme } from "react-native-paper";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { format } from 'date-fns';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import RBSheet from "react-native-raw-bottom-sheet";
+import { Switch } from "react-native-switch";
+import { useSelector } from "react-redux";
 
 import TextInputCustom from "../../components/TextInputCustom";
 import ButtonCustom from "../../components/ButtonCustom";
-import { getProductByCode } from "../../actions/seller/productActions";
 import { createReceipt } from "../../actions/seller/receiptActions";
 import ModalInputProductCode from "../../components/Modal/ModalInputProductCode";
-import { Switch } from "react-native-switch";
 import QRDemo from "../QRDemo";
-import { useSelector } from "react-redux";
 
 const theme = {
     ...DefaultTheme,

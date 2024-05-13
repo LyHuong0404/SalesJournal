@@ -1,14 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useRef, useState } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollView, Dimensions } from "react-native";
-import { Searchbar } from "react-native-paper";
-import SegmentedControlTab from 'react-native-segmented-control-tab';
-import * as Animatable from 'react-native-animatable';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { format } from "date-fns";
 
-import { filterProduct } from "../actions/seller/productActions";
-import { filterCategory } from "../actions/seller/categoryActions";
+
 import Loading from "../components/Loading";
 import ModalCalendar from "../components/Modal/ModalCalendar";
 import { setDateFormat } from "../utils/helper";
@@ -20,7 +16,7 @@ function ImportBook() {
     const refRBSheet = useRef();
     const navigation = useNavigation();
     const [loading, setLoading] = useState(false);
-    const [fromDate, setFromDate] = useState(format(new Date().setDate(new Date().getDate() - 1), 'yyyy-MM-dd'));
+    const [fromDate, setFromDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
     const [toDate, setToDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
     const [buttonTimeType, setButtonTimeType] = useState('homnay'); 
     const [totalImport, setTotalImport] = useState(''); 
@@ -39,11 +35,11 @@ function ImportBook() {
                     const totalImportAmount = response?.reduce((total, item) => {
                         return total + (item?.totalImportAmount);
                     }, 0);
-                    if (totalImportProductMoney > 0 && totalImportAmount > 0){
+                    if (totalImportProductMoney > 0 || totalImportAmount > 0){
                         setTotalImport({ totalImportProductMoney, totalImportAmount });
                         const rs = await revenueOfProduct({ pageIndex: 0, pageSize: 1000, fromDate, toDate});
                         if (rs) {
-                            setProducts(response);
+                            setProducts(rs);
                         } else {
                             ToastAndroid.show('Lỗi tải không thành công', ToastAndroid.SHORT);
                         } 
@@ -57,8 +53,6 @@ function ImportBook() {
             }
             getTotalImport();
 
-            
-    
         } catch(e){
             setLoading(false);
             ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
@@ -126,7 +120,7 @@ function ImportBook() {
                         <View style={{ paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#e2e5ea' }}>
                             <View style={[styles.display, { marginVertical: 10 }]}>
                                 <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                    <Image source={require('../assets/images/distribution.png')} style={{ width: 28, height: 28, marginRight: 10 }}/>
+                                    <Image source={require('../assets/images/distributions.png')} style={{ width: 28, height: 28, marginRight: 10 }}/>
                                     <Text style={{ color: '#969696', fontSize: 13 }}>Tổng số lượng nhập</Text>                
                                 </View>
                                 <Text style={{ color: '#3a3a3a', fontSize: 13, fontWeight: '500' }}>{totalImport.totalImportAmount}</Text>                
@@ -149,8 +143,8 @@ function ImportBook() {
                         <View style={styles.item_container} key={index}>
                             <Text>{item.product.name}</Text>
                             <View style={[styles.display, { marginVertical: 6 }]}>
-                                <Text style={{ color: '#969696', fontSize: 12 }}>{`SP00${item.product.id}`}</Text>                
-                                <Text style={{ color: '#3a3a3a', fontSize: 12, fontWeight: '500' }}>{item.product.totalImportAmount}</Text>                
+                                <Text style={{ color: '#969696', fontSize: 12 }}>{`#SP00${item.product.id}`}</Text>                
+                                <Text style={{ color: '#3a3a3a', fontSize: 12, fontWeight: '500' }}>SL: +{item.product.totalImportAmount}</Text>                
                             </View>              
                         </View>
                     )}
@@ -268,6 +262,7 @@ const styles = StyleSheet.create({
     item_container: {
         backgroundColor: 'white',
         padding: 15,
+        paddingVertical: 5,
         borderBottomColor: '#e2e5ea',
         borderBottomWidth: 1
     },

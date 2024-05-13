@@ -53,7 +53,7 @@ function ModalConfirmCamera({ onUpdateAvatar, actor }) {
                     }
                 }}
             >
-                <ModalCameraScreen actor='vendor' onUpdateAvatar={handleUpdateAvatar} />
+                <ModalCameraScreen actor={actor} onUpdateAvatar={handleUpdateAvatar} close={() => refRBSheet?.current.close()} />
             </RBSheet>
         </View>
     );

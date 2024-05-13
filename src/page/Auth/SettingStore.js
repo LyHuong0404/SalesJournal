@@ -17,8 +17,6 @@ function SettingStore() {
     const { user } = useSelector((state) => state.auth);
     const [profileId, setProfileId] = useState(user?.profile?.id || '');
     const [name, setName] = useState(user?.profile?.nameStore || '');
-    const [phone, setPhone] = useState('');
-    const [address, setAddress] = useState('');
     const [isEnabled, setIsEnabled] = useState(user?.profile?.allowCustomerAccumulate || false);
     const [exchangeMoneyToPoint, setExchangeMoneyToPoint] = useState(user?.profile?.exchangeMoneyToPoint || '1000');
     const [exchangePointToMoney, setExchangePointToMoney] = useState(user?.profile?.exchangePointToMoney || '1000');
@@ -33,8 +31,8 @@ function SettingStore() {
                     profileId,
                     nameStore: name,
                     allowCustomerAccumulate: isEnabled,
-                    exchangePointToMoney: isEnabled ? exchangePointToMoney.replace('.','') : null,
-                    exchangeMoneyToPoint: isEnabled ? exchangeMoneyToPoint.replace('.','') : null
+                    exchangePointToMoney: isEnabled ? (exchangePointToMoney.toString().includes('.') ? exchangePointToMoney.replace(/\./g, "") : exchangePointToMoney) : null,
+                    exchangeMoneyToPoint: isEnabled ? (exchangePointToMoney.toString().includes('.') ? exchangeMoneyToPoint.replace(/\./g, "") : exchangeMoneyToPoint) : null
                 }))
                 if(response) {
                     ToastAndroid.show('Cập nhật cửa hàng thành công', ToastAndroid.SHORT);

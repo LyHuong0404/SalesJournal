@@ -8,7 +8,6 @@ import { getImportProductByCode, getProductByCode } from '../actions/seller/prod
 
 export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close }) {
     const navigation = useNavigation();
-    const [facing, setFacing] = useState('back');
     const [permission, requestPermission] = useCameraPermissions();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);

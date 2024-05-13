@@ -164,7 +164,7 @@ function ProfileUser() {
 
     return (
         <View style={styles.container}>
-            <View onPress={() => navigation.goBack()}>
+            <View>
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center',justifyContent: "flex-start", backgroundColor: 'green', height: 'auto', paddingVertical: 12, paddingHorizontal: 15 }}>
                     <Text style={{ flex: 1, color: '#ffffff', textAlign: 'center', fontWeight: 'bold', marginLeft: 10 }}>Tài khoản</Text>
                     <TouchableOpacity onPress={handleLogout}>
@@ -347,7 +347,7 @@ function ProfileUser() {
                     }
                 }}
             >
-                <ModalConfirmCamera onUpdateAvatar={handleUpdateAvatar} onClose={() => refRBSheet?.current.close()}/>
+                <ModalConfirmCamera actor='user' onUpdateAvatar={handleUpdateAvatar} onClose={() => refRBSheet?.current.close()}/>
             </RBSheet>
             {loading && <Loading />}
         </View>

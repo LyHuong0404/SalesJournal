@@ -1,42 +1,70 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { Camera } from 'expo-camera'; 
+import { CameraView, useCameraPermissions  } from 'expo-camera/next'; 
 import { useNavigation } from '@react-navigation/native';
+
 import Loading from '../Loading';
 
 
-function ModalCameraScreen( { onUpdateAvatar, actor }) {
-  const navigation = useNavigation();
-  const [loading, setLoading] = useState(false);
+function ModalCameraScreen( { onUpdateAvatar, actor, close }) {
+    const navigation = useNavigation();
+    const [loading, setLoading] = useState(false);
+    const [permission, requestPermission] = useCameraPermissions();
 
-  let cameraRef = null; 
-  const takePicture = async () => {
-    setLoading(true);
-    if (cameraRef) {
-        const photo = await cameraRef.takePictureAsync(); 
-        const url = photo.uri;
-        onUpdateAvatar(url);
-        if (actor == 'vendor') {
-            navigation.navigate('Profile');
-        }
-        else navigation.navigate('ProfileUser');
+    if (!permission) {
+        return <Loading />
     }
-    setLoading(false);
-  };
+
+    if (!permission.granted) {
+        const checkCameraPermission = async () => {
+            try {
+            const status = await requestPermission();
+            if (status?.status === 'denied') {
+                close();
+            }
+            } catch (error) {
+                console.error('camera', error);
+            }
+        };        
+        checkCameraPermission();
+    }
 
 
-  return (
-    <View style={{ flex: 1 }}>
-        <Camera style={{ flex: 1 }} ref={ref => (cameraRef = ref)}>
-        </Camera>
-        <View style={styles.bottomButtonContainer}>
-            <TouchableOpacity onPress={takePicture}>
-                <Image source={require('../../assets/images/camera-lens.png')} style={{ width: 55, height: 55, marginVertical: 10, alignSelf: 'center'}}/>
-            </TouchableOpacity>          
+    let cameraRef = null; 
+    const takePicture = async () => {
+        setLoading(true);
+        if (cameraRef) {
+            const photo = await cameraRef.takePictureAsync(); 
+            const url = photo.uri;
+            if (actor == 'CreateCategory') {
+                navigation.navigate('CreateCategory', { url });
+                close();
+            }
+            else if (actor == 'vendor') {
+                onUpdateAvatar(url);
+                navigation.navigate('Profile');
+            }
+            else {
+                onUpdateAvatar(url);
+                navigation.navigate('ProfileUser');
+            }
+        }
+        setLoading(false);
+    };
+
+
+    return (
+        <View style={{ flex: 1 }}>
+            <CameraView style={{ flex: 1 }} ref={ref => (cameraRef = ref)}>
+            </CameraView>
+            <View style={styles.bottomButtonContainer}>
+                <TouchableOpacity onPress={takePicture}>
+                    <Image source={require('../../assets/images/camera-lens.png')} style={{ width: 55, height: 55, marginVertical: 10, alignSelf: 'center'}}/>
+                </TouchableOpacity>          
+            </View>
+            {loading && <Loading />}
         </View>
-        {loading && <Loading />}
-    </View>
-  );
+    );
 }
 
 const styles = StyleSheet.create({

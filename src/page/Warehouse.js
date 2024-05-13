@@ -1,10 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useRef, useState } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollView, Dimensions } from "react-native";
-import { Searchbar } from "react-native-paper";
 import SegmentedControlTab from 'react-native-segmented-control-tab';
-import * as Animatable from 'react-native-animatable';
-import RBSheet from "react-native-raw-bottom-sheet";
+
 import { filterProduct } from "../actions/seller/productActions";
 import { filterCategory } from "../actions/seller/categoryActions";
 import Loading from "../components/Loading";

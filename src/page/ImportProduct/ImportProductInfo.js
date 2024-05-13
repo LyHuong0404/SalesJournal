@@ -21,7 +21,6 @@ function ImportProductInfo() {
     const [name, setName] = useState(product?.name || '');
     const [inputDay, setInputDay] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));   
     const [capitalPrice, setCapitalPrice] = useState(product?.importPrice || '');
-    const [bonusPrice, setBonusPrice] = useState('');
     const [salePrice, setSalePrice] = useState(product?.product?.salePrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '') || '')
     const [importAmount, setImportAmount] = useState('');
     const [stockAmount, setStockAmount] = useState(product?.stockAmount.toString() || '');
@@ -57,7 +56,7 @@ function ImportProductInfo() {
                     code: QR, 
                     name, 
                     expireAt: expirationDate, 
-                    importPrice: capitalPrice.toString().replace('.', ''), 
+                    importPrice: capitalPrice.toString().includes('.') ? capitalPrice.toString().replace(/\./g, ""): capitalPrice, 
                     importAmount,
                     productId: category.value
                 });

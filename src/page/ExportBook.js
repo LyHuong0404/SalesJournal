@@ -1,159 +1,185 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useRef, useState } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollView, Dimensions } from "react-native";
-import { Searchbar } from "react-native-paper";
-import SegmentedControlTab from 'react-native-segmented-control-tab';
-import * as Animatable from 'react-native-animatable';
 import RBSheet from "react-native-raw-bottom-sheet";
-import { filterProduct } from "../actions/seller/productActions";
-import { filterCategory } from "../actions/seller/categoryActions";
+import { format } from "date-fns";
+
 import Loading from "../components/Loading";
+import ModalCalendar from "../components/Modal/ModalCalendar";
+import { setDateFormat } from "../utils/helper";
+import { filterReport, revenueOfProduct } from "../actions/seller/receiptActions";
 
 const screenWidth = Dimensions.get('window').width;
 
 function ExportBook() {
     const refRBSheet = useRef();
     const navigation = useNavigation();
-    const [selectedIndex, setSelectedIndex] = useState(0);
-    const [products, setProducts] = useState([]);
-    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [productId, setProductId] = useState(null);
+    const [fromDate, setFromDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
+    const [toDate, setToDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
+    const [buttonTimeType, setButtonTimeType] = useState('homnay'); 
+    const [totalImport, setTotalImport] = useState(''); 
+    const [products, setProducts] = useState([]); 
+
 
     useEffect(() => {
-        try{      
-            const getAllProduct = async() => {
+        try{
+            const getTotalImport = async()=> {
                 setLoading(true);
-                const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: null, productId, orderBy: null});
-                
-                if (response?.content && response.content.length > 0) {
-                    setProducts(response.content);
-                } else setProducts([]);
-                setLoading(false);
-            }
-            getAllProduct();
-
-        } catch(e) {
-            setLoading(false);
-            ToastAndroid.show('Lỗi khi tải sản phẩm', ToastAndroid.SHORT);
-        }
-    }, [productId])
-
-    useEffect(() => {
-        try{      
-            const getCategories = async() => {   
-                setLoading(true);
-                const response = await filterCategory({ pageIndex: 0, pageSize: 1000 });
-                if (response?.content) {
-                    response?.content.unshift({name: 'Tất cả'});
-                    setCategories(response?.content);
+                const response = await filterReport({ fromDate, toDate });
+                if (response) {
+                    const totalImportProductMoney = response?.reduce((total, item) => {
+                        return total + (item?.totalSpentMoney);
+                    }, 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '');
+                    const totalImportAmount = response?.reduce((total, item) => {
+                        return total + (item?.totalSaleAmount);
+                    }, 0);
+                    if (totalImportProductMoney > 0 || totalImportAmount > 0){
+                        setTotalImport({ totalImportProductMoney, totalImportAmount });
+                        const rs = await revenueOfProduct({ pageIndex: 0, pageSize: 1000, fromDate, toDate});
+                        if (rs) {
+                            setProducts(rs);
+                        } else {
+                            ToastAndroid.show('Lỗi tải không thành công', ToastAndroid.SHORT);
+                        } 
+                    } else {
+                        setTotalImport('');
+                    }
+                } else {
+                    ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
                 }
                 setLoading(false);
             }
-            
-            getCategories();
-        } catch(e) {
+            getTotalImport();
+
+        } catch(e){
             setLoading(false);
-            ToastAndroid.show('Lỗi khi tải sản phẩm', ToastAndroid.SHORT);
+            ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
         }
-    }, [])
+      }, [fromDate, toDate])    
 
-    const handleIndexChange = (index) => {
-        if(index == 0) {
-            setProductId(undefined);
-        } else setProductId(categories[index].id);
-        setSelectedIndex(index);
-    }; 
+    const labelOfTime = () => {
+        switch(buttonTimeType) {
+            case 'homnay':
+                return 'Hôm nay';
+            case 'homqua':
+                return 'Hôm qua';
+            case 'tuannay':
+                return 'Tuần này';
+            case 'tuantruoc':
+                return 'Tuần trước';
+            case 'thangnay':
+                return 'Tháng này';
+            case 'thangtruoc':
+                return 'Tháng trước';
+            case 'none':
+                return 'Tùy chỉnh: ' + format(fromDate, 'dd-MM-yyyy') + ' đến ' + format(toDate, 'dd-MM-yyyy');
+            default:
+                break;
+        }
+    }
 
+    const handleChangeTime = (data) => {
+        const time = setDateFormat(data.buttonType, data.startDate, data.endDate);
     
+        setFromDate(time[0]);
+        setToDate(time[1]);
+        setButtonTimeType(data.buttonType);
+        refRBSheet.current?.close();
+    };
+
+    const handleSettingAgain = () => {
+        setButtonTimeType('homnay');
+        setStartDate(format(new Date(Date.now()), 'yyyy-MM-dd'));
+        setEndDate(format(new Date(Date.now()), 'yyyy-MM-dd'));
+        refRBSheet.current?.close();    
+    }
+
     return ( 
         <View style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <Image source={require('../assets/images/right_arrow.png')} style={{ width: 17, height: 17, objectFit: 'contain' }}/>
-                        <Text style={{ fontWeight: 'bold', marginLeft: 10 }}>Kho hàng</Text>
-                    </View>
-                </TouchableOpacity>
+                        <Image source={require('../assets/images/right_arrow.png')}  style={{ width: 17, height: 17, objectFit: 'contain', marginVertical: 15 }} />
+                    </TouchableOpacity>
+                <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center'}}>Sổ xuất hàng</Text>
             </View>
-            <View style={{ display: 'flex', flexDirection: 'row', margin: 15, marginBottom: 0 }}>
-                <TouchableOpacity style={{ backgroundColor: 'white', borderRadius: 7, justifyContent: 'center', alignItems: 'center', width: 80, paddingVertical: 5, marginRight: 15 }}>
-                    <Image source={require('../assets/images/import_product.png')} style={{ width: 40, height: 40, objectFit: 'contain' }}/>
-                    <Text style={{ textAlign: 'center', fontWeight: '500', fontSize: 11 }}>Sổ nhập hàng</Text>
+            <View style={[styles.display_center, { margin: 15 }]}>
+                <TouchableOpacity onPress={() => refRBSheet.current?.open()}>
+                    <Image source={require('../assets/images/calendar.png')} style={styles.icon_calender}/>
                 </TouchableOpacity>
-
-                <TouchableOpacity style={{ backgroundColor: 'white', borderRadius: 7, justifyContent: 'center', alignItems: 'center', width: 80, paddingVertical: 5 }}>
-                    <Image source={require('../assets/images/export_product.png')} style={{ width: 40, height: 40, objectFit: 'contain' }}/>
-                    <Text style={{ textAlign: 'center', fontWeight: '500', fontSize: 11 }}>Sổ xuất hàng</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={{ paddingHorizontal: 15, marginVertical: 15 }}>
-                <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ flexGrow: 1 }}
-                > 
-                    <SegmentedControlTab
-                        values={categories.map(category => category.name)}
-                        selectedIndex={selectedIndex}
-                        onTabPress={handleIndexChange}
-                        tabStyle={{ backgroundColor: 'white', borderColor: '#e5e5ea', borderWidth: 1.5, borderRadius: 8, marginRight: 10, paddingHorizontal: 10 }}
-                        activeTabStyle={{ backgroundColor: 'white', borderColor: '#4173bc', borderWidth: 1.5, borderRadius: 8 }}
-                        tabTextStyle={{ color: '#8e8e93' }}
-                        activeTabTextStyle={{ color: '#4173bc' }}
-                    />
-                </ScrollView>
-            </View>
-            <ScrollView style={{ flex: 1 }}>
-                <View style={styles.box_container}>
-                    <View style={{ paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#e2e5ea' }}>
-                        <Text style={{ fontWeight: '500', fontSize: 11, color: '#abaaaa', textAlign: 'center'}}>Giá trị kho</Text>                
-                        <Text style={styles.text_price}>
-                            {`${products?.reduce((total, item) => {
-                                return total + (item?.stockAmount * item.importPrice);
-                            }, 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '')}`}</Text>                   
-                    </View>  
-                    <View style={styles.display_gap}>
-                        <View>
-                            <Text style={styles.text}>Mã sản phẩm</Text>
-                            <Text style={{ color: '#3a3a3a', textAlign: 'center' }}>{products.length}</Text>
-                        </View>
-                        <View style={styles.verticalLine}></View>
-                        <View>
-                            <Text style={styles.text}>Số lượng</Text>
-                            <Text style={{ color: '#3a3a3a', textAlign: 'center' }}>
-                                {products?.reduce((total, item) => {
-                                    return total + item?.stockAmount;
-                                }, 0)}
-                            </Text>
-                        </View>
-                    </View>
+                <View style={styles.button_action_container}>   
+                    <Text style={styles.text_action}>
+                        {labelOfTime()}
+                    </Text>
                 </View>
-                <View style={{ marginHorizontal: 15 }}>
-                    {products.length > 0 ? 
-                        products.map((product, index) =>
-                            <View style={styles.product_container} key={index}>
-                                <Image source={{ uri: product?.product?.avatar }} style={styles.image_product}  />
-                                <View style={{ flex: 1 }}>
-                                    <View style={[styles.display, { flex: 1 }]}>
-                                        <Text style={{ fontWeight: '500', color: '#3a3a3a' }}>{product.name}</Text>
-                                        <Text style={styles.text_light}>{`SL: ${product?.stockAmount}`}</Text>
-                                    </View>
-                                    <View style={[styles.display, { flex: 1, marginTop: 10}]}>
-                                        <View style={styles.row}>
-                                            <Text style={styles.text_light}>{`SP00${product?.id}`}</Text>
-                                        </View>
-                                        <Text style={styles.product_price}>{`${product.importPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
-                                    </View>
+            </View>
+            {totalImport && 
+                <ScrollView style={{ flex: 1 }}>
+                    <View style={styles.box_container}>
+                        <View style={{ paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#e2e5ea' }}>
+                            <View style={[styles.display, { marginVertical: 10 }]}>
+                                <View style={{ display: 'flex', flexDirection: 'row' }}>
+                                    <Image source={require('../assets/images/distribution.png')} style={{ width: 28, height: 28, marginRight: 10 }}/>
+                                    <Text style={{ color: '#969696', fontSize: 13 }}>Tổng số lượng xuất</Text>                
                                 </View>
-                            </View>
-                        ) : <View style={styles.content_noitem}>
-                                <Image source={require('../assets/images/noresults.png')} style={{ width: 150, height: 150, objectFit: 'contain' }}/>
-                                <Text style={{ color: '#8e8e93', textAlign: 'center', marginBottom: 15, marginTop: 25 }}>Bạn chưa có danh mục sản phẩm nào trong danh mục này. </Text>
-                            </View>
-                        }                   
+                                <Text style={{ color: '#3a3a3a', fontSize: 13, fontWeight: '500' }}>{totalImport.totalImportAmount}</Text>                
+                            </View> 
+                            <View style={[styles.display, { marginVertical: 10 }]}>
+                                <View style={{ display: 'flex', flexDirection: 'row' }}>
+                                    <Image source={require('../assets/images/dollar.png')} style={{ width: 28, height: 28, marginRight: 10 }}/>
+                                    <Text style={{ color: '#969696', fontSize: 13 }}>Tổng số tiền xuất</Text>                
+                                </View>
+                                <Text style={{ color: '#3a3a3a', fontSize: 13, fontWeight: '500' }}>{totalImport.totalImportProductMoney}</Text>                
+                            </View>                                     
+                        </View>  
+                    </View>
+                    <View style={{ display: 'flex', flexDirection: 'row', marginVertical: 20, marginHorizontal: 15, justifyContent: 'space-between' }}>
+                        <View style={styles.horizontalLine} />
+                        <View style={styles.horizontalLine} />  
+                    </View>
+
+                    {products.map((item, index) => 
+                        <View style={styles.item_container} key={index}>
+                            <Text>{item.product.name}</Text>
+                            <View style={[styles.display, { marginVertical: 6 }]}>
+                                <Text style={{ color: '#969696', fontSize: 12 }}>{`#SP00${item.product.id}`}</Text>                
+                                <Text style={{ color: '#3a3a3a', fontSize: 12, fontWeight: '500' }}>SL: -{item.product.totalSaleAmount}</Text>                
+                            </View>              
+                        </View>
+                    )}
+                </ScrollView>
+            }
+
+            {!totalImport &&
+                <View style={styles.no_content}>
+                    <Image source={require('../assets/images/notes.png')} style={{ width: 80, height: 80, objectFit: 'contain', marginVertical: 10 }}/>
+                    <Text style={{ color: '#767676' }}>Bạn chưa có báo cáo nào được ghi lại.</Text>
                 </View>
-            </ScrollView>
+            }
+            <RBSheet
+                ref={refRBSheet}
+                closeOnDragDown={true}
+                closeOnPressMask={true}
+                customStyles={{
+                    wrapper: 
+                    {
+                        backgroundColor: "rgba(100, 100, 100, 0.5)",
+                    },
+                    draggableIcon: {
+                        backgroundColor: "grey"
+                    },
+                    container: {
+                        height: 540
+                    }
+                }}
+            >
+                <ModalCalendar 
+                    valueTimeFrom={fromDate} 
+                    valueTimeTo={toDate}
+                    buttonTimeType={buttonTimeType}
+                    onSelected={handleChangeTime}
+                    handleSettingAgain={handleSettingAgain} />
+            </RBSheet>
             {loading && <Loading />}
         </View> 
     );
@@ -180,6 +206,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         alignItems: 'center'
     },
+    display: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    display_center: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
     box_container: {
         paddingHorizontal: 20,
         alignSelf: 'center',
@@ -188,67 +224,53 @@ const styles = StyleSheet.create({
         width: screenWidth - 30,
         height: 'auto',
         elevation: 2,
-        marginBottom: 15
     },
-    display: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    text_price: {
-        textAlign: 'center',
-        fontSize: 24,
-        color:'#15803D',
-        fontWeight: '500',
-        marginTop: 5
-    },
-    display_gap: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginVertical: 10,
-    },
-    text: {
-        color: "#abaaaa",
-        fontSize: 11,
-        marginBottom: 5
-    },
-    verticalLine: {
-        alignSelf: 'center',
-        width: 1,
-        height: '50%',
-        backgroundColor: '#e2e5ea'
-    },
-    product_container: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        flex: 1, 
-        paddingVertical: 5,
-        paddingHorizontal: 10,
-        backgroundColor: 'white',
-        borderRadius: 7,
-        elevation: 2,
-        marginBottom: 10
-    },
-    row: {
-        display: 'flex',
-        flexDirection: 'row',
-    },
-    image_product: {
-        width: 50,
-        height: 50,
+    icon_calender: {
+        width: 28,
+        height: 28,
         objectFit: 'contain',
-        borderRadius: 15,
-        marginRight: 10
+        tintColor: '#3a3a3a',
+        marginRight: 10,
+        alignSelf: 'center',
     },
-    product_price: {
-        color: '#e58302', 
+    button_action_container: {
+        backgroundColor: '#e2e5ea',
+        borderRadius: 7,
+        // width: '75%',
+        height: 35,
+        display: 'flex',
+        flexDirection: 'row',
+        padding: 3,
+        justifyContent: 'space-around',
     },
-    text_light: {
-        fontSize: 12,
-        color: '#9a9a9a'
+    text_action: {
+        fontSize: 10,
+        backgroundColor: 'red',
+        textAlign: 'center',
+        paddingVertical: 6,
+        paddingHorizontal: 10,
+        borderRadius: 7,
+        color: '#15803D',
+        backgroundColor: 'white'
     },
+    horizontalLine: { 
+        height: 1, 
+        backgroundColor: '#c5c5c5' ,
+        width: '49%'
+    },
+    item_container: {
+        backgroundColor: 'white',
+        padding: 15,
+        paddingVertical: 5,
+        borderBottomColor: '#e2e5ea',
+        borderBottomWidth: 1
+    },
+    no_content: {
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 15,
+    }
 })
 
 export default ExportBook;

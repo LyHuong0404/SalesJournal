@@ -1,5 +1,5 @@
-import { useNavigation } from '@react-navigation/native';
 import { useState, useRef } from 'react';
+import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, TouchableOpacity, Image, View, Text, ScrollView, ToastAndroid } from 'react-native';
 import { HelperText } from 'react-native-paper';
 
@@ -43,7 +43,7 @@ function ChangePassword() {
 
     return ( 
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => goBack()}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Image source={require('../../assets/images/right_arrow.png')}  style={{ width: 17, height: 17, objectFit: 'contain', marginVertical: 15 }} />
             </TouchableOpacity>
             <View style={{ display: 'flex', flexDirection: 'row', marginTop: 20 }}>

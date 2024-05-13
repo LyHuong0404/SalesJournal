@@ -91,12 +91,12 @@ function CreateCoupon() {
                         response = await addCoupon({
                             couponCode, 
                             description: saleName,
-                            limitUse: limitUse.replace('.', ''), 
+                            limitUse: limitUse.toString().includes('.') ? limitUse.toString().replace(/\./g, ""): limitUse, 
                             startDate, 
                             endDate, 
                             type: type == 1 ? 'NUMBER' : 'PERCENT', 
                             proviso, 
-                            value: value.replace('.', ''), 
+                            value: value.toString().includes('.') ? value.toString().replace(/\./g, ""): value, 
                             provisoMinPrice: null,
                             provisoMinAmount,
                             productIds
@@ -105,13 +105,13 @@ function CreateCoupon() {
                         response = await addCoupon({
                             couponCode, 
                             description: saleName,
-                            limitUse: limitUse.replace('.', ''), 
+                            limitUse: limitUse.toString().includes('.') ? limitUse.toString().replace(/\./g, ""): limitUse, 
                             startDate, 
                             endDate, 
                             type: type == 1 ? 'NUMBER' : 'PERCENT', 
                             proviso, 
-                            value: value.replace('.', ''), 
-                            provisoMinPrice: provisoMinPrice.replace('.', ''),
+                            value: value.toString().includes('.') ? value.toString().replace(/\./g, ""): value, 
+                            provisoMinPrice: provisoMinPrice.toString().includes('.') ? provisoMinPrice.toString().replace(/\./g, ""): provisoMinPrice,
                             provisoMinAmount: null,
                             productIds: null
                         })
