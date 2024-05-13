@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "189009872460",
+    "project_id": "salesjournal-823f5",
+    "storage_bucket": "salesjournal-823f5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189009872460:android:b153a81587601e7532d6e9",
+        "android_client_info": {
+          "package_name": "com.hokimtien2002.demo1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSWx3iQ53-D8T3uQP2Y-a6TdXLH0gss4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189009872460:android:dcf0df203cdae32b32d6e9",
+        "android_client_info": {
+          "package_name": "com.lyhuong.SoBanHang"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSWx3iQ53-D8T3uQP2Y-a6TdXLH0gss4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

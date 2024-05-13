@@ -55,6 +55,8 @@ import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { updateUser } from './src/actions/authActions';
 import { addNotifyToken } from './src/actions/otherActions';
+import { Linking } from 'react-native';
+
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -66,6 +68,7 @@ Notifications.setNotificationHandler({
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+
 
 
 const CustomTabIcon = ({ route, focused }) => {
@@ -182,7 +185,7 @@ const UserLoggedNav = () => {
 }
 
 const VendorNav = () => {
-  
+
   return (
     <Stack.Navigator initialRouteName="BottomNavigatorPage" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="BottomNavigatorPage" component={BottomNavigator} />
@@ -262,7 +265,7 @@ function App() {
         }
       }
       getNotifyToken();
-      setExpoPushToken(token)
+      setExpoPushToken(token);
     });
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
@@ -270,7 +273,6 @@ function App() {
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
     });
 
     return () => {
@@ -278,25 +280,59 @@ function App() {
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
-  
+
+  const navigationRef = useRef(null);
+  const linking = {
+    prefixes: ["com.lyhuong.SoBanHang://"],
+    config: {
+    initialRouteName: "BottomNavigatorPage",
+    screens: {
+            Home: 'Home',
+            ServicePackage: 'ServicePackage',
+            Report: 'Report'
+    },
+    },
+    async getInitialURL() {
+      // First, you may want to do the default deep link handling
+      // Check if app was opened from a deep link
+      const url = await Linking.getInitialURL();
+
+      if (url != null) {
+        return url;
+      }
+
+      // Handle URL from expo push notifications
+      const response = await Notifications.getLastNotificationResponseAsync();
+      return `com.lyhuong.SoBanHang://${response?.notification.request.content.data.url}`;
+    },
+      subscribe(listener) {
+        const onReceiveURL = ({url}) => {
+          listener(url);
+        };
+    
+        // Listen to incoming links from deep linking
+        const linkingSubscription = Linking.addEventListener('url', onReceiveURL);
+    
+        const subscription = Notifications.addNotificationResponseReceivedListener(response => {
+          const url = `com.lyhuong.SoBanHang://${response.notification.request.content.data.url}`;
+          listener(url);
+        });
+    
+        return () => {
+          linkingSubscription.remove();
+          subscription.remove();
+        };
+      },
+  };
   return (
       <PaperProvider theme={DefaultTheme}>
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}
+          linking={linking}
+        >
           {data?.user?.profile ? <VendorNav /> : data ? <UserLoggedNav /> : <LoginNav />}
         </NavigationContainer>
       </PaperProvider>
   );
-}
-
-async function schedulePushNotification() {
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: "You've got mail! 📬",
-      body: 'Here is the notification body',
-      data: { data: 'goes here' },
-    },
-    trigger: { seconds: 2 },
-  });
 }
 
 async function registerForPushNotificationsAsync() {
@@ -325,7 +361,9 @@ async function registerForPushNotificationsAsync() {
     // Learn more about projectId:
     // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
 
-    token = (await Notifications.getExpoPushTokenAsync({ projectId: '02b29ea0-5b32-4138-babf-8f739813e5a6' })).data;
+    // token = (await Notifications.getExpoPushTokenAsync({ projectId: '02b29ea0-5b32-4138-babf-8f739813e5a6' })).data;
+    token = (await Notifications.getDevicePushTokenAsync({ projectId: '0e674e53-ee33-403b-bb4b-7eac26af598e' })).data;
+
   } else {
     alert('Must use physical device for Push Notifications');
   }

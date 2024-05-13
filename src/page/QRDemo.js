@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import Loading from '../components/Loading';
 import { getImportProductByCode, getProductByCode } from '../actions/seller/productActions';
+import { Audio } from 'expo-av';
 
 export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close }) {
     const navigation = useNavigation();
@@ -16,6 +17,12 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
     if (!permission) {
         return <Loading />
     }
+
+    async function playSound() {
+        const { sound } = await Audio.Sound.createAsync( require('../../assets/sound/scanner-beep.mp3')
+        );
+        sound.playAsync();
+      }
     
     if (!permission.granted) {
         const checkCameraPermission = async () => {
@@ -34,6 +41,7 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
     
     const handleBarCodeScanned = (scanningResult) => {
         if(scanningResult) {
+            playSound();
             if (action == 'ProductDetail') {
                 try {
                     const fetchData = async () => {
