@@ -133,7 +133,6 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
             </View>
             <CameraView 
                 style={styles.camera} 
-                facing={facing} 
                 barcodeScannerSettings={{
                     barcodeTypes: ["qr", "aztec", "ean13", "ean8", "pdf417", "upc_e", "datamatrix", "code39", "code93", "itf14", "codabar", "code128", "upc_a"],
                 }}

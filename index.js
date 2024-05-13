@@ -59,7 +59,6 @@ import { addNotifyToken } from './src/actions/otherActions';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { updateUser } from './src/actions/authActions';
-import { addNotifyToken } from './src/actions/otherActions';
 import { Linking } from 'react-native';
 
 
