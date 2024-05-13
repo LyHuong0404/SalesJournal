@@ -312,9 +312,7 @@ function App() {
       return `com.lyhuong.SoBanHang://${response?.notification.request.content.data.url}`;
     },
       subscribe(listener) {
-        const onReceiveURL = ({url}) => {
-          listener(url);
-        };
+        const onReceiveURL = ({url}) => listener(url);
     
         // Listen to incoming links from deep linking
         const linkingSubscription = Linking.addEventListener('url', onReceiveURL);
