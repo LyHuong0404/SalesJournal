@@ -8,7 +8,7 @@ import { format, parse } from 'date-fns';
 import { MultiSelect } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-import TextInputPrice from "../../components/TextInputPrice";
+
 import { applyProductForCoupon, getCouponById, stopCoupon, unapplyProductForCoupon, updateCoupon } from "../../actions/couponActions";
 import TextInputCustom from "../../components/TextInputCustom";
 import TwoButtonBottom from "../../components/TwoButtonBottom";
@@ -90,7 +90,6 @@ function CouponDetail() {
             const response = await filterCategory({ pageIndex: 0, pageSize: 1000 });
             let convertFormat = [];
             if (response?.content) {
-                // response.content = response.content.filter((item) => item.stockAmount > 0);
                 response.content.map((cg) => convertFormat.push({ label: cg.name, value: cg.id}));
             }
             setCategories(convertFormat);
@@ -202,10 +201,9 @@ function CouponDetail() {
                         limitUse, 
                         startDate, 
                         endDate, 
-                        // activated: format(new Date(Date.now()), 'yyyy-MM-dd') == startDate ? true : false, 
                         type: type == 1 ? 'NUMBER' : 'PERCENT', 
                         proviso: 'BY_PRODUCT', 
-                        value: value.replace('.', ''), 
+                        value: value.toString().includes('.') ? value.toString().replace(/\./g, ""): value, 
                         provisoMinPrice: null,
                         provisoMinAmount
                     })
@@ -217,10 +215,9 @@ function CouponDetail() {
                         limitUse, 
                         startDate, 
                         endDate, 
-                        // activated: format(new Date(Date.now()), 'yyyy-MM-dd') == startDate ? true : false, 
                         type: type == 1 ? 'NUMBER' : 'PERCENT', 
                         proviso: 'BY_RECEIPT', 
-                        value: value.replace('.', ''), 
+                        value: value.toString().includes('.') ? value.toString().replace(/\./g, ""): value, 
                         provisoMinPrice,
                         provisoMinAmount: null
                     })
@@ -339,28 +336,6 @@ function CouponDetail() {
                         (type == 1 ? <Text style={{ color: '#383838', marginBottom: 5 }}>{`Giảm ${value} đơn tối thiểu ${provisoMinPrice}`}</Text>
                         : <Text style={{ color: '#383838', marginBottom: 5 }}>{`Giảm ${value}% đơn tối thiểu ${provisoMinPrice}`}</Text>)  
                 }
-
-
-                {/* <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', marginVertical: 20  }}>
-                    <View style={{ width: '52%' }}>
-                        <TextInputCustom 
-                            label='Tổng khuyến mãi'
-                            placeholder='0'
-                            keyboardType='numeric'
-                            value={value} 
-                            onChange={(text) => setValue(text)} 
-                            required={true}
-                        />
-                    </View>
-                    <View style={[styles.button_type, { flex: 0.2 }]}>
-                        <View style={{ flex: 1 }}>
-                            <Text style={styles.text_button_type}
-                                onPress={() => setType(button.id)}>
-                            {type == 'NUMBER' ? '%' : 'VNĐ'}
-                            </Text>
-                        </View>
-                    </View>
-                </View> */}
                 <View style={styles.horizontalLine} />
                 <Text style={{ marginTop: 10, fontWeight: 'bold', color: '#3a3a3a'}}>Hiệu suất</Text>
                 <View style={{ display: 'flex', flexDirection: 'row', marginVertical: 10}}>

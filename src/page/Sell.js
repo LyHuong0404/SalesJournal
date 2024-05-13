@@ -4,6 +4,7 @@ import { Searchbar, Button } from "react-native-paper";
 import { useState, useRef } from "react";
 import SegmentedControlTab from 'react-native-segmented-control-tab';
 import RBSheet from "react-native-raw-bottom-sheet";
+
 import ModalArrange from "../components/Modal/ModalArrange";
 
 function Sell() {

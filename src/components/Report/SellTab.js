@@ -15,12 +15,12 @@ const screenWidth = Dimensions.get('window').width;
 
 const chartOptions = [
     { label: 'Doanh thu', value: '1' },
-    { label: 'Đơn hàng', value: '2' },
+    { label: 'Hóa đơn', value: '2' },
     { label: 'Khách hàng', value: '3' },
 ];
 const revenueOptions = [
     { label: 'Danh mục', value: '1' },
-    { label: 'Đơn hàng', value: '2' },
+    { label: 'Hóa đơn', value: '2' },
     { label: 'Ngày', value: '3' },
     { label: 'Khách hàng', value: '4' },
 ];
@@ -185,7 +185,7 @@ function SellTab() {
                             </View>  
                             <View style={styles.display_gap}>
                                 <View>
-                                    <Text style={styles.text}>Đơn hàng</Text>
+                                    <Text style={styles.text}>Hóa đơn</Text>
                                     <Text style={{ color: '#3a3a3a'}}>20</Text>
                                 </View>
                                 <View style={styles.verticalLine}></View>

@@ -2,6 +2,7 @@ import { StyleSheet, ScrollView, Text, View, ToastAndroid } from "react-native";
 import { Button } from "react-native-paper";
 import HorizontalProduct from "./HorizontalProduct";
 import { useState } from "react";
+
 import Loading from "./Loading";
 import { deleteProduct } from "../actions/seller/productActions";
 import ModalConfirmation from "./Modal/ModalConfirmation";

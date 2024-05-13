@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, TouchableOpacity, Image, ScrollView } from "rea
 import { Button } from "react-native-paper";
 import { useState } from "react";
 import { Switch } from 'react-native-switch';
+
 import ButtonCustom from "../components/ButtonCustom";
 
 const paymentMethods = [

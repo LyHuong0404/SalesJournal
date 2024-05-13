@@ -25,7 +25,6 @@ function CreateProduct() {
     const refRBSheet = useRef();
     const refRBSheetCamera = useRef();
     const [name, setName] = useState(product?.name || '');
-    const [price, setPrice] = useState('');
     const [inputDay, setInputDay] = useState(convertTimeStamp(product?.importedAt, 'yyyy-MM-dd') || format(new Date(Date.now()), 'yyyy-MM-dd'));   
     const [capitalPrice, setCapitalPrice] = useState(product?.importPrice || '');
     const [importAmount, setImportAmount] = useState(product?.importAmount?.toString() ||'');
@@ -78,7 +77,7 @@ function CreateProduct() {
                         name, 
                         // expireAt: expirationDate, 
                         expireAt: '2024-08-06', 
-                        importPrice: capitalPrice.replace('.',''), 
+                        importPrice: capitalPrice.toString().includes('.') ? capitalPrice.toString().replace(/\./g, ""): capitalPrice, 
                         importAmount,
                         productId: category.value,
                         importProductId: product.id,
@@ -88,7 +87,7 @@ function CreateProduct() {
                         code: QR, 
                         name, 
                         expireAt: expirationDate, 
-                        importPrice: capitalPrice.replace('.',''), 
+                        importPrice: capitalPrice.toString().includes('.') ? capitalPrice.toString().replace(/\./g, ""): capitalPrice, 
                         importAmount,
                         productId: category.value
                     });

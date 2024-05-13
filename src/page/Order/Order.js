@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { View, Image, StyleSheet, TouchableOpacity, ToastAndroid } from "react-native";
+import { View, Image, StyleSheet, TouchableOpacity, ToastAndroid, ScrollView } from "react-native";
 import { Button, Text } from "react-native-paper";
 import { useEffect, useRef, useState } from "react";
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -8,7 +8,6 @@ import { format } from 'date-fns';
 import Loading from "../../components/Loading";
 import { filterReceipt } from "../../actions/seller/receiptActions";
 import ModalCalendar from "../../components/Modal/ModalCalendar";
-import { ScrollView } from "react-native-gesture-handler";
 import OrderItem from "./OrderItem";
 import { setDateFormat } from "../../utils/helper";
 
@@ -40,10 +39,6 @@ function Order() {
     }
   }, [startDate, endDate])
 
-  const handleHideSearchBar = () => {
-      setSearchbarVisible(false);
-      setSearchValue(null);
-  }
 
   const handleChangeTime = (data) => {
     const time = setDateFormat(data.buttonType, data.startDate, data.endDate);

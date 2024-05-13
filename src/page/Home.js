@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Dimensions, ToastAndroid } from 'react-native';
-import { useNavigation, DrawerActions  } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { Badge, Button } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { format } from 'date-fns';
-import { filterReport } from '../actions/seller/receiptActions';
 import { useState, useEffect, useRef } from 'react';
 import RBSheet from "react-native-raw-bottom-sheet";
+
+import { filterReport } from '../actions/seller/receiptActions';
 import QRDemo from './QRDemo';
 import { convertTimeStamp } from '../utils/helper';
 import { logout, profileInfo } from '../actions/authActions';
@@ -69,9 +70,9 @@ function Home() {
             <TouchableOpacity onPress={() => navigation.navigate('Search')}> 
               <Image source={require('../assets/images/search.png')} style={{ width: 22, height: 22, objectFit: 'contain', marginLeft: 15 }}/>
             </TouchableOpacity>
-            <TouchableOpacity>
+            {/* <TouchableOpacity>
               <Image source={require('../assets/images/chatting.png')} style={{ width: 25, height: 25, objectFit: 'contain', marginLeft: 15 }} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
               <Image source={require('../assets/images/setting.png')} style={{ width: 25, height: 25, objectFit: 'contain', marginLeft: 15, tintColor: 'white' }} />
             </TouchableOpacity>

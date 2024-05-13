@@ -1,10 +1,7 @@
 import { View, StyleSheet, Text, TouchableOpacity, Image, ScrollView } from "react-native";
-import { Button } from "react-native-paper";
 import { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
-import ButtonCustom from "../../components/ButtonCustom";
-import TwoButtonBottom from "../../components/TwoButtonBottom";
 import { convertTimeStamp } from "../../utils/helper";
 
 function OrderDetail() {

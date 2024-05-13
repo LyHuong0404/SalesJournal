@@ -4,8 +4,8 @@ import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useDispatch, useSelector } from 'react-redux';
-import { View, Image, Text, TouchableOpacity, Platform } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { Image, Platform } from 'react-native';
 import { useState, useEffect, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SplashScreen from 'react-native-splash-screen';
@@ -37,7 +37,6 @@ import TransactionDetails from './src/page/TransactionDetails';
 import UnderPayment from './src/page/UnderPayment';
 import Report from './src/page/Report/Report';
 import CreateCategory from './src/page/Product/CreateCategory';
-import CameraScreen from './src/page/CameraScreen';
 import ImportProduct from './src/page/ImportProduct/ImportProduct';
 import ImportProductInfo from './src/page/ImportProduct/ImportProductInfo';
 import SaleType from './src/page/Coupon/SaleType';
@@ -50,6 +49,12 @@ import ProfileUser from './src/page/Auth/ProfileUser';
 import Logout from './src/page/Logout';
 import ServicePackage from './src/page/ServicePackage';
 import Setting from './src/page/Auth/Setting';
+import AdminHome from './src/page/Admin/AdminHome';
+import AccountManagement from './src/page/Admin/AccountManagement';
+import TransactionManagement from './src/page/Admin/TransactionManagement';
+import ServicePackageManagement from './src/page/Admin/ServicePackageManagement';
+import AddServicePackage from './src/page/Admin/AddServicePackage';
+import { addNotifyToken } from './src/actions/otherActions';
 
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
@@ -80,7 +85,7 @@ const CustomTabIcon = ({ route, focused }) => {
         ? require('./src/assets/images/bottom1_active.png')
         : require('./src/assets/images/bottom1.png');
         break;
-      case 'Đơn hàng':
+      case 'Hóa đơn':
         iconSource = focused
           ? require('./src/assets/images/bottom2_active.png')
           : require('./src/assets/images/bottom2.png');
@@ -123,10 +128,10 @@ const BottomNavigator = () => (
       })}
     />
     <Tab.Screen
-      name="Đơn hàng"
+      name="Hóa đơn"
       component={Order}
       options={({ route }) => ({
-        tabBarLabel: 'Đơn hàng',
+        tabBarLabel: 'Hóa đơn',
         headerShown: false,
         tabBarIcon: ({ focused }) => (
           <CustomTabIcon route={route} focused={focused} />
@@ -161,7 +166,6 @@ const LoginNav = () => {
         <Stack.Screen name="VendorNav" component={VendorNav} options={{ headerShown: false }}/>
         <Stack.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
         <Stack.Screen name="RegisterStore" component={RegisterStore} options={{ headerShown: false }} />
-        <Stack.Screen name="CameraScreen" component={CameraScreen} options={{ headerShown: false }}/>
     </Stack.Navigator>
   )
 }
@@ -179,7 +183,6 @@ const UserLoggedNav = () => {
         <Stack.Screen name="VendorNav" component={VendorNav} options={{ headerShown: false }}/>
         <Stack.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
         <Stack.Screen name="RegisterStore" component={RegisterStore} options={{ headerShown: false }} />
-        <Stack.Screen name="CameraScreen" component={CameraScreen} options={{ headerShown: false }}/>
     </Stack.Navigator>
   )
 }
@@ -207,7 +210,6 @@ const VendorNav = () => {
         <Stack.Screen name="UnderPayment" component={UnderPayment} options={{ headerShown: false }}/>
         <Stack.Screen name="Report" component={Report} options={{ headerShown: false }}/>
         <Stack.Screen name="CreateCategory" component={CreateCategory} options={{ headerShown: false }}/>
-        <Stack.Screen name="CameraScreen" component={CameraScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="ImportProduct" component={ImportProduct} options={{ headerShown: false }}/>
         <Stack.Screen name="ImportProductInfo" component={ImportProductInfo} options={{ headerShown: false }}/>
         <Stack.Screen name="SaleManagement" component={SaleManagement} options={{ headerShown: false }}/>
@@ -223,6 +225,11 @@ const VendorNav = () => {
         <Stack.Screen name="SettingStore" component={SettingStore} options={{ headerShown: false }}/>
         <Stack.Screen name="SettingProfile" component={SettingProfile} options={{ headerShown: false }}/>
         <Stack.Screen name="Setting" component={Setting} options={{ headerShown: false }}/>
+        <Stack.Screen name="AdminHome" component={AdminHome} options={{ headerShown: false }}/>
+        <Stack.Screen name="AccountManagement" component={AccountManagement} options={{ headerShown: false }}/>
+        <Stack.Screen name="TransactionManagement" component={TransactionManagement} options={{ headerShown: false }}/>
+        <Stack.Screen name="ServicePackageManagement" component={ServicePackageManagement} options={{ headerShown: false }}/>
+        <Stack.Screen name="AddServicePackage" component={AddServicePackage} options={{ headerShown: false }}/>
       </Stack.Navigator>
   )
 }

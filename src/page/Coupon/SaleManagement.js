@@ -47,8 +47,12 @@ function SaleManagement() {
         }, [])
     );
    
-    const statusOfCoupon = (coupon) => {
-        
+    const statusOfCoupon = (status) => {
+        if (status) {
+            return 'Đang chạy';
+        } else {
+            return 'Đã dừng';
+        }
     }
     
     return ( 
@@ -96,7 +100,7 @@ function SaleManagement() {
                     {coupons.map((coupon, index) => {
                         return (<View key={index} style={{ marginBottom: 10 }}>
                                     <TouchableOpacity onPress={() => navigation.navigate('CouponDetail', { couponId: coupon?.couponId })}>
-                                        <Text style={{ fontWeight: '500', color: '#6f6f6f', marginTop: 15, marginBottom: 5 }}>{statusOfCoupon(coupon)}</Text>
+                                        <Text style={{ fontWeight: '500', color: '#6f6f6f', marginTop: 15, marginBottom: 5 }}>{statusOfCoupon(coupon.status)}</Text>
                                         <View style={styles.coupon_item_container}> 
                                             <View style={styles.display}>
                                                 <Text style={styles.coupon_code}>{coupon?.couponCode}</Text>

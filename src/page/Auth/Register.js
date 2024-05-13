@@ -3,6 +3,7 @@ import { HelperText, TextInput, DefaultTheme } from "react-native-paper";
 import { useRef, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import { getCodeSignUp } from "../../actions/authActions";
 import PasswordInput from "../../components/PasswordInput";
 import ButtonCustom from "../../components/ButtonCustom";
@@ -112,17 +113,6 @@ function Register() {
                                     Mật khẩu không khớp.
                                 </HelperText>
                             )}
-
-                            {/* <Text style={{ fontWeight: '600', marginTop: 20 }}>Thông tin thêm</Text>
-        
-                            <View style={{ marginVertical: 20}}>
-                                <TextInputCustom 
-                                    label="Tên cửa hàng"
-                                    placeholder="Ví dụ: Cửa hàng tạp hóa"
-                                    value={nameStore}
-                                    onChange={onChangeNameStore}
-                                />
-                            </View> */}
                         </View>                  
                     </KeyboardAwareScrollView>
                 </View>

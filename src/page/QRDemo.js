@@ -9,7 +9,6 @@ import { Audio } from 'expo-av';
 
 export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close }) {
     const navigation = useNavigation();
-    const [facing, setFacing] = useState('back');
     const [permission, requestPermission] = useCameraPermissions();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);

@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { View, StyleSheet, TouchableOpacity, Image, Text, TextInput, ScrollView } from "react-native";
 import { IconButton } from 'react-native-paper';
 import { useState, useEffect, useRef } from "react";
+
 import useDebounce from "../hooks";
 import { filterProduct } from "../actions/seller/productActions";
 

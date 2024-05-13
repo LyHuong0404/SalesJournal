@@ -1,18 +1,21 @@
 import { StyleSheet, View, TouchableOpacity, Image, Text, ToastAndroid } from "react-native";
 import { Button } from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import RBSheet from "react-native-raw-bottom-sheet";
 
 import { addCategory, updateCategory } from "../../actions/seller/categoryActions";
 import TextInputCustom from "../../components/TextInputCustom";
 import TextInputPrice from "../../components/TextInputPrice";
 import ButtonCustom from "../../components/ButtonCustom";
 import Loading from "../../components/Loading";
+import ModalCameraScreen from "../../components/Modal/ModalCameraScreen";
 
 
 function CreateCategory() {
     const navigation = useNavigation();
+    const refRBSheet = useRef();
     const route = useRoute();
     const paramUrl = route.params?.url;
     const [category, setCategory] = useState(route.params?.category || '')
@@ -51,7 +54,7 @@ function CreateCategory() {
         }
         const formData = new FormData();
         formData.append('name', name);
-        formData.append('salePrice', salePrice.replace('.', ''));
+        formData.append('salePrice', salePrice.toString().includes('.') ? salePrice.toString().replace(/\./g, ""): salePrice);
         formData.append('avatarFile', {
             uri: url,
             name: 'image.' + imageType,
@@ -107,7 +110,7 @@ function CreateCategory() {
                         textColor='#22539e' 
                         style={styles.button_upload} 
                         mode="contained" 
-                        onPress={() => navigation.navigate('CameraScreen')}> Chụp ảnh
+                        onPress={() => refRBSheet?.current.open()}> Chụp ảnh
                     </Button>
                 </View>
                 <Image source={{ uri: url }} style={styles.image_category} />
@@ -139,6 +142,16 @@ function CreateCategory() {
                     labelStyle={{ color: '#ffffff' }}>
                 </ButtonCustom>
             </View>
+            <RBSheet
+                ref={refRBSheet}
+                customStyles={{               
+                    container: {
+                      height: '100%'
+                    }
+                }}
+            >
+                <ModalCameraScreen actor='CreateCategory' close={() => refRBSheet?.current.close()} />
+            </RBSheet>
             {loading && <Loading />}     
         </View>
     );

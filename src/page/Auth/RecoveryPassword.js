@@ -1,10 +1,11 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useRef, useState } from "react";
 import { StyleSheet, View, Image, Text, TouchableOpacity, ToastAndroid, ScrollView } from "react-native";
+import { HelperText } from "react-native-paper";
+
 import { recoverPassword } from "../../actions/authActions";
 import ButtonCustom from "../../components/ButtonCustom";
 import PasswordInput from "../../components/PasswordInput";
-import { HelperText } from "react-native-paper";
 
 
 function RecoveryPassword() {
