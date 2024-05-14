@@ -47,21 +47,23 @@ function CreateCategory() {
 
     
     const submitForm = () => {
-        let imageType = '';
-        const lastDotIndex = url.lastIndexOf(".");
-        if (lastDotIndex !== -1) {
-            imageType = url.substring(lastDotIndex + 1); 
-        } else {
-            console.log("Không tìm thấy dấu chấm trong chuỗi.");
-        }
         const formData = new FormData();
         formData.append('name', name);
         formData.append('salePrice', salePrice.toString().includes('.') ? salePrice.toString().replace(/\./g, ""): salePrice);
-        formData.append('avatarFile', {
-            uri: url,
-            name: 'image.' + imageType,
-            type: 'image/' + imageType,
-        });
+        if (url) {
+            let imageType = '';
+            const lastDotIndex = url.lastIndexOf(".");
+            if (lastDotIndex !== -1) {
+                imageType = url.substring(lastDotIndex + 1); 
+            } else {
+                console.log("Không tìm thấy dấu chấm trong chuỗi.");
+            }
+            formData.append('avatarFile', {
+                uri: url,
+                name: 'image.' + imageType,
+                type: 'image/' + imageType,
+            });
+        }
      
         try{ 
             const fetchApi = async() => {

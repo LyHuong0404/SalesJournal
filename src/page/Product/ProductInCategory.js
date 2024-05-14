@@ -10,6 +10,7 @@ import ProductInCategoryTab from "../../components/ProductInCategoryTab";
 import { deleteCategory, getCategoryById } from "../../actions/seller/categoryActions";
 import useDebounce from "../../hooks";
 import { filterProduct } from "../../actions/seller/productActions";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 function ProductInCategory() {
     const navigation = useNavigation();
@@ -22,6 +23,7 @@ function ProductInCategory() {
     const [category, setCategory] = useState({});
     const [showModal, setShowModal] = useState(false);
     const [productsInCategory, setProductsInCategory] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const renderTabContent = () => {
         switch (tabIndex) {
@@ -37,32 +39,39 @@ function ProductInCategory() {
     useEffect(() => {
         try {
             const fetchData = async () => {
+                setLoading(true);
                 const response = await getCategoryById(categoryId);
                 setCategory(response?.info);
+                setLoading(false);
             }
             fetchData();
         } catch(err) {
+            setLoading(false);
             ToastAndroid.show('Lỗi khi tải danh mục', ToastAndroid.SHORT);
         }
     }, [])
 
     
     useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: debounceValue, productId: categoryId, orderBy: null });
+        try {
+            const fetchProducts = async () => {
+                setLoading(true);
+                const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: debounceValue, productId: categoryId, orderBy: null, fromDate: null, toDate: null });
                 setProductsInCategory(response?.content) 
-            } catch (err) {
-                ToastAndroid.show('Lỗi khi tải sản phẩm', ToastAndroid.SHORT);
-            }
-        };
-        fetchProducts();
+                setLoading(false);
+            };
+            fetchProducts();
+        } catch (err) {
+            setLoading(false);
+            ToastAndroid.show('Lỗi khi tải sản phẩm', ToastAndroid.SHORT);
+        }
     }, [debounceValue, tabIndex]);
 
         
     const handleDeleteCategory = () => {
         try{           
             const fetchAPI = async() => {
+                setLoading(true);
                 const response = await deleteCategory(categoryId);
                 if (response?.code == 0) {
                     ToastAndroid.show('Xóa danh mục không thành công', ToastAndroid.SHORT);
@@ -70,10 +79,12 @@ function ProductInCategory() {
                 } else {
                     ToastAndroid.show('Xóa danh mục không thành công', ToastAndroid.SHORT);
                 }
+                setLoading(false);
             }
             fetchAPI();
             setShowModal(false);
         } catch(err) {
+            setLoading(false);
             ToastAndroid.show('Xóa danh mục không thành công', ToastAndroid.SHORT);
         }
     }
@@ -142,7 +153,7 @@ function ProductInCategory() {
                     onPressConfirm={handleDeleteCategory}
                 />
             }
-            
+            {loading && <LoadingSpinner />}
         </View>
     );
 }

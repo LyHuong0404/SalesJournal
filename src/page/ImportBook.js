@@ -7,8 +7,8 @@ import { format } from "date-fns";
 
 import ModalCalendar from "../components/Modal/ModalCalendar";
 import { setDateFormat } from "../utils/helper";
-import { filterReport, revenueOfProduct } from "../actions/seller/receiptActions";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { filterProduct } from "../actions/seller/productActions";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -27,22 +27,18 @@ function ImportBook() {
         try{
             const getTotalImport = async()=> {
                 setLoading(true);
-                const response = await filterReport({ fromDate, toDate });
+                const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: null, productId: null, orderBy: null, fromDate, toDate });;
                 if (response) {
-                    const totalImportProductMoney = response?.reduce((total, item) => {
-                        return total + (item?.totalImportProductMoney);
+                    const totalImportProductMoney = response?.content?.reduce((total, item) => {
+                        return total + (item?.product?.totalImportMoney);
                     }, 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '');
-                    const totalImportAmount = response?.reduce((total, item) => {
-                        return total + (item?.totalImportAmount);
+                    const totalImportAmount = response?.content?.reduce((total, item) => {
+                        return total + (item?.product?.totalImportAmount);
                     }, 0);
                     if (totalImportProductMoney > 0 || totalImportAmount > 0){
                         setTotalImport({ totalImportProductMoney, totalImportAmount });
-                        const rs = await revenueOfProduct({ pageIndex: 0, pageSize: 1000, fromDate, toDate});
-                        if (rs) {
-                            setProducts(rs);
-                        } else {
-                            ToastAndroid.show('Lỗi tải không thành công', ToastAndroid.SHORT);
-                        } 
+                        response.content = response.content.filter((item) => item.product.totalImportAmount > 0);
+                        setProducts(response?.content);
                     } else {
                         setTotalImport('');
                     }
@@ -115,7 +111,7 @@ function ImportBook() {
                 </View>
             </View>
             {totalImport && 
-                <ScrollView style={{ flex: 1 }}>
+                <ScrollView style={{ flex: 1, marginBottom: 15 }}>
                     <View style={styles.box_container}>
                         <View style={{ paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#e2e5ea' }}>
                             <View style={[styles.display, { marginVertical: 10 }]}>
@@ -141,9 +137,9 @@ function ImportBook() {
 
                     {products.map((item, index) => 
                         <View style={styles.item_container} key={index}>
-                            <Text>{item.product.name}</Text>
+                            <Text>{item.name}</Text>
                             <View style={[styles.display, { marginVertical: 6 }]}>
-                                <Text style={{ color: '#969696', fontSize: 12 }}>{`#SP00${item.product.id}`}</Text>                
+                                <Text style={{ color: '#969696', fontSize: 12 }}>{`#SP00${item.id}`}</Text>                
                                 <Text style={{ color: '#3a3a3a', fontSize: 12, fontWeight: '500' }}>SL: +{item.product.totalImportAmount}</Text>                
                             </View>              
                         </View>

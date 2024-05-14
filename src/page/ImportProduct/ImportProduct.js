@@ -1,5 +1,5 @@
-import { useNavigation } from "@react-navigation/native";
-import { useEffect, useRef, useState } from "react";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollView} from "react-native";
 import { Button, Searchbar } from "react-native-paper";
 import SegmentedControlTab from 'react-native-segmented-control-tab';
@@ -25,7 +25,7 @@ function ImportProduct() {
 
     const getAllProduct = async() => {
         setLoading(true);     
-        const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: debounceValue, productId: null, orderBy: null});
+        const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: debounceValue, productId: null, orderBy: null, fromDate: null, toDate: null });
 
         if(response) {
             if (selectedIndex == 1) {
@@ -52,6 +52,12 @@ function ImportProduct() {
     const handleIndexChange = (index) => {
         setSelectedIndex(index);
     }; 
+
+    useFocusEffect(
+        useCallback(() => {
+            getAllProduct();
+        }, [])
+    );
 
     return ( 
         <View style={styles.container}>

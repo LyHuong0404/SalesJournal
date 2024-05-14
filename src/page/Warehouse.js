@@ -22,7 +22,7 @@ function Warehouse() {
         try{      
             const getAllProduct = async() => {
                 setLoading(true);
-                const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: null, productId, orderBy: null});
+                const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: null, productId, orderBy: null, fromDate: null, toDate: null });
                 
                 if (response?.content && response.content.length > 0) {
                     setProducts(response.content);
@@ -62,8 +62,6 @@ function Warehouse() {
         } else setProductId(categories[index].id);
         setSelectedIndex(index);
     }; 
-
-    
 
     return ( 
         <View style={styles.container}>

@@ -35,7 +35,7 @@ function WarehouseTab() {
     useEffect(() => {
         try{      
             const getAllProduct = async() => {
-                const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: null, productId: null, orderBy: null});
+                const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: null, productId: null, orderBy: null, fromDate: null, toDate: null });
                 
                 if(response?.content && response?.content.length > 0) {
                     setProductToCount(response?.content);
@@ -51,7 +51,7 @@ function WarehouseTab() {
         try{      
             const getAllProduct = async() => {
                 setLoading(true);
-                const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: null, productId: null, orderBy: null});
+                const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: null, productId: null, orderBy: null, fromDate: null, toDate: null});
                 
                 if (response?.content && response.content.length > 0) {
                     let filteredContent = response.content;
@@ -71,14 +71,14 @@ function WarehouseTab() {
     useEffect(() => {
         try{
             const fetchAPI = async()=> {
-                const response = await filterReport({ fromDate: startDate, toDate: endDate });
+                const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: null, productId: null, orderBy: null, fromDate: startDate, toDate: endDate });
                 if (response) {
-                    const totalImportProductMoney = response?.reduce((total, item) => {
-                        return total + (item?.totalImportProductMoney);
+                    const totalImportProductMoney = response?.content?.reduce((total, item) => {
+                        return total + (item?.product?.totalImportMoney)
                     }, 0);
 
-                    const totalSpentMoney = response?.reduce((total, item) => {
-                        return total + (item?.totalSpentMoney)
+                    const totalSpentMoney = response?.content?.reduce((total, item) => {
+                        return total + (item?.product?.totalSaleAmount * item?.importPrice)
                     }, 0);
                     
                     setRevenue({ totalImportProductMoney, totalSpentMoney });

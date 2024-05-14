@@ -17,7 +17,7 @@ function Search() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await filterProduct({ pageIndex, pageSize: 1000, keySearch: debounceValue, productId: null, orderBy: null });
+                const response = await filterProduct({ pageIndex, pageSize: 1000, keySearch: debounceValue, productId: null, orderBy: null, fromDate: null, toDate: null });
                 setProducts(response?.content);
             } catch (err) {
                 ToastAndroid.show('Lỗi khi tải sản phẩm', ToastAndroid.SHORT);

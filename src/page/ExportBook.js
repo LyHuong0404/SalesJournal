@@ -6,8 +6,8 @@ import { format } from "date-fns";
 
 import ModalCalendar from "../components/Modal/ModalCalendar";
 import { setDateFormat } from "../utils/helper";
-import { filterReport, revenueOfProduct } from "../actions/seller/receiptActions";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { filterProduct } from "../actions/seller/productActions";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -26,22 +26,18 @@ function ExportBook() {
         try{
             const getTotalImport = async()=> {
                 setLoading(true);
-                const response = await filterReport({ fromDate, toDate });
+                const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: null, productId: null, orderBy: null, fromDate, toDate });;
                 if (response) {
-                    const totalImportProductMoney = response?.reduce((total, item) => {
-                        return total + (item?.totalSpentMoney);
+                    const totalImportProductMoney = response?.content?.reduce((total, item) => {
+                        return total + (item?.product?.totalSaleAmount * item?.importPrice);
                     }, 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '');
-                    const totalImportAmount = response?.reduce((total, item) => {
-                        return total + (item?.totalSaleAmount);
+                    const totalImportAmount = response?.content?.reduce((total, item) => {
+                        return total + (item?.product?.totalSaleAmount);
                     }, 0);
                     if (totalImportProductMoney > 0 || totalImportAmount > 0){
                         setTotalImport({ totalImportProductMoney, totalImportAmount });
-                        const rs = await revenueOfProduct({ pageIndex: 0, pageSize: 1000, fromDate, toDate});
-                        if (rs) {
-                            setProducts(rs);
-                        } else {
-                            ToastAndroid.show('Lỗi tải không thành công', ToastAndroid.SHORT);
-                        } 
+                        response.content = response.content.filter((item) => item.product.totalSaleAmount > 0);
+                        setProducts(response?.content);
                     } else {
                         setTotalImport('');
                     }

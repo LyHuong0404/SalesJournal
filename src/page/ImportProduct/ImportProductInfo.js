@@ -166,7 +166,7 @@ function ImportProductInfo() {
                         <View style={{ width: '45%' }}>
                             <TextInputCustom
                                 label='Ngày hết hạn'
-                                required={false}
+                                required={true}
                                 placeholder="Chọn ngày"
                                 value={expirationDate} 
                                 onPressIn={() => setIsDatePickerExpirationDateVisible(true)}
@@ -199,7 +199,7 @@ function ImportProductInfo() {
             </ScrollView>
             <View style={{ paddingHorizontal: 15 }}>
                 <ButtonCustom 
-                    disabled={!name || !capitalPrice || !importAmount || !category || !inputDay || !QR}
+                    disabled={!name || !capitalPrice || !importAmount || !category || !inputDay || !QR || !expirationDate}
                     title="Hoàn tất" 
                     onPress={submitForm}
                 />               

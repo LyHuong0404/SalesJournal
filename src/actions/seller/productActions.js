@@ -1,8 +1,8 @@
 import * as httprequest from '../../utils/httprequest';
 
-export const filterProduct = async ({ pageIndex, pageSize, keySearch, productId, orderBy }) => {
+export const filterProduct = async ({ pageIndex, pageSize, keySearch, productId, orderBy, fromDate, toDate }) => {
     try {
-        const filters = { pageSize, pageIndex, keySearch, productId, orderBy };
+        const filters = { pageSize, pageIndex, keySearch, productId, orderBy, fromDate, toDate };
         const filteredParams = Object.fromEntries(Object.entries(filters).filter(([_, value]) => value !== null || value !== undefined));
         const response = await httprequest.get('filter-import-product', { params: filteredParams });
         return response.data;
