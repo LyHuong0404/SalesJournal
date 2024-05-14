@@ -261,7 +261,14 @@ function App() {
   const responseListener = useRef(); 
   const [data, setData] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
-  
+  const getData = async(expireAt) => {
+    const data = await AsyncStorage.getItem('user');
+    if (data) {
+      const parsedUserData = JSON.parse(data);
+      parsedUserData.user.profile.expireAt = expireAt; 
+      dispatch(updateUser(parsedUserData.user)); 
+    }
+  }
 
   useEffect(() => {
     const getData = async() => {
@@ -308,23 +315,6 @@ function App() {
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      //  BỊ TRÙNG LẶP
-      // const getData = async() => {
-      //   const data = await AsyncStorage.getItem('user');
-      //   if (data) {
-      //     const parsedUserData = JSON.parse(data);
-      //     if (
-      //       parsedUserData?.roles.some((item) => item == 'ROLE_BUYER') &&
-      //       !parsedUserData?.roles.some((item) => item == 'ROLE_ADMIN')
-      //     ) {
-      //         const rs = await profileInfo();
-      //         parsedUserData.user.profile = rs; 
-      //     }
-      //     setData(parsedUserData);
-      //     dispatch(updateUser(parsedUserData.user)); 
-      //   }
-      // }
-      // getData();
     });
 
     return () => {
@@ -338,10 +328,12 @@ function App() {
     prefixes: ["com.lyhuong.SoBanHang://"],
     config: {
     initialRouteName: "BottomNavigatorPage",
+    initialRouteName: "ProfileUser",
     screens: {
             Home: 'Home',
             ServicePackage: 'ServicePackage',
-            Report: 'Report'
+            Report: 'Report',
+            OrderHistory: 'OrderHistory'
     },
     },
     async getInitialURL() {
@@ -365,6 +357,10 @@ function App() {
     
         const subscription = Notifications.addNotificationResponseReceivedListener(response => {
           const url = `com.lyhuong.SoBanHang://${response.notification.request.content.data.url}`;
+          if(response.notification.request.content.data.url == 'Home') {
+            const dateExpire = response.notification.request.content.data.dateExpire;
+            getData(dateExpire);
+          }
           listener(url);
         });
     

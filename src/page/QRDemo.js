@@ -13,7 +13,7 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
     const [permission, requestPermission] = useCameraPermissions();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-
+    let currentScanResult = null;
     if (!permission) {
         return <LoadingSpinner />
     }
@@ -40,8 +40,14 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
     
     
     const handleBarCodeScanned = (scanningResult) => {
-        if(scanningResult) {
+        if(scanningResult != currentScanResult) {
+            currentScanResult = scanningResult;
             playSound();
+        }
+        else {
+            return;
+        }
+        if(scanningResult) {            
             if (action == 'ProductDetail') {
                 try {
                     const fetchData = async () => {

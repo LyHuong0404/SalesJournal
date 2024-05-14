@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "SoBanHang",
-    "slug": "SoBanHang",
+    "name": "Sổ Bán Hàng",
+    "slug": "Sổ Bán Hàng",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/bottom3_active.png",
+    "icon": "./assets/icon.jpg",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -19,7 +19,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/bottom3_active.png",
+        "foregroundImage": "./assets/icon.jpg",
         "backgroundColor": "#ffffff"
       },
       "package": "com.lyhuong.SoBanHang",
