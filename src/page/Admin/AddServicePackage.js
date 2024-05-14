@@ -8,7 +8,7 @@ import { addServicePackage, lockServicePackage, unlockServicePackage, updateServ
 import ButtonCustom from "../../components/ButtonCustom";
 import TextInputPrice from "../../components/TextInputPrice";
 import TextInputCustom from "../../components/TextInputCustom";
-import Loading from "../../components/Loading";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 
 
@@ -125,7 +125,7 @@ function AddServicePackage() {
                 customStyle={{ marginHorizontal: 15 }}
                 title="Hoàn tất">
             </ButtonCustom>
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View> 
     );
 }

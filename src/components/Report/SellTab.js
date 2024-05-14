@@ -7,22 +7,20 @@ import { format } from 'date-fns';
 import RBSheet from "react-native-raw-bottom-sheet";
 
 import { filterReceipt, filterReport, revenueOfProduct } from "../../actions/seller/receiptActions";
-import Loading from "../../components/Loading";
 import ModalCalendar from "../Modal/ModalCalendar";
 import { convertTimeStamp, setDateFormat } from "../../utils/helper";
+import LoadingSpinner from "../LoadingSpinner";
 
 const screenWidth = Dimensions.get('window').width;
 
 const chartOptions = [
     { label: 'Doanh thu', value: '1' },
     { label: 'Hóa đơn', value: '2' },
-    { label: 'Khách hàng', value: '3' },
 ];
 const revenueOptions = [
     { label: 'Danh mục', value: '1' },
     { label: 'Hóa đơn', value: '2' },
     { label: 'Ngày', value: '3' },
-    { label: 'Khách hàng', value: '4' },
 ];
 
 
@@ -43,6 +41,7 @@ function SellTab() {
     useEffect(() => {
         try{
             const fetchAPI = async()=> {
+                setLoading(true)
                 const response = await filterReport({ fromDate, toDate});
                 if (response) {
                     let newArray = [];
@@ -59,7 +58,10 @@ function SellTab() {
                         })
                     }
                     setData(newArray);
+                    setLoading(false);
+
                 } else {
+                    setLoading(false);
                     ToastAndroid.show('Lỗi tải không thành công', ToastAndroid.SHORT);
                 }
             }
@@ -105,7 +107,6 @@ function SellTab() {
             ToastAndroid.show('Lỗi tải không thành công', ToastAndroid.SHORT);
         }
     }, [fromDate, toDate, revenueOption])
-
 
 
     const handleChangeTime = (data) => {
@@ -186,7 +187,11 @@ function SellTab() {
                             <View style={styles.display_gap}>
                                 <View>
                                     <Text style={styles.text}>Hóa đơn</Text>
-                                    <Text style={{ color: '#3a3a3a'}}>20</Text>
+                                    <Text style={{ color: '#3a3a3a'}}>
+                                        {revenue?.reduce((total, item) => {
+                                            return total + item?.totalReceipt;
+                                        }, 0)}
+                                    </Text>
                                 </View>
                                 <View style={styles.verticalLine}></View>
                                 <View>
@@ -196,7 +201,11 @@ function SellTab() {
                                 <View style={styles.verticalLine}></View>
                                 <View>
                                     <Text style={styles.text}>Sản phẩm</Text>
-                                    <Text style={{ color: '#3a3a3a'}}>20</Text>
+                                    <Text style={{ color: '#3a3a3a'}}>
+                                        {revenue?.reduce((total, item) => {
+                                            return total + item?.totalSaleAmount;
+                                        }, 0)}
+                                    </Text>
                                 </View>
                             </View>
                         </View>
@@ -259,7 +268,7 @@ function SellTab() {
                     </View> 
                     {revenueByTable.length > 0 ?
                         <DataTable>
-                            {loadingTable && <Loading />}  
+                            {loadingTable && <LoadingSpinner />}  
                             {revenueOption == "1" && 
                                 <>
                                     <DataTable.Header>
@@ -303,31 +312,13 @@ function SellTab() {
                                     <DataTable.Title numeric><Text style={styles.header_table}>D.THU</Text></DataTable.Title>
                                 </DataTable.Header>
                                 {revenueByTable.map((item, index) => 
-                                    <DataTable.Row>
+                                    <DataTable.Row key={index}>
                                         <DataTable.Cell style={styles.cell}><Text style={styles.cell_text_number}>{convertTimeStamp(item.date, 'dd/MM/yyyy')}</Text></DataTable.Cell>
                                         <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{item.totalReceipt}</Text></DataTable.Cell>
                                         <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>2</Text></DataTable.Cell>
                                         <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${item.totalSaleMoney}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
                                     </DataTable.Row>
                                 )}
-                            </>}
-                            {revenueOption == 4 && 
-                            <>
-                                <DataTable.Header>
-                                    <DataTable.Title style={styles.cell}><Text style={styles.header_table}>KHÁCH HÀNG</Text></DataTable.Title>
-                                    <DataTable.Title style={styles.cell} numeric><Text style={styles.header_table}>ĐƠN</Text></DataTable.Title>
-                                    <DataTable.Title style={styles.cell} numeric><Text style={styles.header_table}>D.THU</Text></DataTable.Title>
-                                </DataTable.Header>
-                                {/* <DataTable.Row>
-                                    <DataTable.Cell style={styles.cell}>
-                                        <View style={{ paddingVertical: 8 }}>
-                                            <Text style={styles.cell_text_number}>Huong</Text>
-                                            <Text style={{ color: '#9a9a9a', fontSize: 11 }}>+0123456789</Text>
-                                        </View>
-                                    </DataTable.Cell>
-                                    <DataTable.Cell style={styles.cell} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>2</Text></DataTable.Cell>
-                                    <DataTable.Cell numeric><Text style={styles.cell_text_number}>842.000</Text></DataTable.Cell>
-                                </DataTable.Row> */}
                             </>}
                         </DataTable>
                         : 
@@ -365,7 +356,7 @@ function SellTab() {
                     handleSettingAgain={handleSettingAgain} />
             </RBSheet>
             </ScrollView>
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View>
     );
 }

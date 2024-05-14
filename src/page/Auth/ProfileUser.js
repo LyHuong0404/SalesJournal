@@ -7,10 +7,11 @@ import RBSheet from "react-native-raw-bottom-sheet";
 
 
 import { changePw, updateAvatar, updateProfile } from '../../actions/user/authActions';
-import Loading from '../../components/Loading';
 import { logout } from '../../actions/authActions';
 import ModalConfirmCamera from '../../components/Modal/ModalConfirmCamera';
 import { filterBonus } from '../../actions/user/otherActions';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import TwoButtonBottom from '../../components/TwoButtonBottom';
 
 const theme = {
     ...DefaultTheme,
@@ -53,8 +54,10 @@ function ProfileUser() {
         }
     }, [])
 
-    const handleLogout = () => {
-        logout();
+    const handleLogout = async() => {
+        setLoading(true);
+        await logout();
+        setLoading(false);
         navigation.navigate('UsernameInput');
     }
 
@@ -164,14 +167,14 @@ function ProfileUser() {
 
     return (
         <View style={styles.container}>
-            <View>
-                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center',justifyContent: "flex-start", backgroundColor: 'green', height: 'auto', paddingVertical: 12, paddingHorizontal: 15 }}>
-                    <Text style={{ flex: 1, color: '#ffffff', textAlign: 'center', fontWeight: 'bold', marginLeft: 10 }}>Tài khoản</Text>
-                    <TouchableOpacity onPress={handleLogout}>
-                        <Image source={require('../../assets/images/logout.png')} style={{ width: 20, height: 20, marginRight: 10, tintColor: 'white' }}/>
-                    </TouchableOpacity>
-                   
-                </View>
+            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'green', height: 'auto', paddingVertical: 12, paddingHorizontal: 15 }}>
+                <TouchableOpacity onPress={() => navigation.navigate('OrderHistory')}>
+                    <Image source={require('../../assets/images/shopping-bag.png')} style={{ width: 22, height: 22, marginRight: 20, tintColor: 'white' }}/>
+                </TouchableOpacity>
+                <Text style={{ flex: 1, color: '#ffffff', fontWeight: 'bold', textAlign: 'center' }}>Tài khoản</Text>
+                <TouchableOpacity onPress={handleLogout}>
+                    <Image source={require('../../assets/images/logout.png')} style={{ width: 20, height: 20, marginRight: 10, tintColor: 'white' }}/>
+                </TouchableOpacity>
             </View>
             <ScrollView style={{ flex: 1, marginBottom: 15 }}>
                 <TouchableOpacity onPress={() => refRBSheet?.current.open()}>
@@ -211,7 +214,6 @@ function ProfileUser() {
                             style={{ fontSize: 13, marginTop: 15 }}
                             mode="outlined"
                             label="Số điện thoại"
-                            placeholder="Số điện thoại"
                             value={phone}
                             onChangeText={(text) => setPhone(text)}
                         />
@@ -220,7 +222,6 @@ function ProfileUser() {
                             style={{ fontSize: 13, marginTop: 15 }}
                             mode="outlined"
                             label="Họ tên"
-                            placeholder="Họ tên"
                             value={fullname}
                             onChangeText={(text) => setFullname(text)}
                         />
@@ -254,7 +255,7 @@ function ProfileUser() {
                     <View style={{ marginHorizontal: 15 }}>
                         <View style={{ display: 'flex', flexDirection: 'row' }}>
                             <Image source={require('../../assets/images/firework.png')} style={{ width: 18, height: 18, objectFit: 'contain' }} />
-                            <Text style={{ marginLeft: 8, marginBottom: 15 }}>4 cửa hàng</Text>      
+                            <Text style={{ marginLeft: 8, marginBottom: 15 }}>{points.length} cửa hàng</Text>      
                         </View>
                         <DataTable.Header style={{ borderColor: '#e2e5ea', borderWidth: 1 }}>
                             <DataTable.Title style={styles.cell}><Text style={styles.header_table}>TÊN CỬA HÀNG</Text></DataTable.Title>
@@ -319,16 +320,16 @@ function ProfileUser() {
                 </>}
                 </View>
             </ScrollView>
-            <View style={{ margin: 15 }}>
-                <Button 
-                    mode="outlined" 
-                    textColor='#15803D' 
-                    buttonColor="transparent" 
-                    style={{ borderRadius: 7, borderColor: '#15803D' }}
-                    onPress={() => navigation.navigate('RegisterStore')}>
-                    Đăng ký cửa hàng
-                </Button>
-            </View>
+            <TwoButtonBottom 
+                titleLeft="QR tích điểm" 
+                titleRight="Đăng ký store" 
+                buttonColorLeft='transparent' 
+                textColorLeft='#15803D' 
+                buttonColorRight='#15803D' 
+                borderColorLeft='#15803D' 
+                onPressRight={() => navigation.navigate('RegisterStore')}
+                onBack={() => navigation.navigate('MyQR', { email: user?.email})}
+            />
             <RBSheet
                 ref={refRBSheet}
                 closeOnDragDown={true}
@@ -349,7 +350,7 @@ function ProfileUser() {
             >
                 <ModalConfirmCamera actor='user' onUpdateAvatar={handleUpdateAvatar} onClose={() => refRBSheet?.current.close()}/>
             </RBSheet>
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View>
     );
 }

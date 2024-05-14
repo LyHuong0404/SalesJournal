@@ -41,9 +41,10 @@ export const updateCategory = async(formData) => {
 }
 
 //delete
-export const deleteCategory = async() => {
+export const deleteCategory = async(productId) => {
     try{
-
+        const response = await httprequest.post(`delete-product/${productId}`, config);
+        return response;
     }catch(err) {
         console.log("Error when deleting category: ", err);
     }

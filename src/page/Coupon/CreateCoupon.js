@@ -13,6 +13,7 @@ import { addCoupon } from "../../actions/couponActions";
 import TextInputCustom from "../../components/TextInputCustom";
 import TwoButtonBottom from "../../components/TwoButtonBottom";
 import { filterCategory } from "../../actions/seller/categoryActions";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 
 const buttonType = [
@@ -86,6 +87,7 @@ function CreateCoupon() {
         } else {
             try{
                 const fetchAPI = async() => {
+                    setLoading(true);
                     let response;
                     if(proviso == 'BY_PRODUCT') {
                         response = await addCoupon({
@@ -123,9 +125,11 @@ function CreateCoupon() {
                     {
                         ToastAndroid.show('Lưu mã khuyến mãi thất bại', ToastAndroid.SHORT);
                     }
+                    setLoading(false);
                 }
                 fetchAPI();
             } catch(e) {
+                setLoading(false);
                 ToastAndroid.show('Lỗi khi tạo mã khuyến mãi', ToastAndroid.SHORT);
             }
         }
@@ -297,7 +301,7 @@ function CreateCoupon() {
                         </View>
 
                         <View style={[styles.display, { alignItems: 'flex-end',  }]}>
-                            <Text style={{  color: '#5a5a5a'}}>Ngày kết thúc</Text>
+                            <Text style={{ color: '#5a5a5a'}}>Ngày kết thúc</Text>
                             <View style={{ width: '40%'}}>
                                 <TextInputCustom
                                     required={false}
@@ -338,6 +342,7 @@ function CreateCoupon() {
                 onBack={handleBack}
                 onPressRight={handleContinues}
             />
+            {loading && <LoadingSpinner />}
         </View> 
     );
 }

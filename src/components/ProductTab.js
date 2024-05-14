@@ -5,7 +5,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 import VerticalProduct from "./VerticalProduct";
 import { filterProduct } from "../actions/seller/productActions";
-import Loading from "./Loading";
+import LoadingSpinner from "./LoadingSpinner";
 
 function ProductTab({ onSearchValue, onSelectedFilter }) {
     const navigation = useNavigation();
@@ -108,7 +108,7 @@ function ProductTab({ onSearchValue, onSelectedFilter }) {
             }
             {((!products || products?.length == 0) && onSearchValue) && 
             <View style={styles.content_noitem}>
-                <Image source={require('../assets/images/noresults.png')} style={{ width: 200, height: 200, objectFit: 'contain' }}/>
+                <Image source={require('../assets/images/noresult.png')} style={{ width: 200, height: 200, objectFit: 'contain' }}/>
                 <Text style={{ color: '#8e8e93', textAlign: 'center', marginTop: 25 }}>Không có kết quả tìm kiếm phù hợp.</Text>
             </View>
             }
@@ -119,7 +119,7 @@ function ProductTab({ onSearchValue, onSelectedFilter }) {
                     </View>
                 </ScrollView>
             }
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View>
     );
 }

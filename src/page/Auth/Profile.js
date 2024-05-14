@@ -5,9 +5,9 @@ import { Button, TextInput, DefaultTheme } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { updateAvatar, updateProfile } from '../../actions/user/authActions';
-import Loading from '../../components/Loading';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import ModalConfirmCamera from '../../components/Modal/ModalConfirmCamera';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 const theme = {
     ...DefaultTheme,
@@ -163,7 +163,7 @@ function Profile() {
             >
                 <ModalConfirmCamera actor='vendor' onUpdateAvatar={handleUpdateAvatar} onClose={() => refRBSheet?.current.close()}/>
             </RBSheet>
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </>
     );
 }

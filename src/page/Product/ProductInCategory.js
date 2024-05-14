@@ -7,7 +7,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import ModalConfirmation from "../../components/Modal/ModalConfirmation";
 import DeleteProductFromCategory from "../../components/DeleteProductFromCategory";
 import ProductInCategoryTab from "../../components/ProductInCategoryTab";
-import { getCategoryById } from "../../actions/seller/categoryActions";
+import { deleteCategory, getCategoryById } from "../../actions/seller/categoryActions";
 import useDebounce from "../../hooks";
 import { filterProduct } from "../../actions/seller/productActions";
 
@@ -62,6 +62,16 @@ function ProductInCategory() {
         
     const handleDeleteCategory = () => {
         try{           
+            const fetchAPI = async() => {
+                const response = await deleteCategory(categoryId);
+                if (response?.code == 0) {
+                    ToastAndroid.show('Xóa danh mục không thành công', ToastAndroid.SHORT);
+                    navigation.navigate('ProductManagement', { index: 1 });
+                } else {
+                    ToastAndroid.show('Xóa danh mục không thành công', ToastAndroid.SHORT);
+                }
+            }
+            fetchAPI();
             setShowModal(false);
         } catch(err) {
             ToastAndroid.show('Xóa danh mục không thành công', ToastAndroid.SHORT);

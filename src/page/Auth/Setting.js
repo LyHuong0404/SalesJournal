@@ -1,13 +1,19 @@
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, View, TouchableOpacity, Image, Text, ScrollView } from "react-native";
+import { useState } from "react";
 
 import { logout } from "../../actions/authActions";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 function Setting() {
     const navigation = useNavigation();
+    const [loadingLogout, setLoadingLogout] = useState(false);
 
-    const handleLogout = () => {
-        logout();
+
+    const handleLogout = async() => {
+        setLoadingLogout(true);
+        await logout();
+        setLoadingLogout(false);
         navigation.navigate('LoginNav');
     }
     return ( 
@@ -40,6 +46,7 @@ function Setting() {
                 <Image source={require('../../assets/images/guarantee.png')} style={{ width: 35, height: 35, objectFit: 'contain', marginBottom: 10 }} />
                 <Text style={{ marginBottom: 20, fontSize: 11, color: '#7a7a7a' }}>An toàn & bảo mật 100%</Text>
             </View>
+            {loadingLogout && <LoadingSpinner />}
         </View>
     );
 }

@@ -5,10 +5,10 @@ import { Button, Searchbar } from "react-native-paper";
 import { useEffect, useRef, useState } from "react";
 import RBSheet from "react-native-raw-bottom-sheet";
 
-import Loading from "../components/Loading";
 import useDebounce from "../hooks";
 import { filterServicePackage } from "../actions/otherActions";
 import ModalServicePackage from "../components/Modal/ModalServicePackage";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -29,7 +29,7 @@ function ServicePackage() {
             const fetchAPI = async() => {
                 setLoading(true);
                 const response = await filterServicePackage({ pageIndex: 0, pageSize: 1000, orderBy: null });
-                if (response && (response?.content).length > 0) {
+                if (response) {
                     response.content = response.content.filter((item) => item.activated)
                     setServicePackage(response.content);
                 }
@@ -55,11 +55,11 @@ function ServicePackage() {
                 </TouchableOpacity>
                 <Text style={styles.title_header}>Nâng cấp SoBanHang</Text>
             </View>
-            <ScrollView style={{ flex: 1, paddingHorizontal: 15 }}>
+            <ScrollView style={{ flex: 1, paddingHorizontal: 15, marginBottom: 15 }}>
                 <Image source={require('../assets/images/pro.png')} style={styles.image_container}/>
                 <View style={[styles.display, { marginBottom: 10 }]}>
                     <Text style={{ fontWeight: '600' }}>Danh sách các gói gia hạn</Text>
-                    {!searchbarVisible ? 
+                    {/* {!searchbarVisible ? 
                         (<TouchableOpacity onPress={() => setSearchbarVisible(true)}>
                             <Image source={require('../assets/images/search.png')} style={{ width: 25, height: 20, objectFit: 'contain', tintColor: '#000000' }}/>
                         </TouchableOpacity>) : 
@@ -69,7 +69,7 @@ function ServicePackage() {
                             }}>
                             <Image source={require('../assets/images/close.png')} style={{ width: 25, height: 20, objectFit: 'contain', tintColor: '#000000' }}/>
                         </TouchableOpacity>
-                    )} 
+                    )}  */}
                 </View>
                 {searchbarVisible &&
                     (<Animatable.View animation="zoomIn" duration={50} style={{ backgroundColor: 'white' }}>
@@ -149,7 +149,7 @@ function ServicePackage() {
             >
                 <ModalServicePackage servicePackage={serviceSelected} />
             </RBSheet>
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View>
     );
 }

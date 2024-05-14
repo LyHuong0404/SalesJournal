@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, TextInput as TextInputR, ToastAndroid } from "react-native";
-import { Button, DefaultTheme } from "react-native-paper";
+import { Button, DefaultTheme, TextInput } from "react-native-paper";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState, useRef } from "react";
 import DateTimePicker from "react-native-modal-datetime-picker";
@@ -9,11 +9,11 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { Switch } from "react-native-switch";
 import { useSelector } from "react-redux";
 
-import TextInputCustom from "../../components/TextInputCustom";
 import ButtonCustom from "../../components/ButtonCustom";
 import { createReceipt } from "../../actions/seller/receiptActions";
 import ModalInputProductCode from "../../components/Modal/ModalInputProductCode";
 import QRDemo from "../QRDemo";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const theme = {
     ...DefaultTheme,
@@ -25,21 +25,19 @@ const theme = {
 };
 
 function OrderConfirmation({ onBack }) {
+    const refRBSheetCamera = useRef();
     const { user } = useSelector((state) => state.auth);
     const navigation = useNavigation();
     const route = useRoute();
     const refRBSheet = useRef();
     const refRBSheetInputCode = useRef();
     const [ArrayQRAndAmount, setArrayQRAndAmount] = useState(route.params?.firstProduct || []);
-    const [value, setValue] = useState('left');
-    const [discount, setDiscount] = useState("0");
-    const [transport, setTransport] = useState("0");
-    const [note, setNote] = useState("");
-    const [products, setProducts] = useState([1,2]);
+    const [products, setProducts] = useState([]);
     const [createDay, setCreateDay] = useState(format(new Date(Date.now()), 'dd/MM/yyyy'));
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [isEnabled, setIsEnabled] = useState(false);
     const [buyerEmail, setBuyerEmail] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
@@ -73,16 +71,19 @@ function OrderConfirmation({ onBack }) {
                 amount: item.amount
             }));
             const fetchAPI = async() => {
+                setLoading(true);
                 const response = await createReceipt({ paymentMethod: "DIRECT", buyerEmail, useBonusPoint: isEnabled, receiptDetailExportModels: newArray });
                 if (response?.code == 0) {
                     navigation.navigate("PaymentDetail", { data: response?.data, buyerEmail });
                 } else {
-                    ToastAndroid.show('Lỗi khi thanh toán', ToastAndroid.SHORT);
+                    ToastAndroid.show('Lỗi khi xác nhận đơn', ToastAndroid.SHORT);
                 }
+                setLoading(false);
             }
             fetchAPI();
         } catch(err) {
-            ToastAndroid.show('Lỗi khi thanh toán', ToastAndroid.SHORT);
+            setLoading(false);
+            ToastAndroid.show('Lỗi khi xác nhận đơn', ToastAndroid.SHORT);
         }
     }
 
@@ -217,57 +218,7 @@ function OrderConfirmation({ onBack }) {
                 )}
             </View>
             <View style={styles.horizontalLine}></View>
-            {/* <TouchableOpacity onPress={() => navigation.navigate("Customers")}> */}
-                    <View>
-                        <Text style={{ fontWeight: '600', margin: 15, marginBottom: 10 }}>Thông tin khách hàng</Text>
-                        {user?.profile?.allowCustomerAccumulate && 
-                        <>
-                            <View style={{ paddingHorizontal: 15, backgroundColor: '#ffffff' }}>
-                                {/* <TextInput
-                                    theme={theme}
-                                    placeholder='Nhập mail khách hàng'
-                                    placeholderTextColor='#abaaaa'
-                                    style={styles.input_style}
-                                    underlineColor="#abaaaa"
-                                    value={buyerEmail}
-                                    onChangeText={(text) => setBuyerEmail(text)}
-                                    // right={<TextInput.Icon icon="account-circle-outline" color='#888888' onPress={() => refRBSheet.current?.open()} />}
-                                /> */}
-                                <TextInputCustom 
-                                    label="Mail khách hàng" 
-                                    placeholder="Ví dụ: nguyena@gmail.com" 
-                                    value={buyerEmail} 
-                                    onChange={(text) => setBuyerEmail(text)}
-                                />
-                                {buyerEmail && <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 10 }}>
-                                    <Text style={{ color: '#7a7a7a', fontWeight: '600' }}>Dùng điểm tích lũy</Text>
-                                    <Switch 
-                                        onValueChange={toggleSwitch} 
-                                        value={isEnabled} 
-                                        activeText={''}
-                                        inActiveText={''}  
-                                        circleSize={20}
-                                        barHeight={20} 
-                                        backgroundInactive={'#e9e7e7'}
-                                    />
-                                </View>}
-                            </View>
-                        </>}
-                    </View>
-            {/* </TouchableOpacity> */}
-
-            {/* <View style={styles.total}>
-                <View style={[styles.display, { marginVertical: 12 }]}>
-                    <Text style={{ fontWeight: '500' }}>Tổng cộng</Text>
-                    <Text style={{ color: '#d81f1f', fontWeight: 'bold' }}>129.000</Text>
-                </View>
-                <Button icon="wallet-outline" mode="outlined" textColor="#22539e" buttonColor='transparent' onPress={() => console.log('Pressed')} style={styles.button}>
-                    Thanh toán trước
-                </Button>
-            </View> */}
-
-            
-            <View style={{ flex: 1, paddingHorizontal: 15, marginVertical: 5, backgroundColor: '#f6f7f8' }}>
+            <View style={{ paddingHorizontal: 8, marginVertical: 10 }}>
                 <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
                     <View style={[styles.display_center,]} >
                         <Image source={require('../../assets/images/calendar.png')} style={{ width: 20, height: 20, tintColor: '#4f86da', marginHorizontal: 10 }}/>
@@ -281,6 +232,41 @@ function OrderConfirmation({ onBack }) {
                     </View>
                 </TouchableOpacity>    
             </View>
+            <View style={{ flex: 1, paddingHorizontal: 15, backgroundColor: '#ffffff' }}>
+                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{ flex: 0.9 }}>
+                        <Text style={{ fontWeight: '500', color: '#3a3a3a'}}>Mail khách hàng</Text>
+                        <TextInput
+                            theme={theme}
+                            value={buyerEmail} 
+                            onChangeText={(text) => setBuyerEmail(text)}
+                            style={styles.input_style}
+                            underlineColor='#e2e5ea'
+                            placeholder="Ví dụ: nguyena@gmail.com"
+                            placeholderTextColor='#888888'
+                        />
+                    </View>
+                    <TouchableOpacity onPress={() => refRBSheetCamera?.current.open()} style={{ justifyContent: 'flex-end'}}>
+                        <Image source={require('../../assets/images/qr_code.png')} style={styles.image_qr} />
+                    </TouchableOpacity>
+                </View>
+                {buyerEmail && user?.profile?.allowCustomerAccumulate && 
+                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginVertical: 15 }}>
+                        <Text style={{ fontWeight: '600', marginRight: 15 }}>Dùng điểm tích lũy</Text>
+                        <Switch 
+                            onValueChange={toggleSwitch} 
+                            value={isEnabled} 
+                            activeText={''}
+                            inActiveText={''}  
+                            circleSize={20}
+                            barHeight={20} 
+                            backgroundInactive={'#e9e7e7'}
+                        />
+                    </View>
+                }
+            </View>
+
+            
             </KeyboardAwareScrollView>
             <View style={styles.button_group}>
                 <ButtonCustom 
@@ -295,6 +281,24 @@ function OrderConfirmation({ onBack }) {
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
             />
+            <RBSheet
+                ref={refRBSheetCamera}
+                customStyles={{               
+                    container: {
+                    height: '100%'
+                    }
+                }}
+            >
+                <QRDemo 
+                    action='ScanCustomerInfo' 
+                    onScanSuccess={(data) => {
+                        setBuyerEmail(data);
+                        refRBSheetCamera.current?.close();
+                    }} 
+                    close={() => refRBSheetCamera.current?.close()}
+                />
+            </RBSheet>
+            {loading && <LoadingSpinner />}
         </View> 
     );
 }
@@ -347,13 +351,6 @@ const styles = StyleSheet.create({
         objectFit: 'contain', 
         marginRight: 8
     },
-    total: {
-        marginTop: 10,
-        borderTopWidth: 0.6, 
-        borderTopColor: '#e5e5ea',
-        borderBottomWidth: 0.6, 
-        borderBottomColor: '#e5e5ea',
-    },
     button_group: {
         padding: 10, 
         borderTopWidth: 1, 
@@ -365,8 +362,19 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#15803D',
         borderRadius: 7,
-        // margin: 10, 
-    }
+    },
+    input_style:{
+        height: 40, 
+        backgroundColor: 'transparent', 
+        fontSize: 14, 
+        paddingHorizontal: 0, 
+        paddingBottom: 5
+    },
+    image_qr: {
+        width: 30,
+        height: 30,
+        objectFit: 'contain',
+    },
 });
 
 export default OrderConfirmation;

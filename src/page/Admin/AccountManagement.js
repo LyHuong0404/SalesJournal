@@ -6,9 +6,9 @@ import { Searchbar, DataTable } from "react-native-paper";
 import * as Animatable from 'react-native-animatable';
 
 
-import Loading from "../../components/Loading";
 import useDebounce from "../../hooks";
 import { filterAccount } from "../../actions/admin/otherActions";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 
 const typeAccountOptions = [
@@ -83,6 +83,7 @@ function AccountManagement() {
                 (<Animatable.View animation="zoomIn" duration={50} style={{ backgroundColor: 'white', marginHorizontal: 15 }}>
                     <View style={{ borderRadius: 5, backgroundColor: 'white', borderColor: '#15803D', borderWidth: 1, height: 40, flexDirection: 'row', alignItems: 'center', width: '100%' }}>
                         <Searchbar
+                            autoFocus
                             placeholder="Tìm kiếm theo tên, email"
                             iconColor='#8e8e93'
                             value={searchValue}
@@ -152,7 +153,7 @@ function AccountManagement() {
                 </View>
             }
             
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View> 
     );
 }

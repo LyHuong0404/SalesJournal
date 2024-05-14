@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { CameraView, useCameraPermissions  } from 'expo-camera/next'; 
 import { useNavigation } from '@react-navigation/native';
 
-import Loading from '../Loading';
+import LoadingSpinner from '../LoadingSpinner';
 
 
 function ModalCameraScreen( { onUpdateAvatar, actor, close }) {
@@ -12,7 +12,7 @@ function ModalCameraScreen( { onUpdateAvatar, actor, close }) {
     const [permission, requestPermission] = useCameraPermissions();
 
     if (!permission) {
-        return <Loading />
+        return <LoadingSpinner />
     }
 
     if (!permission.granted) {
@@ -62,7 +62,7 @@ function ModalCameraScreen( { onUpdateAvatar, actor, close }) {
                     <Image source={require('../../assets/images/camera-lens.png')} style={{ width: 55, height: 55, marginVertical: 10, alignSelf: 'center'}}/>
                 </TouchableOpacity>          
             </View>
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View>
     );
 }

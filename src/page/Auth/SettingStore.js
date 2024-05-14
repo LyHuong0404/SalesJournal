@@ -7,8 +7,8 @@ import { Switch } from "react-native-switch";
 import TextInputCustom from "../../components/TextInputCustom";
 import ButtonCustom from "../../components/ButtonCustom";
 import TextInputPrice from "../../components/TextInputPrice";
-import Loading from "../../components/Loading";
 import { updateStore } from "../../actions/authActions";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 
 function SettingStore() {
@@ -135,7 +135,7 @@ function SettingStore() {
                 customStyle={{ marginHorizontal: 15 }}
                 disabled={(isEnabled && (!exchangePointToMoney || !exchangeMoneyToPoint)) || (!name)}
             />
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View>
     );
 }

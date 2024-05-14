@@ -4,7 +4,7 @@
     "slug": "SoBanHang",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon-test.png",
+    "icon": "./assets/bottom3_active.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -19,7 +19,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon-test.png",
+        "foregroundImage": "./assets/bottom3_active.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.lyhuong.SoBanHang",

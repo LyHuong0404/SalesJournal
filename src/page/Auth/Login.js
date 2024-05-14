@@ -6,7 +6,9 @@ import { useDispatch } from "react-redux";
 
 import { getCodeForgotPassword } from "../../actions/authActions";
 import { login } from "../../actions/authActions";
-import Loading from "../../components/Loading";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { addNotifyToken } from "../../actions/otherActions";
 
 const theme = {
     ...DefaultTheme,
@@ -48,9 +50,16 @@ function Login() {
         setLoading(true);
         try {
             const response = await dispatch(login({ username, password }));
-            if (response) {            
+            if (response) { 
+                const notifyToken = await AsyncStorage.getItem('notifyToken')
+                const rs = await addNotifyToken({ notifyToken: JSON.parse(notifyToken) });
+                if (rs?.code !== 0) {
+                  console.log('Exception when add notify token');
+                }      
                 if (response?.payload?.user?.profile) {
-                    navigation.navigate('VendorNav');              
+                    if (response?.payload?.roles?.some((item) => item == 'ROLE_ADMIN')) {
+                        navigation.navigate('AdminNav');
+                    } else navigation.navigate('VendorNav');              
                 } else {
                     navigation.navigate('ProfileUser');              
                 }
@@ -101,7 +110,7 @@ function Login() {
                     Đăng nhập
                 </Button>
             </View>
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View> 
     );
 }

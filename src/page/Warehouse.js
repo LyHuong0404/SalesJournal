@@ -5,7 +5,7 @@ import SegmentedControlTab from 'react-native-segmented-control-tab';
 
 import { filterProduct } from "../actions/seller/productActions";
 import { filterCategory } from "../actions/seller/categoryActions";
-import Loading from "../components/Loading";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -153,7 +153,7 @@ function Warehouse() {
                         }                   
                 </View>
             </ScrollView>
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View> 
     );
 }

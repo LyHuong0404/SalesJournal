@@ -60,9 +60,6 @@ function ModalCalendar({ valueTimeFrom, valueTimeTo, buttonTimeType, onSelected,
         <View style={styles.container}>
             <View style={styles.header}>
                 <Text style={{ fontWeight: '600', textAlign: 'center', flex: 1 }}>Bộ lọc</Text>
-                <TouchableOpacity style={{ flex: 0.5}}>
-                    <Image source={require('../../assets/images/close.png')} style={{ width: 15, height: 15 }}/>
-                </TouchableOpacity>
             </View>
             <Text style={{ fontWeight: '600', marginVertical: 10 }}>Thời gian</Text>
             <View style={styles.button_container}>

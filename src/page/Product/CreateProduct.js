@@ -13,9 +13,9 @@ import TextInputCustom from "../../components/TextInputCustom";
 import { addProduct, deleteProduct, updateProduct } from "../../actions/seller/productActions";
 import TwoButtonBottom from "../../components/TwoButtonBottom";
 import ModalConfirmation from "../../components/Modal/ModalConfirmation";
-import Loading from "../../components/Loading";
 import { convertTimeStamp } from "../../utils/helper";
 import QRDemo from "../QRDemo";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 
 function CreateProduct() {
@@ -65,7 +65,6 @@ function CreateProduct() {
     }
 
 
-
     const submitForm = () => {
         try {
             const fetchAPI = async() => {
@@ -82,6 +81,7 @@ function CreateProduct() {
                         productId: category.value,
                         importProductId: product.id,
                     });
+                    console.log('resss   ', response);
                 } else {
                     response = await addProduct({
                         code: QR, 
@@ -128,7 +128,7 @@ function CreateProduct() {
             ToastAndroid.show('Xóa sản phẩm thành công', ToastAndroid.SHORT);
         }
     }
-    
+
     return ( 
         <View style={styles.container}>
             <View style={{ height: 20, width: '100%', backgroundColor: 'transparent'}}></View>
@@ -174,14 +174,19 @@ function CreateProduct() {
                             <Image source={require('../../assets/images/category.png')} style={{ width: 25, height: 25, marginRight: 15 }}/>
                         </TouchableOpacity>
 
-                        {Object.keys(category).length > 0 && 
+                        {Object.keys(category).length > 2 && 
                             <View style={styles.category}>
                                 <Text style={{ color: '#8e8e93'}}>{category.label}</Text>
-                            </View>}
+                            </View>
+                            }
                        
                         <Button 
-                            icon="plus" buttonColor='#ffffff' textColor='#22539e' 
-                            style={[styles.button_upload, { marginRight: 15, width: 170 }]} mode="contained" 
+                            icon="plus" 
+                            buttonColor='#ffffff' 
+                            textColor='#22539e' 
+                            style={[styles.button_upload, { marginRight: 15, width: 170 }]} 
+                            mode="contained"
+                            onPress={() => navigation.navigate('CreateCategory', { action: 'CreatingProduct'})} 
                         >
                             Tạo danh mục
                         </Button>
@@ -216,14 +221,15 @@ function CreateProduct() {
                                 label='Ngày nhập hàng'
                                 required={true}
                                 value={inputDay} 
-                                onPressIn={() => setIsDatePickerExpirationDateVisible(true)}
+                                onPressIn={() => setDatePickerInputVisibility(true)}
+                                disabled
                             />
-                            {isDatePickerExpirationDateVisible && <DateTimePicker
+                            <DateTimePicker
                                 isVisible={isDatePickerInputVisible}
                                 mode="date"
                                 onConfirm={handleConfirmDatePicker}
                                 onCancel={hideDatePicker}
-                            />}
+                            />
                         </View>
     
                         <View style={{ width: '45%' }}>
@@ -234,12 +240,12 @@ function CreateProduct() {
                                 value={expirationDate} 
                                 onPressIn={() => setIsDatePickerExpirationDateVisible(true)}
                             />
-                            {isDatePickerExpirationDateVisible && <DateTimePicker
-                                isVisible={true}
+                            <DateTimePicker
+                                isVisible={isDatePickerExpirationDateVisible}
                                 mode="date"
                                 onConfirm={handleConfirmDatePicker}
                                 onCancel={hideDatePicker}
-                            />}
+                            />
                         </View>
                     </View>
                     <View style={[styles.display, { marginBottom: 15, justifyContent: 'space-between', alignItems: 'flex-end' }]}>
@@ -279,7 +285,7 @@ function CreateProduct() {
                     /> 
                 }      
             </View>
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
             {showModal && 
                 <ModalConfirmation 
                     title="Xóa sản phẩm?" 

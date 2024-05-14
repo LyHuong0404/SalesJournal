@@ -87,13 +87,6 @@ function OrderDetail() {
                             <Text style={{ fontWeight: '500' }}>Tổng cộng</Text>
                             <Text style={{ color: '#d81f1f', fontWeight: 'bold' }}>{`${receipt?.finalPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                         </View>
-                        {/* <View style={styles.price_container}>
-                            <Text style={{ color: '#858585', fontSize: 12 }}>Khách còn nợ</Text>
-                            <Text style={{ color: '#cb870b', fontSize: 12 }}>50.000</Text>
-                        </View> */}
-                        {/* <Button icon="wallet-outline" mode="outlined" textColor="#22539e" buttonColor='transparent' onPress={() => console.log('Pressed')} style={styles.button_payment}>
-                            Thanh toán trước
-                        </Button> */}
                     </View>
 
                     <View style={styles.horizontalLine} />

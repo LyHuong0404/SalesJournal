@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import ButtonCustom from "../../components/ButtonCustom";
 import TextInputCustom from "../../components/TextInputCustom";
 import { registerStore } from "../../actions/user/authActions";
-import Loading from "../../components/Loading";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 
 function RegisterStore() {
@@ -130,7 +130,7 @@ function RegisterStore() {
                 customStyle={{ marginHorizontal: 15 }}
                 title="Đăng ký">
             </ButtonCustom>
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View> 
     );
 }

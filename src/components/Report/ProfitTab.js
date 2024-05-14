@@ -6,9 +6,9 @@ import { format } from 'date-fns';
 import RBSheet from "react-native-raw-bottom-sheet";
 
 import { filterReceipt, filterReport, revenueOfProduct } from "../../actions/seller/receiptActions";
-import Loading from "../../components/Loading";
 import ModalCalendar from "../Modal/ModalCalendar";
 import { convertTimeStamp, setDateFormat } from "../../utils/helper";
+import LoadingSpinner from "../LoadingSpinner";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -37,6 +37,7 @@ function ProfitTab() {
     useEffect(() => {
         try{
             const fetchAPI = async()=> {
+                setLoading(true);
                 const response = await filterReport({ fromDate, toDate});
                 if (response) {
                     handleTotalSpentMoney(response);
@@ -46,9 +47,11 @@ function ProfitTab() {
                 } else {
                     ToastAndroid.show('Lỗi tải không thành công', ToastAndroid.SHORT);
                 }
+                setLoading(false);
             }
             fetchAPI();
         } catch(e){
+            setLoading(false);
             ToastAndroid.show('Lỗi tải không thành công', ToastAndroid.SHORT);
         }
     }, [fromDate, toDate])
@@ -250,13 +253,13 @@ function ProfitTab() {
                                         <Text style={styles.cell_text_number}>{saleMoney}</Text>
                                     </DataTable.Cell>
                                 </DataTable.Row>
-                                <DataTable.Row>
+                                {/* <DataTable.Row>
                                     <DataTable.Cell style={[styles.cell, { flex: 1.5 }]}>
                                         <Text style={[styles.text_cell, { paddingLeft: 20 }]}>Khuyến mãi</Text></DataTable.Cell>
                                     <DataTable.Cell numeric>
                                         <Text style={styles.cell_text_number}>0</Text>
                                     </DataTable.Cell>
-                                </DataTable.Row>
+                                </DataTable.Row> */}
                             </>
                          }
                         <DataTable.Row>
@@ -295,7 +298,7 @@ function ProfitTab() {
                     </View>   
                     {revenueByTable?.length > 0 ? 
                         <DataTable>
-                            {loadingTable && <Loading />}
+                            {loadingTable && <LoadingSpinner />}
                             {revenueOption == "1" && 
                             <>
                                 <DataTable.Header>
@@ -386,7 +389,7 @@ function ProfitTab() {
                     handleSettingAgain={handleSettingAgain} />
             </RBSheet>
             </ScrollView>
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View>
     );
 }

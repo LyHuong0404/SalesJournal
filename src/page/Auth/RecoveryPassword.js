@@ -44,7 +44,7 @@ function RecoveryPassword() {
                 </View>
                 <View style={{ display: 'flex', flexDirection: 'row', marginVertical: 10 }}>
                     <Text style={{ fontSize: 12, color: '#7a7a7a' }}>Tên tài khoản </Text>
-                    <Text style={{ fontSize: 12, color: '#7a7a7a', fontWeight: 'bold' }}>lyhuong</Text>
+                    <Text style={{ fontSize: 12, color: '#7a7a7a', fontWeight: 'bold' }}>{username}</Text>
                 </View>
     
                 <View style={{ flex: 1, marginTop: 60 }}>            

@@ -5,11 +5,11 @@ import { useEffect, useRef, useState } from "react";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { format } from 'date-fns';
 
-import Loading from "../../components/Loading";
 import { filterReceipt } from "../../actions/seller/receiptActions";
 import ModalCalendar from "../../components/Modal/ModalCalendar";
 import OrderItem from "./OrderItem";
 import { setDateFormat } from "../../utils/helper";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 function Order() {
   const navigation = useNavigation();
@@ -56,6 +56,27 @@ function Order() {
     refRBSheet.current?.close();
   }
 
+  const labelOfTime = () => {
+    switch(buttonTimeType) {
+        case 'homnay':
+            return 'Hôm nay';
+        case 'homqua':
+            return 'Hôm qua';
+        case 'tuannay':
+            return 'Tuần này';
+        case 'tuantruoc':
+            return 'Tuần trước';
+        case 'thangnay':
+            return 'Tháng này';
+        case 'thangtruoc':
+            return 'Tháng trước';
+        case 'none':
+            return 'Tùy chỉnh: ' + format(startDate, 'dd-MM-yyyy') + ' đến ' + format(endDate, 'dd-MM-yyyy');
+        default:
+            break;
+        }
+    }
+
 
   return ( 
     <View style={styles.container}>
@@ -63,10 +84,17 @@ function Order() {
             <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Image source={require('../../assets/images/right_arrow.png')} style={{ width: 17, height: 17, objectFit: 'contain' }}/>
             </TouchableOpacity>
-            <Text style={{ fontWeight: 'bold' }}>Quản lý hóa đơn</Text>            
+            <Text style={{ flex: 1, fontWeight: 'bold', textAlign: 'center' }}>Quản lý hóa đơn</Text>            
+        </View>
+        <View style={{ display: 'flex', flexDirection: 'row', margin: 15 }}>
             <TouchableOpacity onPress={() => refRBSheet.current?.open()}>
-                <Image source={require('../../assets/images/calendar_outline.png')} style={{ width: 25, height: 20, objectFit: 'contain', tintColor: '#000000' }}/>
+                <Image source={require('../../assets/images/calendar.png')} style={styles.icon_calender}/>
             </TouchableOpacity>
+            <View style={styles.button_action_container}>   
+                <Text style={styles.text_action}>
+                    {labelOfTime()}
+                </Text>
+            </View>
         </View>
         {receipts?.length > 0 && 
             <ScrollView style={styles.content}>
@@ -81,7 +109,7 @@ function Order() {
                 Tạo đơn hàng
             </Button> */}
         </View>}
-        {loading && <Loading />}
+        {loading && <LoadingSpinner />}
 
         <RBSheet
             ref={refRBSheet}
@@ -121,7 +149,6 @@ const styles = StyleSheet.create({
         height: 50,
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between',
         paddingHorizontal: 15,
         backgroundColor: '#ffffff',
         alignItems: 'center',
@@ -137,7 +164,35 @@ const styles = StyleSheet.create({
     content: {
         flex: 0.9,
         paddingHorizontal: 8, 
-    }
+    },
+    icon_calender: {
+        width: 28,
+        height: 28,
+        objectFit: 'contain',
+        tintColor: '#3a3a3a',
+        marginRight: 10,
+        alignSelf: 'center',
+    },
+    button_action_container: {
+        backgroundColor: '#e2e5ea',
+        borderRadius: 7,
+        // width: '75%',
+        height: 35,
+        display: 'flex',
+        flexDirection: 'row',
+        padding: 3,
+        justifyContent: 'space-around',
+    },
+    text_action: {
+        fontSize: 10,
+        backgroundColor: 'red',
+        textAlign: 'center',
+        paddingVertical: 6,
+        paddingHorizontal: 10,
+        borderRadius: 7,
+        color: '#15803D',
+        backgroundColor: 'white'
+    },
 });
 
 export default Order;

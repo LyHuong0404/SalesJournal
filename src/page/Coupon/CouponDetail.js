@@ -13,9 +13,9 @@ import { applyProductForCoupon, getCouponById, stopCoupon, unapplyProductForCoup
 import TextInputCustom from "../../components/TextInputCustom";
 import TwoButtonBottom from "../../components/TwoButtonBottom";
 import { filterCategory } from "../../actions/seller/categoryActions";
-import Loading from "../../components/Loading";
 import { convertTimeStamp } from "../../utils/helper";
 import ModalConfirmation from "../../components/Modal/ModalConfirmation";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 
 function CouponDetail() {
@@ -427,7 +427,7 @@ function CouponDetail() {
                     onPressConfirm={handleCancelCoupon}
                 />
             }
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View> 
     );
 }

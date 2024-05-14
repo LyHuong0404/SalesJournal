@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollView } from "react-native";
 import { DataTable } from "react-native-paper";
 
-import Loading from "../../components/Loading";
 import { filterBonus } from "../../actions/seller/bonusActions";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 
 function Customers() {
@@ -17,7 +17,7 @@ function Customers() {
             const fetchAPI = async()=> {
                 setLoading(true);
                 const response = await filterBonus({ pageIndex: 0, pageSize: 1000, orderBy: null });
-                if (response && (response?.content).length > 0) {
+                if (response){
                     setCustomers(response.content);
                 } else {
                     ToastAndroid.show('Lỗi tải danh sách khách hàng không thành công', ToastAndroid.SHORT);
@@ -67,7 +67,7 @@ function Customers() {
                 </View>
             }
 
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View> 
     );
 }

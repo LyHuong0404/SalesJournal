@@ -9,8 +9,8 @@ import { addCategory, updateCategory } from "../../actions/seller/categoryAction
 import TextInputCustom from "../../components/TextInputCustom";
 import TextInputPrice from "../../components/TextInputPrice";
 import ButtonCustom from "../../components/ButtonCustom";
-import Loading from "../../components/Loading";
 import ModalCameraScreen from "../../components/Modal/ModalCameraScreen";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 
 function CreateCategory() {
@@ -22,7 +22,9 @@ function CreateCategory() {
     const [salePrice, setSalePrice] = useState(category?.salePrice?.toString() || '');
     const [name, setName] = useState(category?.name || '');
     const [url, setUrl] = useState(category?.avatar || paramUrl);
+    const [categoryId, setCategoryId] = useState(category?.id || '');
     const [loading, setLoading] = useState(false);
+    const [action, setAction] = useState(route?.params?.action || '');
 
     useEffect(() => {
         if (paramUrl) {
@@ -66,13 +68,16 @@ function CreateCategory() {
                 setLoading(true);
                 let response;
                 if (category) {
+                    formData.append('productId', categoryId);
                     response = await updateCategory(formData);
                 } else {
                     response = await addCategory(formData);
                 }
                 if (response?.code == 0) {
                     ToastAndroid.show('Lưu danh mục thành công', ToastAndroid.SHORT);
-                    navigation.navigate('ProductManagement', { index: 1 });
+                    if (action == 'CreatingProduct') {
+                        navigation.navigate('CreateProduct');
+                    } else navigation.navigate('ProductManagement', { index: 1 });
                 } else {
                     ToastAndroid.show('Lưu danh mục không thành công', ToastAndroid.SHORT);
                 }
@@ -152,7 +157,7 @@ function CreateCategory() {
             >
                 <ModalCameraScreen actor='CreateCategory' close={() => refRBSheet?.current.close()} />
             </RBSheet>
-            {loading && <Loading />}     
+            {loading && <LoadingSpinner />}     
         </View>
     );
 }

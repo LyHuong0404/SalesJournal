@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Dimensions, ToastAndroid } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
+import { FAB } from 'react-native-paper';
 
 import { logout } from '../../actions/authActions';
-import { getNewInfoToday } from '../../actions/admin/otherActions';
-import Loading from '../../components/Loading';
+import { getNewInfoToday, sendNotificationVendorExpire } from '../../actions/admin/otherActions';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -34,9 +35,28 @@ function AdminHome() {
     }
   }, [])
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async() => {
+    setLoading(true);
+    await logout();
+    setLoading(false);
     navigation.navigate('LoginNav');
+  }
+
+  const handleSendNotification = () => {
+    try{
+      const fetchAPI = async() => {
+        setLoading(true);
+        const rs = await sendNotificationVendorExpire();
+        if (rs?.code == 0) {
+          ToastAndroid.show('Gửi thông báo thành công', ToastAndroid.SHORT);
+        } else ToastAndroid.show('Gửi thông báo thất bại', ToastAndroid.SHORT);
+        setLoading(false);
+      }
+      fetchAPI();
+    } catch(e) {
+      setLoading(false);
+      ToastAndroid.show('Gửi thông báo thất bại', ToastAndroid.SHORT);
+    }
   }
 
   return (
@@ -66,7 +86,7 @@ function AdminHome() {
                 <Image source={require('../../assets/images/plus_user.png')} style={{ width: 20, height: 20, objectFit: 'contain' }}/>
                 <View style={{ display: 'flex', flexDirection: 'column', marginTop: 2, marginLeft: 5, marginRight: 50}}>
                   <Text style={{ color: '#808080', fontWeight: 'bold', fontSize: 11, marginBottom: 10 }}>Tài khoản</Text>
-                  <Text style={{ color: '#000000', fontWeight: 'bold' }}>{data?.newUserToday > 0 ? data?.newUserToday : 10}</Text>
+                  <Text style={{ color: '#000000', fontWeight: 'bold' }}>{data?.newUserToday > 0 ? data?.newUserToday : 0}</Text>
                 </View> 
                 <View style={styles.verticalLine} />
               </View>
@@ -75,7 +95,7 @@ function AdminHome() {
                 <Image source={require('../../assets/images/plus_store.png')} style={{ width: 20, height: 20, objectFit: 'contain', tintColor: '#2083c5' }}/>
                 <View style={{ display: 'flex', flexDirection: 'column', marginTop: 2, marginLeft: 5, marginRight: 50}}>
                   <Text style={{ color: '#808080', fontWeight: 'bold', fontSize: 11, marginBottom: 10 }}>Cửa hàng</Text>
-                  <Text style={{ color: '#000000', fontWeight: 'bold' }}>{data?.newVendorToday > 0 ? data?.newVendorToday : 4}</Text>
+                  <Text style={{ color: '#000000', fontWeight: 'bold' }}>{data?.newVendorToday > 0 ? data?.newVendorToday : 0}</Text>
                 </View> 
                 <View style={styles.verticalLine} />
               </View>
@@ -84,13 +104,13 @@ function AdminHome() {
                 <Image source={require('../../assets/images/transaction_now.png')} style={{ width: 20, height: 20, objectFit: 'contain' }}/>
                 <View style={{ display: 'flex', flexDirection: 'column', marginTop: 2, marginLeft: 5}}>
                   <Text style={{ color: '#808080', fontWeight: 'bold', fontSize: 11, marginBottom: 10 }}>Giao dịch</Text>
-                  <Text style={{ color: '#000000', fontWeight: 'bold' }}>{data?.totalTransactionToday > 0 ? data?.totalTransactionToday : 7}</Text>
+                  <Text style={{ color: '#000000', fontWeight: 'bold' }}>{data?.totalTransactionToday > 0 ? data?.totalTransactionToday.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : 0}</Text>
                 </View> 
               </View>       
             </View>
           </ScrollView>
         </View>
-        <View style={{ marginBottom: 20 }}>
+        <View>
           <Text style={{ margin: 20, marginBottom: 0, color: '#000000', fontWeight: 'bold'}}>Quản lý</Text>
           <View style={[styles.centeredBox, { margin: 20 }]}>  
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', height: 90 }}>                              
@@ -113,8 +133,23 @@ function AdminHome() {
             </View>
           </View>
         </View>
+
+        <View style={{ marginBottom: 20 }}>
+          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+              <View style={{ marginLeft: 20, flex: 0.7 }}>
+                  <Text style={{ marginBottom: 0, color: '#000000', fontWeight: 'bold'}}>Thông báo</Text>
+                  <Text style={styles.text_light}>Bấm Gửi để gửi thông báo đến những tài khoản người dùng sắp hết hạn</Text> 
+              </View>
+              <FAB
+                icon="send"
+                style={styles.fab}
+                onPress={handleSendNotification}
+                variant='surface'
+              />
+          </View>
+        </View>
       </ScrollView>
-      {loading && <Loading />}
+      {loading && <LoadingSpinner />}
     </View>
   );
 }
@@ -195,7 +230,18 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     objectFit: 'contain',
     backgroundColor: '#dad6d6'
-    },
+  },
+  text_light: {
+    fontSize: 10,
+    color: '#6f6f6f',
+    marginTop: 10
+  },
+  fab: {
+    position: 'absolute',
+    marginRight: 28,
+    right: 0,
+    bottom: 0,
+  },
 });
 
 export default AdminHome;

@@ -9,8 +9,8 @@ import TextInputPrice from "../../components/TextInputPrice";
 import ButtonCustom from "../../components/ButtonCustom";
 import TextInputCustom from "../../components/TextInputCustom";
 import { addProduct } from "../../actions/seller/productActions";
-import Loading from "../../components/Loading";
 import QRDemo from "../QRDemo";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 
 function ImportProductInfo() {
@@ -221,7 +221,7 @@ function ImportProductInfo() {
                     close={() => refRBSheet.current?.close()}
                 />
             </RBSheet>
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View>
     );
 }

@@ -6,7 +6,7 @@ import { HelperText } from 'react-native-paper';
 import ButtonCustom from '../../components/ButtonCustom';
 import PasswordInput from '../../components/PasswordInput';
 import { changePw } from '../../actions/user/authActions';
-import Loading from '../../components/Loading';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 
 function ChangePassword() {
@@ -98,7 +98,7 @@ function ChangePassword() {
                     onPress={handleChangePassword} 
                     title="Hoàn tất">
             </ButtonCustom>
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View>
     );
 }

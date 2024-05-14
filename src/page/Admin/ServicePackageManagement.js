@@ -3,9 +3,9 @@ import { useEffect, useState, useCallback } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollView, Dimensions } from "react-native";
 import { FAB } from "react-native-paper";
 
-import Loading from "../../components/Loading";
 import { filterServicePackage } from "../../actions/otherActions";
 import { convertTimeStamp } from "../../utils/helper";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -16,7 +16,7 @@ function ServicePackageManagement() {
 
     const getServicePackages = async() => {
         const response = await filterServicePackage({ pageIndex: 0, pageSize: 1000, orderBy: null });
-        if (response && (response?.content).length > 0) {
+        if (response) {
             setServicePackages(response.content);
         } else {
             ToastAndroid.show('Lỗi tải danh sách gói gia hạn không thành công', ToastAndroid.SHORT);
@@ -89,7 +89,7 @@ function ServicePackageManagement() {
                 onPress={() => navigation.navigate('AddServicePackage')} 
                 color='white'
             />
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View> 
     );
 }

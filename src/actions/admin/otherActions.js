@@ -33,3 +33,12 @@ export const filterTransaction = async({ pageIndex, pageSize, fromDate, toDate, 
         console.log("Error when filtering transaction: ", err);
     }
 }
+
+export const sendNotificationVendorExpire = async() => {
+    try {
+        const response = await httprequest.get('admin/send-notification-vendor-expire');
+        return response;
+    } catch (err) {
+        console.log("Error when admin is getting info today: ", err);
+    }
+}

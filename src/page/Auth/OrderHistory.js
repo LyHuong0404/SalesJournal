@@ -11,10 +11,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import useDebounce from "../../hooks";
 import { setDateFormat } from "../../utils/helper";
 import ModalCalendar from "../../components/Modal/ModalCalendar";
-import { filterServicePackage } from "../../actions/otherActions";
-import { filterTransaction } from "../../actions/admin/otherActions";
 import LoadingSpinner from "../../components/LoadingSpinner";
-
 
 const statusOptions = [
     { label: 'Tất cả', value: '1' },
@@ -22,7 +19,7 @@ const statusOptions = [
     { label: 'Chưa thanh toán', value: '3' },
 ];
 
-function TransactionManagement() {
+function OrderHistory() {
     const navigation = useNavigation();
     const refRBSheet = useRef();
     const [loading, setLoading] = useState(false);
@@ -41,33 +38,10 @@ function TransactionManagement() {
 
 
     useEffect(() => {
-        try {
-            const fetchAPI = async() => {
-                setLoading(true);
-                const response = await filterServicePackage({ pageIndex: 0, pageSize: 1000, orderBy: null });
-                if (response) {
-                    let convertFormat = [{ label: 'Tất cả', value: 0 }];
-                    response.content.map((cg) => convertFormat.push({ label: cg.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'), value: cg.id }));
-                    setServicePackage(convertFormat);
-                }
-                setLoading(false);
-            }
-            fetchAPI();
-        }catch(e) {
-            setLoading(false);
-            ToastAndroid.show('Lỗi khi tải các gói dịch vụ', ToastAndroid.SHORT);
-        }
-    }, [])
-
-    useEffect(() => {
         try{
             const fetchAPI = async()=> {
                 setLoading(true);
-
-                const response = await filterTransaction({ pageIndex: 0, pageSize: 1000, fromDate, toDate, orderBy: null, servicePackageId, paid, keySearch: searchValue});
-                if (response) {
-                    setTransactions(response.content);
-                }
+                
                 setLoading(false);
             }
             fetchAPI();
@@ -76,7 +50,7 @@ function TransactionManagement() {
             setLoading(false);
             ToastAndroid.show('Lỗi tải danh sách giao dịch không thành công', ToastAndroid.SHORT);
         }
-    }, [debounceValue, paid, servicePackageId, fromDate, toDate])    
+    }, [debounceValue, fromDate, toDate])    
 
     const handleChangeTime = (data) => {
         const time = setDateFormat(data.buttonType, data.startDate, data.endDate);
@@ -116,21 +90,11 @@ function TransactionManagement() {
     }
 
     const handleChangeStatus = (item) => {
-        if (item.value == '1') {
-            setPaid(null);
-        } else if (item.value == '2') {
-            setPaid(true);
-        } else if (item.value == '3') {
-            setPaid(false);
-        }
-        setTypeTransaction(item.value);
+       
     }   
 
     const handleChangeSerivePackage = (item) => {
-        if (item.value == 0) {
-            setServicePackageId(null);
-        } else setServicePackageId(item.value);
-        setServicePackageSelected(item.value);
+        setServer
     }
 
     return ( 
@@ -139,7 +103,7 @@ function TransactionManagement() {
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image source={require('../../assets/images/right_arrow.png')}  style={{ width: 17, height: 17, objectFit: 'contain', marginVertical: 15 }} />
                 </TouchableOpacity>
-                <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center'}}>Quản lý giao dịch</Text>
+                <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center'}}>Lịch sử mua hàng</Text>
                 {!searchBarVisible ? 
                     (<TouchableOpacity onPress={() => setSearchBarVisible(true)}>
                         <Image source={require('../../assets/images/search.png')} style={{ width: 25, height: 20, objectFit: 'contain', tintColor: '#000000' }}/>
@@ -156,7 +120,7 @@ function TransactionManagement() {
                 (<Animatable.View animation="zoomIn" duration={50} style={{ backgroundColor: 'white', marginHorizontal: 15 }}>
                     <View style={{ borderRadius: 5, backgroundColor: 'white', borderColor: '#15803D', borderWidth: 1, height: 40, flexDirection: 'row', alignItems: 'center', width: '100%' }}>
                         <Searchbar
-                            placeholder="Tìm kiếm theo tên tài khoản"
+                            placeholder="Tìm kiếm"
                             iconColor="#8e8e93"
                             value={searchValue}
                             style={{
@@ -248,26 +212,26 @@ function TransactionManagement() {
             </ScrollView>) : 
                 <View style={styles.content_noitem}>
                     <Image source={require('../../assets/images/notes.png')} style={{ width: 150, height: 150, objectFit: 'contain' }}/>
-                    <Text style={{ color: '#8e8e93', textAlign: 'center', marginBottom: 15, marginTop: 25 }}>Hệ thống chưa có giao dịch nào. </Text>
+                    <Text style={{ color: '#8e8e93', textAlign: 'center', marginBottom: 15, marginTop: 25 }}>Bạn chưa có đơn hàng nào. </Text>
                 </View>
             }
             <RBSheet
-                    ref={refRBSheet}
-                    closeOnDragDown={true}
-                    closeOnPressMask={true}
-                    customStyles={{
-                        wrapper: 
-                        {
-                            backgroundColor: "rgba(100, 100, 100, 0.5)",
-                        },
-                        draggableIcon: {
-                            backgroundColor: "grey"
-                        },
-                        container: {
-                            height: 540
-                        }
-                    }}
-                >
+                ref={refRBSheet}
+                closeOnDragDown={true}
+                closeOnPressMask={true}
+                customStyles={{
+                    wrapper: 
+                    {
+                        backgroundColor: "rgba(100, 100, 100, 0.5)",
+                    },
+                    draggableIcon: {
+                        backgroundColor: "grey"
+                    },
+                    container: {
+                        height: 540
+                    }
+                }}
+            >
                 <ModalCalendar 
                     valueTimeFrom={fromDate} 
                     valueTimeTo={toDate}
@@ -361,4 +325,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default TransactionManagement;
+export default OrderHistory;

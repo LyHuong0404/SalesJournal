@@ -4,7 +4,7 @@ import { View, StyleSheet, Text, Image, ToastAndroid } from "react-native";
 import { Button, TextInput, DefaultTheme  } from "react-native-paper";
 import { getCodeSignUp } from "../../actions/authActions";
 
-import Loading from "../../components/Loading";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const theme = {
     ...DefaultTheme,
@@ -62,7 +62,7 @@ function UsernameInput() {
                 <Text style={{ marginBottom: 20, fontSize: 11 }}>An toàn & bảo mật 100%</Text>
                 <Text style={{ color: '#888888' }}>Bằng việc ấn vào Tiếp tục, bạn đã đồng ý với <Text style={{ color: '#15803D'}}>Điều khoản và Điều kiện sử dụng </Text>của ứng dụng</Text>
             </View>
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View>
     );
 }

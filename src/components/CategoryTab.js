@@ -3,9 +3,10 @@ import { FAB } from 'react-native-paper';
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useCallback, useEffect, useState, memo } from "react";
 
-import Loading from "./Loading";
+
 import HorizontalCategory from "./HorizontalCategory";
 import { filterCategory } from "../actions/seller/categoryActions";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function CategoryTab({ onSearchValue }) {
     const navigation = useNavigation();
@@ -66,10 +67,17 @@ function CategoryTab({ onSearchValue }) {
                 onPress={() => navigation.navigate('CreateCategory')} 
                 color='white'
             />
-            {(!categories || categories?.length == 0) &&
+            {(!categories || categories?.length == 0) && (!onSearchValue) &&
                 <View style={styles.content_noitem}>
                     <Image source={require('../assets/images/noresults.png')} style={{ width: 200, height: 200, objectFit: 'contain' }}/>
                     <Text style={{ color: '#8e8e93', textAlign: 'center', marginBottom: 15, marginTop: 25 }}>Bạn chưa có danh mục sản phẩm nào, hãy tạo ngay danh mục đầu tiên nhé</Text>
+                </View>
+            }
+
+            {(!categories || categories?.length == 0) && (onSearchValue) &&
+                <View style={styles.content_noitem}>
+                    <Image source={require('../assets/images/noresults.png')} style={{ width: 200, height: 200, objectFit: 'contain' }}/>
+                    <Text style={{ color: '#8e8e93', textAlign: 'center', marginTop: 25 }}>Không có kết quả tìm kiếm phù hợp.</Text>
                 </View>
             }
             
@@ -78,7 +86,7 @@ function CategoryTab({ onSearchValue }) {
                     {categories?.map((category, index) => <HorizontalCategory key={index} category={category} />)}
                 </ScrollView>
             }
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View>
     );
 }

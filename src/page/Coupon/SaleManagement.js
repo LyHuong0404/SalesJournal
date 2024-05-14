@@ -6,8 +6,8 @@ import * as Animatable from 'react-native-animatable';
 
 import { filterCoupon } from "../../actions/couponActions";
 import useDebounce from "../../hooks";
-import Loading from "../../components/Loading";
 import { convertTimeStamp } from "../../utils/helper";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 function SaleManagement() {
     const navigation = useNavigation();
@@ -143,7 +143,7 @@ function SaleManagement() {
                     <Text style={{ color: '#8e8e93', textAlign: 'center' }}>Hãy tạo ngay mã khuyến mãi đầu tiên nhé!</Text>
                 </View>
             }
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
             <FAB
                 icon="plus"
                 label="Tạo khuyến mãi"

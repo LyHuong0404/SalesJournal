@@ -4,10 +4,10 @@ import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollV
 import RBSheet from "react-native-raw-bottom-sheet";
 import { format } from "date-fns";
 
-import Loading from "../components/Loading";
 import ModalCalendar from "../components/Modal/ModalCalendar";
 import { setDateFormat } from "../utils/helper";
 import { filterReport, revenueOfProduct } from "../actions/seller/receiptActions";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -180,7 +180,7 @@ function ExportBook() {
                     onSelected={handleChangeTime}
                     handleSettingAgain={handleSettingAgain} />
             </RBSheet>
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View> 
     );
 }

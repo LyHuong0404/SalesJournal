@@ -1,65 +1,83 @@
 import { View, StyleSheet, Text, ToastAndroid } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useCallback } from "react";
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useFocusEffect } from "@react-navigation/native";
+
 
 import { filterCategory } from "../../actions/seller/categoryActions";
+import LoadingSpinner from "../LoadingSpinner";
 
 function ModalSelectCategory({ onSetCategory }) {
     const [value, setValue] = useState(null);
     const [isFocus, setIsFocus] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const getCategories = async() => {
+      setLoading(true);
+      const response = await filterCategory({ pageIndex: 0, pageSize: 1000 });
+      let convertFormat = [];
+      if (response?.content) {
+        response.content.map((cg) => convertFormat.push({ label: cg.name, value: cg.id}));
+      }
+      setCategories(convertFormat);
+      setLoading(false);
+    }
 
     useEffect(() => {
       try {
-          const fetchApi = async() => {
-              const response = await filterCategory({ pageIndex: 0, pageSize: 1000 });
-              let convertFormat = [];
-              if (response?.content) {
-                response.content.map((cg) => convertFormat.push({ label: cg.name, value: cg.id}));
-              }
-              setCategories(convertFormat);
-          }
-          fetchApi();
+        getCategories();
+          
       } catch(err) {
+        setLoading(false);
           ToastAndroid.show('Lỗi khi tải danh mục', ToastAndroid.SHORT);
       }
     }, []);
 
+    useFocusEffect(
+      useCallback(() => {
+        getCategories();
+      }, [])
+    );
+
     return (
-      <View style={styles.container}>
-        <Text style={{ fontWeight: '600', textAlign: 'center', marginBottom: 10 }}>Danh mục</Text>
-        <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: '#15803D', borderWidth: 1 }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={categories}
-            search
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder={!isFocus ? 'Chọn danh mục' : '...'}
-            searchPlaceholder="Tìm kiếm..."
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setValue(item.value);
-              setIsFocus(false);
-              onSetCategory(item)
-            }}
-            renderLeftIcon={() => (
-            <AntDesign
-                style={styles.icon}
-                color={isFocus ? 'blue' : 'black'}
-                name="Safety"
-                size={20}
-            />
-          )}
-        />
-      </View>
+      <>
+        <View style={styles.container}>
+          <Text style={{ fontWeight: '600', textAlign: 'center', marginBottom: 10 }}>Danh mục</Text>
+          <Dropdown
+              style={[styles.dropdown, isFocus && { borderColor: '#15803D', borderWidth: 1 }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={categories}
+              search
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={!isFocus ? 'Chọn danh mục' : '...'}
+              searchPlaceholder="Tìm kiếm..."
+              value={value}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={item => {
+                setValue(item.value);
+                setIsFocus(false);
+                onSetCategory(item)
+              }}
+              renderLeftIcon={() => (
+              <AntDesign
+                  style={styles.icon}
+                  color={isFocus ? 'blue' : 'black'}
+                  name="Safety"
+                  size={20}
+              />
+            )}
+          />
+        </View>
+          {loading && <LoadingSpinner />}
+      </>
     );
 }
 

@@ -8,8 +8,9 @@ import RBSheet from "react-native-raw-bottom-sheet";
 
 import { filterProduct } from "../../actions/seller/productActions";
 import useDebounce from "../../hooks";
-import Loading from "../../components/Loading";
 import QRDemo from "../QRDemo";
+import { convertTimeStamp } from "../../utils/helper";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 
 function ImportProduct() {
@@ -114,7 +115,7 @@ function ImportProduct() {
                 <Image source={require('../../assets/images/noresults.png')} style={{ width: 200, height: 200, objectFit: 'contain' }}/>
                 <Text style={{ color: '#8e8e93', textAlign: 'center', marginBottom: 15, marginTop: 25 }}>Bạn chưa có sản phẩm nào, hãy tạo ngay sản phẩm đầu tiên nhé</Text>
             </View> */}
-            {products?.length > 0 &&
+            {products?.length > 0 ?
                 <ScrollView style={{ paddingHorizontal: 15}}>
                     {products?.map((product, index) => 
                         <View key={index} style={styles.item_container}>
@@ -123,7 +124,7 @@ function ImportProduct() {
                                 <Text style={styles.item_name}>{product?.name}</Text>
                                 <View style={styles.display}>
                                     <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                        <Text style={{ color: '#abaaaa', fontSize: 11 }}>{`SP00${product?.id}`}  |  </Text>
+                                        <Text style={{ color: '#abaaaa', fontSize: 11 }}>{`HSD: ${convertTimeStamp(product?.expireAt, 'dd/MM/yyyy')}`}  |  </Text>
                                         <Text style={{ color: '#abaaaa', fontSize: 11 }}>Còn: {product?.stockAmount}</Text>
                                     </View>
                                     <TouchableOpacity onPress={() => navigation.navigate('ImportProductInfo', { product })}>
@@ -133,7 +134,7 @@ function ImportProduct() {
                             </View>
                         </View>
                     )}
-                    <Button 
+                    {/* <Button 
                         icon="plus"
                         mode="outlined" 
                         textColor="#15803D" 
@@ -141,8 +142,12 @@ function ImportProduct() {
                         onPress={() => navigation.navigate('CreateProduct')} 
                         style={{ borderWidth: 2, borderColor: '#15803D', borderRadius: 7,}}>
                         Thêm sản phẩm
-                    </Button>
+                    </Button> */}
                 </ScrollView>
+                : <View style={styles.content_noitem}>
+                    <Image source={require('../../assets/images/noresults.png')} style={{ width: 200, height: 200, objectFit: 'contain' }}/>
+                    <Text style={{ color: '#8e8e93', textAlign: 'center', marginBottom: 15, marginTop: 25 }}>Bạn chưa có sản phẩm nào, hãy tạo ngay sản phẩm đầu tiên nhé</Text>
+                </View>
             }
             <RBSheet
                 ref={refRBSheet}
@@ -158,7 +163,7 @@ function ImportProduct() {
                     close={() => refRBSheet.current?.close()}
                 />
             </RBSheet>
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View> 
     );
 }

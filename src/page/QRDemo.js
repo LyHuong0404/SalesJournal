@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View, Image, ToastAndroid } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 
-import Loading from '../components/Loading';
+
 import { getImportProductByCode, getProductByCode } from '../actions/seller/productActions';
 import { Audio } from 'expo-av';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close }) {
     const navigation = useNavigation();
@@ -14,7 +15,7 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
     const [error, setError] = useState(false);
 
     if (!permission) {
-        return <Loading />
+        return <LoadingSpinner />
     }
 
     async function playSound() {
@@ -49,7 +50,7 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
                         if (response) {
                             navigation.navigate('CreateCategory', { category: response });
                         } else {
-                            ToastAndroid.show('Lỗi khi quét sản phẩm', ToastAndroid.SHORT);
+                            ToastAndroid.show('Mã sản phẩm không tồn tại', ToastAndroid.SHORT);
                         }
                         onScanSuccess();
                         setLoading(false);
@@ -67,7 +68,7 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
                         if (response?.data) {
                             navigation.navigate('ImportProductInfo', { product: response?.data });
                         } else {
-                            ToastAndroid.show('Lỗi khi quét sản phẩm', ToastAndroid.SHORT);
+                            ToastAndroid.show('Mã sản phẩm không tồn tại', ToastAndroid.SHORT);
                         }
                         onScanSuccess();
                         setLoading(false);
@@ -84,8 +85,9 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
                 } catch (err) {
                     ToastAndroid.show('Thử lại', ToastAndroid.SHORT);
                 }
-            }
-            else {
+            } else if (action == 'ScanCustomerInfo') {
+                onScanSuccess(scanningResult);
+            } else {
                 //check exist code 
                 const index = Array.isArray(ArrayQRAndAmount) ? ArrayQRAndAmount.findIndex((item) => item?.product?.code == scanningResult) : -1;
                 if (index == -1) {
@@ -129,7 +131,7 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
                 <TouchableOpacity onPress={close}>
                     <Image source={require('../assets/images/right_arrow.png')}  style={{ width: 17, height: 17, objectFit: 'contain', marginVertical: 15 }} />
                 </TouchableOpacity>
-                <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center'}}>Quét mã sản phẩm</Text>
+                <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center'}}>{action == 'ScanCustomerInfo' ? 'Quét mã khách hàng' : 'Quét mã sản phẩm'}</Text>
             </View>
             <CameraView 
                 style={styles.camera} 
@@ -144,7 +146,7 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
                     </TouchableOpacity>
                 </View>
             </CameraView>
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </View>
     );
 }

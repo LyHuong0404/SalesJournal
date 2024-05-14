@@ -2,7 +2,9 @@ import { useState } from "react";
 import { StyleSheet, View, Text, Linking } from "react-native";
 import { Button } from "react-native-paper";
 import { createURLPayment } from "../../actions/otherActions";
-import Loading from "../Loading";
+
+
+import LoadingSpinner from "../LoadingSpinner";
 
 
 function ModalServicePackage({ servicePackage }) {
@@ -60,7 +62,7 @@ function ModalServicePackage({ servicePackage }) {
                     </Button>
                 </View>
             </View>
-            {loading && <Loading />}
+            {loading && <LoadingSpinner />}
         </>
     );
 }

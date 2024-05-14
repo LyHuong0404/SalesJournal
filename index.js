@@ -55,10 +55,12 @@ import TransactionManagement from './src/page/Admin/TransactionManagement';
 import ServicePackageManagement from './src/page/Admin/ServicePackageManagement';
 import AddServicePackage from './src/page/Admin/AddServicePackage';
 import { addNotifyToken } from './src/actions/otherActions';
+import OrderHistory from './src/page/Auth/OrderHistory';
+import MyQR from './src/page/Auth/MyQR';
 
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-import { updateUser } from './src/actions/authActions';
+import { profileInfo, updateProfileSeller, updateUser } from './src/actions/authActions';
 import { Linking } from 'react-native';
 
 
@@ -163,7 +165,9 @@ const LoginNav = () => {
         <Stack.Screen name="RecoveryPassword" component={RecoveryPassword} options={{ headerShown: false }}/>
         <Stack.Screen name="ProfileUser" component={ProfileUser} options={{ headerShown: false }}/>
         <Stack.Screen name="VendorNav" component={VendorNav} options={{ headerShown: false }}/>
+        <Stack.Screen name="AdminNav" component={AdminNav} options={{ headerShown: false }}/>
         <Stack.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
+        <Stack.Screen name="OrderHistory" component={OrderHistory} options={{ headerShown: false }}/>
         <Stack.Screen name="RegisterStore" component={RegisterStore} options={{ headerShown: false }} />
     </Stack.Navigator>
   )
@@ -177,15 +181,34 @@ const UserLoggedNav = () => {
         <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
         <Stack.Screen name="OTP" component={OTP} options={{ headerShown: false }}/>
+        <Stack.Screen name="OrderHistory" component={OrderHistory} options={{ headerShown: false }}/>
         <Stack.Screen name="RecoveryPassword" component={RecoveryPassword} options={{ headerShown: false }}/>
         <Stack.Screen name="ProfileUser" component={ProfileUser} options={{ headerShown: false }}/>
-        <Stack.Screen name="VendorNav" component={VendorNav} options={{ headerShown: false }}/>
         <Stack.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
+        <Stack.Screen name="VendorNav" component={VendorNav} options={{ headerShown: false }}/>
         <Stack.Screen name="RegisterStore" component={RegisterStore} options={{ headerShown: false }} />
+        <Stack.Screen name="MyQR" component={MyQR} options={{ headerShown: false }} />
     </Stack.Navigator>
   )
 }
 
+const AdminNav = () => {
+
+  return (
+    <Stack.Navigator initialRouteName="AdminHome" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="AdminHome" component={AdminHome} options={{ headerShown: false }}/>
+        <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>    
+        <Stack.Screen name="Logout" component={Logout} options={{ headerShown: false }}/>
+        <Stack.Screen name="SettingProfile" component={SettingProfile} options={{ headerShown: false }}/>
+        <Stack.Screen name="Setting" component={Setting} options={{ headerShown: false }}/>
+        <Stack.Screen name="AccountManagement" component={AccountManagement} options={{ headerShown: false }}/>
+        <Stack.Screen name="TransactionManagement" component={TransactionManagement} options={{ headerShown: false }}/>
+        <Stack.Screen name="ServicePackageManagement" component={ServicePackageManagement} options={{ headerShown: false }}/>
+        <Stack.Screen name="AddServicePackage" component={AddServicePackage} options={{ headerShown: false }}/>
+        <Stack.Screen name="LoginNav" component={LoginNav}/>
+      </Stack.Navigator>
+  )
+}
 const VendorNav = () => {
 
   return (
@@ -219,16 +242,12 @@ const VendorNav = () => {
         <Stack.Screen name="ImportBook" component={ImportBook} options={{ headerShown: false }}/>
         <Stack.Screen name="ExportBook" component={ExportBook} options={{ headerShown: false }}/>
         <Stack.Screen name="Logout" component={Logout} options={{ headerShown: false }}/>
-        <Stack.Screen name="LoginNav" component={LoginNav}/>
         <Stack.Screen name="ServicePackage" component={ServicePackage} options={{ headerShown: false }}/>
         <Stack.Screen name="SettingStore" component={SettingStore} options={{ headerShown: false }}/>
         <Stack.Screen name="SettingProfile" component={SettingProfile} options={{ headerShown: false }}/>
         <Stack.Screen name="Setting" component={Setting} options={{ headerShown: false }}/>
-        <Stack.Screen name="AdminHome" component={AdminHome} options={{ headerShown: false }}/>
-        <Stack.Screen name="AccountManagement" component={AccountManagement} options={{ headerShown: false }}/>
-        <Stack.Screen name="TransactionManagement" component={TransactionManagement} options={{ headerShown: false }}/>
-        <Stack.Screen name="ServicePackageManagement" component={ServicePackageManagement} options={{ headerShown: false }}/>
-        <Stack.Screen name="AddServicePackage" component={AddServicePackage} options={{ headerShown: false }}/>
+        <Stack.Screen name="AdminNav" component={AdminNav} options={{ headerShown: false }}/>
+        <Stack.Screen name="LoginNav" component={LoginNav}/>
       </Stack.Navigator>
   )
 }
@@ -241,6 +260,7 @@ function App() {
   const notificationListener = useRef();
   const responseListener = useRef(); 
   const [data, setData] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
   
 
   useEffect(() => {
@@ -248,6 +268,18 @@ function App() {
       const data = await AsyncStorage.getItem('user');
       if (data) {
         const parsedUserData = JSON.parse(data);
+        if (
+          parsedUserData?.roles.some((item) => item == 'ROLE_BUYER') &&
+          !parsedUserData?.roles.some((item) => item == 'ROLE_ADMIN')
+        ) {
+            const rs = await profileInfo();
+            parsedUserData.user.profile = rs; 
+        }
+        if (
+          parsedUserData?.roles.some((item) => item == 'ROLE_ADMIN')
+        ) {
+            setIsAdmin(true);
+        }
         setData(parsedUserData);
         dispatch(updateUser(parsedUserData.user)); 
       }
@@ -261,16 +293,13 @@ function App() {
       
   useEffect(() => {
     registerForPushNotificationsAsync().then(token => {
-      const getNotifyToken = async() => {
+      const setNotifyToken = async() => {
         const notifyToken = await AsyncStorage.getItem('notifyToken');
         if (!notifyToken) {
-          const response = await addNotifyToken({ notifyToken: token });
-          if (response?.code !== 0) {
-            console.log('Exception');
-          }
+          await AsyncStorage.setItem('notifyToken', JSON.stringify(token));
         }
       }
-      getNotifyToken();
+      setNotifyToken();
       setExpoPushToken(token);
     });
 
@@ -279,6 +308,23 @@ function App() {
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      //  BỊ TRÙNG LẶP
+      // const getData = async() => {
+      //   const data = await AsyncStorage.getItem('user');
+      //   if (data) {
+      //     const parsedUserData = JSON.parse(data);
+      //     if (
+      //       parsedUserData?.roles.some((item) => item == 'ROLE_BUYER') &&
+      //       !parsedUserData?.roles.some((item) => item == 'ROLE_ADMIN')
+      //     ) {
+      //         const rs = await profileInfo();
+      //         parsedUserData.user.profile = rs; 
+      //     }
+      //     setData(parsedUserData);
+      //     dispatch(updateUser(parsedUserData.user)); 
+      //   }
+      // }
+      // getData();
     });
 
     return () => {
@@ -333,7 +379,9 @@ function App() {
         <NavigationContainer ref={navigationRef}
           linking={linking}
         >
-          {data?.user?.profile ? <VendorNav /> : data ? <UserLoggedNav /> : <LoginNav />}
+          {data?.user?.profile ? 
+            (isAdmin ? <AdminNav /> : <VendorNav /> )
+          : (data ? <UserLoggedNav /> : <LoginNav />)}
         </NavigationContainer>
       </PaperProvider>
   );

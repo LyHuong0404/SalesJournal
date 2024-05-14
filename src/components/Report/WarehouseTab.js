@@ -9,6 +9,7 @@ import ModalCalendar from "../Modal/ModalCalendar";
 import { convertTimeStamp, setDateFormat } from "../../utils/helper";
 import { filterProduct } from "../../actions/seller/productActions";
 import { useNavigation } from "@react-navigation/native";
+import LoadingSpinner from "../LoadingSpinner";
 
 const buttonAction = [
     {id: 1, label: 'Tổng quan'},
@@ -26,6 +27,7 @@ function WarehouseTab() {
     const [buttonTimeType, setButtonTimeType] = useState('homnay'); 
     const [products, setProducts] = useState([]);
     const [productToCount, setProductToCount] = useState([]);
+    const [loading, setLoading] = useState(false);
 
 
     useEffect(() => {
@@ -46,6 +48,7 @@ function WarehouseTab() {
     useEffect(() => {
         try{      
             const getAllProduct = async() => {
+                setLoading(true);
                 const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: null, productId: null, orderBy: null});
                 
                 if (response?.content && response.content.length > 0) {
@@ -54,9 +57,11 @@ function WarehouseTab() {
                     else if (active === 4) filteredContent = filteredContent.filter(item => moment(item.expireAt).isBefore(moment()));
                     setProducts(filteredContent);
                 }
+                setLoading(false);
             }
             getAllProduct();
         } catch(e) {
+            setLoading(false);
             ToastAndroid.show('Lỗi khi tải sản phẩm', ToastAndroid.SHORT);
         }
     }, [active])
@@ -221,6 +226,7 @@ function WarehouseTab() {
                                     </View>
                                 </View>
                             )} 
+                            {loading && <LoadingSpinner />}
                         </View>
                     </>
                     : 
