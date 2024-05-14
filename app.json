@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Sổ Bán Hàng",
-    "slug": "Sổ Bán Hàng",
+    "slug": "SoBanHang",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.jpg",
