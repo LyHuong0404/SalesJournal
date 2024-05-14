@@ -35,6 +35,7 @@ function CreateProduct() {
     const [isDatePickerExpirationDateVisible, setIsDatePickerExpirationDateVisible] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [stockAmount, setStockAmount] = useState(product?.stockAmount.toString() || '')
 
 
     const hideDatePicker = () => {
@@ -74,14 +75,13 @@ function CreateProduct() {
                     response = await updateProduct({
                         code: QR, 
                         name, 
-                        // expireAt: expirationDate, 
-                        expireAt: '2024-08-06', 
+                        expireAt: expirationDate, 
+                        stockAmount,
                         importPrice: capitalPrice.toString().includes('.') ? capitalPrice.toString().replace(/\./g, ""): capitalPrice, 
                         importAmount,
                         productId: category.value,
                         importProductId: product.id,
                     });
-                    console.log('resss   ', response);
                 } else {
                     response = await addProduct({
                         code: QR, 

@@ -10,6 +10,7 @@ import { convertTimeStamp, setDateFormat } from "../../utils/helper";
 import { filterProduct } from "../../actions/seller/productActions";
 import { useNavigation } from "@react-navigation/native";
 import LoadingSpinner from "../LoadingSpinner";
+import { filterReport } from "../../actions/seller/receiptActions";
 
 const buttonAction = [
     {id: 1, label: 'Tổng quan'},
@@ -28,6 +29,7 @@ function WarehouseTab() {
     const [products, setProducts] = useState([]);
     const [productToCount, setProductToCount] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [revenue, setRevenue] = useState({});
 
 
     useEffect(() => {
@@ -66,6 +68,31 @@ function WarehouseTab() {
         }
     }, [active])
 
+    useEffect(() => {
+        try{
+            const fetchAPI = async()=> {
+                const response = await filterReport({ fromDate: startDate, toDate: endDate });
+                if (response) {
+                    const totalImportProductMoney = response?.reduce((total, item) => {
+                        return total + (item?.totalImportProductMoney);
+                    }, 0);
+
+                    const totalSpentMoney = response?.reduce((total, item) => {
+                        return total + (item?.totalSpentMoney)
+                    }, 0);
+                    
+                    setRevenue({ totalImportProductMoney, totalSpentMoney });
+                } else {
+                    ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
+                }
+            }
+            fetchAPI();
+        } catch(e){
+            ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
+        }
+    }, [startDate, endDate])
+
+      
     const handleChangeTime = (data) => {
         const time = setDateFormat(data.buttonType, data.startDate, data.endDate);    
         setStartDate(time[0]);
@@ -240,21 +267,20 @@ function WarehouseTab() {
                             <View style={styles.display}>
                                 <TouchableOpacity style={[styles.item_report_container, { borderBottomColor: buttonAnalysis == 1 ? '#d61212' : 'transparent' }]} onPress={() => setButtonAnalysis(1)}>
                                     <Text style={{ color: '#565555', fontWeight: '500', marginBottom: 5 }}>Nhập kho</Text>
-                                    <Text style={{ fontWeight: '500', color: buttonAnalysis == 1 ? '#6d1212' : '#7a7a7a'}}>200.000 ₫</Text>
+                                    <Text style={{ fontWeight: '500', color: buttonAnalysis == 1 ? '#6d1212' : '#7a7a7a'}}>{`${revenue?.totalImportProductMoney}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                                 </TouchableOpacity>
                                 <View style={styles.verticalLine} />
                                 <TouchableOpacity style={[styles.item_report_container, { borderBottomColor: buttonAnalysis == 2 ? '#15803D' : 'transparent' }]} onPress={() => setButtonAnalysis(2)}>
                                     <Text style={{ color: '#565555', fontWeight: '500', marginBottom: 5 }}>Xuất kho</Text>
-                                    <Text style={{ fontWeight: '500', color: buttonAnalysis == 2 ? '#15803D' : '#7a7a7a'}}>40.000 ₫</Text>
+                                    <Text style={{ fontWeight: '500', color: buttonAnalysis == 2 ? '#15803D' : '#7a7a7a'}}>{`${revenue?.totalSpentMoney}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                                 </TouchableOpacity>
                             </View>          
                         </View>
                         <View style={[styles.report_container, { marginVertical: 10 }]}>
-                            <Text style={styles.text_bold}>Tổng nhập theo {labelOfTime()}</Text>
-                        </View>
-                        <View style={[styles.report_container, { marginVertical: 10 }]}>
                             <Text style={styles.text_bold}>Tồn kho thay đổi</Text>
-                            <Text style={{ color: '#15803D', fontWeight: 'bold', fontSize: 16 }}>36.000 ₫</Text>
+                            <Text style={{ color: '#15803D', fontWeight: 'bold', fontSize: 16 }}>
+                                {`${revenue?.totalImportProductMoney - revenue?.totalSpentMoney}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                            </Text>
                         </View>
                     </>
                 }

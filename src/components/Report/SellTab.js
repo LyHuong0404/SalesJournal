@@ -184,7 +184,7 @@ function SellTab() {
                                 <Text style={{ fontWeight: '500', fontSize: 11, color: '#abaaaa', textAlign: 'center'}}>Doanh thu</Text>                
                                 <Text style={styles.text_price}>{handeTotalSaleMoney()}</Text>                   
                             </View>  
-                            <View style={styles.display_gap}>
+                            <View style={[styles.display_gap, { justifyContent: 'space-around' }]}>
                                 <View>
                                     <Text style={styles.text}>Hóa đơn</Text>
                                     <Text style={{ color: '#3a3a3a'}}>
@@ -194,11 +194,11 @@ function SellTab() {
                                     </Text>
                                 </View>
                                 <View style={styles.verticalLine}></View>
-                                <View>
+                                {/* <View>
                                     <Text style={styles.text}>Khách hàng</Text>
                                     <Text style={{ color: '#3a3a3a'}}>20</Text>
                                 </View>
-                                <View style={styles.verticalLine}></View>
+                                <View style={styles.verticalLine}></View> */}
                                 <View>
                                     <Text style={styles.text}>Sản phẩm</Text>
                                     <Text style={{ color: '#3a3a3a'}}>

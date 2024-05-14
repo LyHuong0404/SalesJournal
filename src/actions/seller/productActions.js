@@ -26,14 +26,14 @@ export const addProduct = async({code, name, expireAt, importPrice, importAmount
     }
 }
 
-export const updateProduct = async({code, name, expireAt, importPrice, importAmount, productId, importProductId}) => { 
+export const updateProduct = async({code, name, expireAt, stockAmount, importPrice, importAmount, productId, importProductId}) => { 
     const config = {
         headers: {
             'Content-Type': 'application/json',
         },
     };
     try {
-        const response = await httprequest.post('update-import-product', {code, name, expireAt, importPrice, importAmount, productId, importProductId}, config);
+        const response = await httprequest.post('update-import-product', {code, name, expireAt, stockAmount, importPrice, importAmount, productId, importProductId}, config);
         return response;
     }catch(err) {
         console.log("Error when updating product: ", err);
