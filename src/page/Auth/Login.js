@@ -49,13 +49,9 @@ function Login() {
     const handleLogin = async() => {
         setLoading(true);
         try {
-            const response = await dispatch(login({ username, password }));
-            if (response) { 
-                const notifyToken = await AsyncStorage.getItem('notifyToken')
-                const rs = await addNotifyToken({ notifyToken: JSON.parse(notifyToken) });
-                if (rs?.code !== 0) {
-                  console.log('Exception when add notify token');
-                }      
+            const notifyToken = await AsyncStorage.getItem('notifyToken')
+            const response = await dispatch(login({ username, password, notifyToken }));
+            if (response) {      
                 if (response?.payload?.user?.profile) {
                     if (response?.payload?.roles?.some((item) => item == 'ROLE_ADMIN')) {
                         navigation.navigate('AdminNav');

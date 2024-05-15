@@ -93,7 +93,7 @@ export const recoverPassword = async ({ username, newPassword }) =>{
 } 
 
 //login
-export const login = createAsyncThunk('auth', async ({ username, password }, { rejectWithValue }) => {
+export const login = createAsyncThunk('auth', async ({ username, password, notifyToken }, { rejectWithValue }) => {
     try {
         const config = {
             headers: {
@@ -101,7 +101,7 @@ export const login = createAsyncThunk('auth', async ({ username, password }, { r
             },
         };
 
-        const { data, code } = await httprequest.post('auth', { username, password }, config);
+        const { data, code } = await httprequest.post('auth', { username, password, notifyToken }, config);
 
         if (code == 0) {
             await AsyncStorage.setItem('user', JSON.stringify(data));

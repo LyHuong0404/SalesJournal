@@ -84,7 +84,7 @@ function App() {
       const setNotifyToken = async() => {
         const notifyToken = await AsyncStorage.getItem('notifyToken');
         if (!notifyToken) {
-          await AsyncStorage.setItem('notifyToken', JSON.stringify(token));
+          await AsyncStorage.setItem('notifyToken', token);
         }
       }
       setNotifyToken();
@@ -109,12 +109,12 @@ function App() {
     prefixes: ["com.lyhuong.SoBanHang://"],
     config: {
     initialRouteName: "BottomNavigatorPage",
-    initialRouteName: "ProfileUser",
+    // initialRouteName: "ProfileUser",
     screens: {
             Home: 'Home',
             ServicePackage: 'ServicePackage',
-            Report: 'Report',
-            OrderHistory: 'OrderHistory'
+            Report: 'Report'
+            // OrderHistory: 'OrderHistory'
     },
     },
     async getInitialURL() {
@@ -195,7 +195,9 @@ async function registerForPushNotificationsAsync() {
     // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
 
     // token = (await Notifications.getExpoPushTokenAsync({ projectId: '02b29ea0-5b32-4138-babf-8f739813e5a6' })).data;
-    token = (await Notifications.getDevicePushTokenAsync({ projectId: '0e674e53-ee33-403b-bb4b-7eac26af598e' })).data;
+    // token = (await Notifications.getDevicePushTokenAsync({ projectId: '0e674e53-ee33-403b-bb4b-7eac26af598e' })).data;
+    token = (await Notifications.getDevicePushTokenAsync({ projectId: '02b29ea0-5b32-4138-babf-8f739813e5a6' })).data;
+
 
   } else {
     alert('Must use physical device for Push Notifications');
