@@ -172,7 +172,7 @@ function AdminHome() {
                 icon="send"
                 style={styles.fab}
                 onPress={handleSendNotificationProductExpire}
-                variant='surface'
+                variant='primary'
               />
           </View>
         </View>
