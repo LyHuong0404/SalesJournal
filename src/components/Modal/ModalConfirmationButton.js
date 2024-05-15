@@ -1,6 +1,6 @@
 import { Modal } from "react-native-paper";
 import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
-import { useState } from "react";
+import { useState, memo } from "react";
 
 const containerStyle = {backgroundColor: 'white', margin: 20, height: 'auto', borderRadius: 7 };
 
@@ -79,4 +79,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ModalConfirmationButton;
+export default memo(ModalConfirmationButton);

@@ -28,14 +28,14 @@ function CreateProduct() {
     const [inputDay, setInputDay] = useState(convertTimeStamp(product?.importedAt, 'yyyy-MM-dd') || format(new Date(Date.now()), 'yyyy-MM-dd'));   
     const [capitalPrice, setCapitalPrice] = useState(product?.importPrice || '');
     const [importAmount, setImportAmount] = useState(product?.importAmount?.toString() ||'');
-    const [category, setCategory] = useState({label: product?.product?.name, value: product?.product?.id} || {});
+    const [category, setCategory] = useState(product ? { label: product?.product?.name, value: product?.product?.id, price: product?.product?.salePrice } : {});
     const [expirationDate, setExpirationDate] = useState(convertTimeStamp(product?.expireAt, 'yyyy-MM-dd') || '');
     const [QR, setQR] = useState(product?.code || '');
     const [isDatePickerInputVisible, setDatePickerInputVisibility] = useState(false);
     const [isDatePickerExpirationDateVisible, setIsDatePickerExpirationDateVisible] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [stockAmount, setStockAmount] = useState(product?.stockAmount.toString() || '')
+    const [stockAmount, setStockAmount] = useState(product?.stockAmount?.toString() || '');
 
 
     const hideDatePicker = () => {
@@ -64,7 +64,6 @@ function CreateProduct() {
         );
         setQR(randomNumberArray.join(""));
     }
-
 
     const submitForm = () => {
         try {
@@ -174,11 +173,11 @@ function CreateProduct() {
                             <Image source={require('../../assets/images/category.png')} style={{ width: 25, height: 25, marginRight: 15 }}/>
                         </TouchableOpacity>
 
-                        {Object.keys(category).length > 2 && 
+                        {Object.keys(category).length > 0 && 
                             <View style={styles.category}>
                                 <Text style={{ color: '#8e8e93'}}>{category.label}</Text>
                             </View>
-                            }
+                        }
                        
                         <Button 
                             icon="plus" 
@@ -190,7 +189,11 @@ function CreateProduct() {
                         >
                             Tạo danh mục
                         </Button>
+
                     </View>
+                    {Object.keys(category).length > 0 && 
+                        <Text style={{ color: '#8e8e93'}}>{`Giá bán: ${category.price}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
+                    }
                     <RBSheet
                         ref={refRBSheet}
                         closeOnDragDown={true}

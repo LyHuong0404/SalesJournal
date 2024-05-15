@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { memo, useRef } from 'react';
 import { View } from 'react-native';
 import { TextInput, DefaultTheme } from 'react-native-paper';
 
@@ -38,5 +38,5 @@ function VerificationCodeInput({ length, onCodeChange }) {
   );
 };
 
-export default VerificationCodeInput;
+export default memo(VerificationCodeInput);
 

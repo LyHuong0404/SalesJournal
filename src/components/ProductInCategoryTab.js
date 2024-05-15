@@ -2,6 +2,7 @@ import { StyleSheet, ScrollView, View } from "react-native";
 import { Button } from "react-native-paper";
 
 import HorizontalProduct from "./HorizontalProduct";
+import { memo } from "react";
 
 function ProductInCategoryTab({ products, onDelete, onAdd }) {
 
@@ -61,4 +62,4 @@ const styles = StyleSheet.create({
         // margin: 10, 
     }
 })
-export default ProductInCategoryTab;
+export default memo(ProductInCategoryTab);

@@ -1,7 +1,7 @@
 import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
-import { useRef } from "react";
+import { useRef, memo } from "react";
 import RBSheet from "react-native-raw-bottom-sheet";
 
 
@@ -102,4 +102,4 @@ const styles = StyleSheet.create({
     }
     
   });
-export default ModalConfirmCamera;
+export default memo(ModalConfirmCamera);

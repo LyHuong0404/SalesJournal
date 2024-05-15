@@ -1,7 +1,7 @@
 import { StyleSheet, ScrollView, Text, View, ToastAndroid } from "react-native";
 import { Button } from "react-native-paper";
 import HorizontalProduct from "./HorizontalProduct";
-import { useState } from "react";
+import { memo, useState } from "react";
 
 import { deleteProduct } from "../actions/seller/productActions";
 import ModalConfirmation from "./Modal/ModalConfirmation";
@@ -112,4 +112,4 @@ const styles = StyleSheet.create({
         // margin: 10, 
     }
 })
-export default DeleteProductFromCategory;
+export default memo(DeleteProductFromCategory);

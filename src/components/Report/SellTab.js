@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import { View, StyleSheet, Image, Dimensions, Text, ScrollView, ToastAndroid, TouchableOpacity } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
 import { DataTable } from "react-native-paper";
@@ -23,13 +23,11 @@ const revenueOptions = [
     { label: 'Ngày', value: '3' },
 ];
 
-
-
 function SellTab() {
     const refRBSheet = useRef();
     const [chartOption, setChartOption] = useState('1');
     const [revenueOption, setRevenueOption] = useState('1');
-    const [fromDate, setFromDate] = useState(format(new Date().setDate(new Date().getDate() - 1), 'yyyy-MM-dd'));
+    const [fromDate, setFromDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
     const [toDate, setToDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
     const [data, setData] = useState([]);
     const [revenue, setRevenue] = useState([]);
@@ -163,7 +161,7 @@ function SellTab() {
         }
         return amount;
     }
-
+console.log('xqwe  ', revenueByTable)
     return (  
         <View>
             <ScrollView>
@@ -210,8 +208,8 @@ function SellTab() {
                             </View>
                         </View>
                         <View style={[styles.display, { alignItems: 'center', marginVertical: 15 }]}>
-                            <Text style={{ color: '#6f6f6f', fontWeight: '500', marginRight: 10 }}>Biểu đồ xu hướng theo</Text>
-                            <Dropdown
+                            <Text style={{ color: '#6f6f6f', fontWeight: '500', marginRight: 10 }}>Biểu đồ xu hướng theo<Text style={{ color: '#3a3a3a' }}> Doanh thu</Text></Text>
+                            {/* <Dropdown
                                 style={styles.dropdown}
                                 selectedTextStyle={styles.selectedTextStyle}
                                 itemTextStyle={{ fontSize: 12 }}
@@ -224,7 +222,7 @@ function SellTab() {
                                 onChange={(item) => {
                                     setChartOption(item.value);
                                 }}
-                            />
+                            /> */}
                         </View>   
                     </View>
                     <View style={{ marginHorizontal: 15 }}>
@@ -279,8 +277,8 @@ function SellTab() {
                                     {revenueByTable.map((product, index) => 
                                         <DataTable.Row key={index}>
                                             <DataTable.Cell style={styles.cell}><Text style={styles.cell_text_number}>{product?.product?.name}</Text></DataTable.Cell>
-                                            <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{product.totalSaleAmount}</Text></DataTable.Cell>
-                                            <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${product.totalSaleMoney}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                            <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{product.product.totalSaleAmount}</Text></DataTable.Cell>
+                                            <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${product.product.totalSaleMoney}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
                                         </DataTable.Row>
                                     )}
                                 </>             
@@ -471,4 +469,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default SellTab;
+export default memo(SellTab);

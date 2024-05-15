@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, ToastAndroid } from "react-native";
 import { TextInput, Button, DefaultTheme } from "react-native-paper";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { getProductByCode } from "../../actions/seller/productActions";
 
 const theme = {
@@ -85,4 +85,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ModalInputProductCode;
+export default memo(ModalInputProductCode);

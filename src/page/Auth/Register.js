@@ -25,13 +25,11 @@ function Register() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [hidePassword, setHidePassword] = useState(true);
     const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
-    const [nameStore, setNameStore] = useState('');
     const [email, setEmail] = useState('');
     const passwordRef = useRef(null);
 
     const onChangePassword = text => setPassword(text);
     const onChangeConfirmPassword = text => setConfirmPassword(text);
-    const onChangeNameStore = text => setNameStore(text);
     const onChangeEmail = text => setEmail(text);
 
 

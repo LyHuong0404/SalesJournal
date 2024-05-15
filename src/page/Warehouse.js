@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollView, Dimensions } from "react-native";
 import SegmentedControlTab from 'react-native-segmented-control-tab';
 
@@ -63,6 +63,19 @@ function Warehouse() {
         setSelectedIndex(index);
     }; 
 
+    const totalAmount = useCallback(() => {
+        const rs = products?.reduce((total, item) => {
+            return total + item?.stockAmount}, 0);
+        return rs;
+    }, [products])
+
+    const totalWarehouseValue = useCallback(() => {
+        const rs = products?.reduce((total, item) => {
+            return total + (item?.stockAmount * item.importPrice);
+        }, 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '');
+        return rs;
+    }, [products])
+
     return ( 
         <View style={styles.container}>
             <View style={styles.header}>
@@ -106,9 +119,7 @@ function Warehouse() {
                     <View style={{ paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#e2e5ea' }}>
                         <Text style={{ fontWeight: '500', fontSize: 11, color: '#abaaaa', textAlign: 'center'}}>Giá trị kho</Text>                
                         <Text style={styles.text_price}>
-                            {`${products?.reduce((total, item) => {
-                                return total + (item?.stockAmount * item.importPrice);
-                            }, 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '')}`}</Text>                   
+                            {totalWarehouseValue()}</Text>                   
                     </View>  
                     <View style={styles.display_gap}>
                         <View>
@@ -119,9 +130,7 @@ function Warehouse() {
                         <View>
                             <Text style={styles.text}>Số lượng</Text>
                             <Text style={{ color: '#3a3a3a', textAlign: 'center' }}>
-                                {products?.reduce((total, item) => {
-                                    return total + item?.stockAmount;
-                                }, 0)}
+                                {totalAmount()}
                             </Text>
                         </View>
                     </View>
@@ -140,7 +149,7 @@ function Warehouse() {
                                         <View style={styles.row}>
                                             <Text style={styles.text_light}>{`SP00${product?.id}`}</Text>
                                         </View>
-                                        <Text style={styles.product_price}>{`${product.importPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
+                                        <Text style={styles.product_price}>{`${product.importPrice * product?.stockAmount}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                                     </View>
                                 </View>
                             </View>

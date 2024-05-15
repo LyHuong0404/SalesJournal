@@ -93,28 +93,35 @@ function PaymentDetail() {
                             {/* <Text style={styles.text}>26.000 ₫</Text> */}
                         </View>
                         <View style={[styles.display, { justifyContent: 'space-between', marginBottom: 2 }]}>
-                            {data?.receiptDetails.every((item) => item.coupon != null) && <>
+                            {data?.receiptDetails.some((item) => item.coupon != null) && <>
                                 <Text style={[styles.text_light, { color: '#565555'}]}>Tổng đơn gốc</Text>
                                 <Text style={styles.text}>{`${data?.totalSalePrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>
                             </>}
                         </View>
                         <View style={[styles.display, { marginBottom: 2 }]}>
-                            {data?.receiptDetails.every((item) => item.coupon != null) && <>
-                                <Text style={[styles.text_light, { color: '#565555', width: '40%' }]}>Giảm giá</Text>
-                                 
+                            {data?.receiptDetails.some((item) => item.coupon != null) && <>
+                                <Text style={[styles.text_light, { color: '#565555', width: '40%' }]}>Giảm giá</Text>                              
                                 <View style={{ flex: 1 }}>
                                     {data?.receiptDetails.map((item, index) =>
                                         <View key={index} style={[styles.display, { justifyContent: 'space-between', marginBottom: 2 }]}>
                                             {item.coupon && 
                                                 <>
                                                     <View style={styles.coupon_container}>
-                                                        <Text style={styles.name_coupon}>{item.coupon?.couponDescription}</Text>
+                                                        <Text style={styles.name_coupon}>{item.coupon?.couponCode}</Text>
                                                     </View>
-                                                    <Text style={styles.text}>-{`${(item.salePrice - item.actualPrice) * item.numberProduct}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>
+                                                    <Text style={styles.text}>-{`${item.coupon.couponValue * item.numberProduct}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>
                                                 </>
                                             }
                                         </View> 
                                     )}
+                                    {data?.coupon && 
+                                        <View style={[styles.display, { justifyContent: 'space-between', marginBottom: 2 }]}>
+                                            <View style={styles.coupon_container}>
+                                                <Text style={styles.name_coupon}>{data.coupon.couponCode}</Text>
+                                            </View>
+                                            <Text style={styles.text}>-{`${data.coupon.value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>
+                                        </View> 
+                                    }
                                 </View> 
                             </>}          
                         </View>

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 function Loading() {
     return (  
@@ -16,4 +17,4 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 })
-export default Loading;
+export default memo(Loading);

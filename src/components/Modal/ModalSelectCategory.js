@@ -1,5 +1,5 @@
 import { View, StyleSheet, Text, ToastAndroid } from "react-native";
-import { useState, useEffect,useCallback } from "react";
+import { useState, useEffect,useCallback, memo } from "react";
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useFocusEffect } from "@react-navigation/native";
@@ -19,7 +19,7 @@ function ModalSelectCategory({ onSetCategory }) {
       const response = await filterCategory({ pageIndex: 0, pageSize: 1000 });
       let convertFormat = [];
       if (response?.content) {
-        response.content.map((cg) => convertFormat.push({ label: cg.name, value: cg.id}));
+        response.content.map((cg) => convertFormat.push({ label: cg.name, value: cg.id, price: cg.salePrice }));
       }
       setCategories(convertFormat);
       setLoading(false);
@@ -122,4 +122,4 @@ const styles = StyleSheet.create({
       fontSize: 16,
     },
   });
-export default ModalSelectCategory;
+export default memo(ModalSelectCategory);

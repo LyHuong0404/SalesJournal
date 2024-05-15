@@ -9,15 +9,11 @@ import LoadingSpinner from "./LoadingSpinner";
 
 function ProductTab({ onSearchValue, onSelectedFilter }) {
     const navigation = useNavigation();
-    const [selectedIndex, setSelectedIndex] = useState(0);
     const [pageIndex, setPageIndex] = useState(0);
     const [resetPageIndex, setResetPageIndex] = useState(0);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
-
-    const handleIndexChange = (index) => {
-        setSelectedIndex(index);
-    };    
+ 
 
     useEffect(() => {
         setPageIndex(0);
@@ -97,7 +93,7 @@ function ProductTab({ onSearchValue, onSelectedFilter }) {
                 label="Tạo sản phẩm"
                 style={styles.fab}
                 onPress={() => navigation.navigate('CreateProduct')}
-                color='white'
+                variant='secondary'
             />
             {((!products || products?.length == 0) && !onSearchValue) &&
                 <View style={styles.content_noitem}>
@@ -129,7 +125,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15
     },
     header: {
-        // backgroundColor: '#ebeced',
         paddingHorizontal: 5,
         paddingTop: 7
     },
@@ -145,10 +140,7 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         zIndex: 100,
-        backgroundColor: '#0e7bc5',
         borderRadius: 50,
-        borderColor: 'white',
-        borderWidth: 1.5
     },
     content_noitem: {
         flex: 1,

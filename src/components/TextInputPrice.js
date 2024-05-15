@@ -1,6 +1,6 @@
 import { TextInputMask } from 'react-native-masked-text';
 import { View, Text, StyleSheet } from 'react-native';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 
 function TextInputPrice({ value, onChange, required, label, customStyle }) {
     const [focus, setFocus] = useState(false);
@@ -50,4 +50,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default TextInputPrice;
+export default memo(TextInputPrice);

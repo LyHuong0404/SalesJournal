@@ -121,7 +121,6 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#15803D',
         borderRadius: 7,
-        // margin: 10, 
     },
     package_container: {
         marginTop: 10, 

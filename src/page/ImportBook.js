@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollView, Dimensions } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { format } from "date-fns";
@@ -55,7 +55,7 @@ function ImportBook() {
         }
       }, [fromDate, toDate])    
 
-    const labelOfTime = () => {
+    const labelOfTime = useCallback(() => {
         switch(buttonTimeType) {
             case 'homnay':
                 return 'Hôm nay';
@@ -73,8 +73,8 @@ function ImportBook() {
                 return 'Tùy chỉnh: ' + format(fromDate, 'dd-MM-yyyy') + ' đến ' + format(toDate, 'dd-MM-yyyy');
             default:
                 break;
-        }
-    }
+        } 
+    }, [buttonTimeType])
 
     const handleChangeTime = (data) => {
         const time = setDateFormat(data.buttonType, data.startDate, data.endDate);
@@ -140,7 +140,7 @@ function ImportBook() {
                             <Text>{item.name}</Text>
                             <View style={[styles.display, { marginVertical: 6 }]}>
                                 <Text style={{ color: '#969696', fontSize: 12 }}>{`#SP00${item.id}`}</Text>                
-                                <Text style={{ color: '#3a3a3a', fontSize: 12, fontWeight: '500' }}>SL: +{item.product.totalImportAmount}</Text>                
+                                <Text style={{ color: '#3a3a3a', fontSize: 12, fontWeight: '500' }}>SL: + {item.product.totalImportAmount}</Text>                
                             </View>              
                         </View>
                     )}

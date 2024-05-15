@@ -2,6 +2,7 @@ import { StyleSheet, ScrollView, Text, View } from "react-native";
 import { Button } from "react-native-paper";
 
 import HorizontalProduct from "./HorizontalProduct";
+import { memo } from "react";
 
 
 function AddProductToCategory({ onBack }) {
@@ -69,4 +70,4 @@ const styles = StyleSheet.create({
         // margin: 10, 
     }
 })
-export default AddProductToCategory;
+export default memo(AddProductToCategory);

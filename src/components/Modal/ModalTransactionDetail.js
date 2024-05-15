@@ -1,5 +1,6 @@
 import { StyleSheet, View, Text, Image } from "react-native";
 import TwoButtonBottom from "../TwoButtonBottom";
+import { memo } from "react";
 
 
 function ModalTransactionDetail() {
@@ -118,4 +119,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ModalTransactionDetail;
+export default memo(ModalTransactionDetail);

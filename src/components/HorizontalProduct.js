@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import { Checkbox } from 'react-native-paper';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { convertTimeStamp } from '../utils/helper';
 
 function HorizontalProduct({ product, checkbox, productIdDeleteArray }) {
@@ -64,4 +64,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default HorizontalProduct;
+export default memo(HorizontalProduct);

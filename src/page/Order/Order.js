@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { View, Image, StyleSheet, TouchableOpacity, ToastAndroid, ScrollView } from "react-native";
 import { Button, Text } from "react-native-paper";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { format } from 'date-fns';
 
@@ -56,7 +56,7 @@ function Order() {
     refRBSheet.current?.close();
   }
 
-  const labelOfTime = () => {
+  const labelOfTime = useCallback(() => {
     switch(buttonTimeType) {
         case 'homnay':
             return 'Hôm nay';
@@ -75,7 +75,8 @@ function Order() {
         default:
             break;
         }
-    }
+
+  }, [buttonTimeType])
 
 
   return ( 
@@ -86,16 +87,14 @@ function Order() {
             </TouchableOpacity>
             <Text style={{ flex: 1, fontWeight: 'bold', textAlign: 'center' }}>Quản lý hóa đơn</Text>            
         </View>
-        <View style={{ display: 'flex', flexDirection: 'row', margin: 15 }}>
-            <TouchableOpacity onPress={() => refRBSheet.current?.open()}>
-                <Image source={require('../../assets/images/calendar.png')} style={styles.icon_calender}/>
-            </TouchableOpacity>
+        <TouchableOpacity onPress={() => refRBSheet.current?.open()} style={{ display: 'flex', flexDirection: 'row', margin: 15, alignItems: 'flex-end' }}>
+            <Image source={require('../../assets/images/calendar.png')} style={styles.icon_calender}/>
             <View style={styles.button_action_container}>   
                 <Text style={styles.text_action}>
                     {labelOfTime()}
                 </Text>
             </View>
-        </View>
+        </TouchableOpacity>
         {receipts?.length > 0 && 
             <ScrollView style={styles.content}>
                 {receipts?.map((receipt, index) => <OrderItem key={index} receipt={receipt}/>)}

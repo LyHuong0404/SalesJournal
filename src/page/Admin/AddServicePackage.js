@@ -22,7 +22,6 @@ function AddServicePackage() {
     const [loading, setLoading] = useState(false);
     const [initialStatus, setInitialStatus] = useState(servicepackageUpdate?.activated || false);
 
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
     const onSubmit = () => {
         try{
@@ -103,7 +102,7 @@ function AddServicePackage() {
                         <View style={styles.display}>
                             <Text style={{ color: '#7a7a7a', fontWeight: '600' }}>Trạng thái</Text>
                             <Switch 
-                                onValueChange={toggleSwitch} 
+                                onValueChange={() => setIsEnabled(previousState => !previousState)} 
                                 value={isEnabled} 
                                 activeText={''}
                                 inActiveText={''} 

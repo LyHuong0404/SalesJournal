@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollView } from "react-native";
 import { format } from "date-fns";
 import { Dropdown } from 'react-native-element-dropdown';
@@ -94,7 +94,7 @@ function TransactionManagement() {
         refRBSheet.current?.close();    
     }
 
-    const labelOfTime = () => {
+    const labelOfTime = useCallback(() => {
         switch(buttonTimeType) {
             case 'homnay':
                 return 'Hôm nay';
@@ -113,7 +113,7 @@ function TransactionManagement() {
             default:
                 break;
         }
-    }
+    }, [buttonTimeType])
 
     const handleChangeStatus = (item) => {
         if (item.value == '1') {

@@ -1,7 +1,7 @@
 import { View, StyleSheet, ScrollView, Text, Image, TouchableOpacity, ToastAndroid } from "react-native";
 import { Button, ProgressBar } from 'react-native-paper';
 import RBSheet from "react-native-raw-bottom-sheet";
-import { useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { format } from 'date-fns';
 import moment from 'moment';
 
@@ -35,14 +35,17 @@ function WarehouseTab() {
     useEffect(() => {
         try{      
             const getAllProduct = async() => {
+                setLoading(true);
                 const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: null, productId: null, orderBy: null, fromDate: null, toDate: null });
                 
                 if(response?.content && response?.content.length > 0) {
                     setProductToCount(response?.content);
                 }
+                setLoading(false);
             }
             getAllProduct();
         } catch(e) {
+            setLoading(false);
             ToastAndroid.show('Lỗi khi tải sản phẩm', ToastAndroid.SHORT);
         }
     }, [])
@@ -71,6 +74,7 @@ function WarehouseTab() {
     useEffect(() => {
         try{
             const fetchAPI = async()=> {
+                setLoading(true);
                 const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: null, productId: null, orderBy: null, fromDate: startDate, toDate: endDate });
                 if (response) {
                     const totalImportProductMoney = response?.content?.reduce((total, item) => {
@@ -85,9 +89,11 @@ function WarehouseTab() {
                 } else {
                     ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
                 }
+                setLoading(false);
             }
             fetchAPI();
         } catch(e){
+            setLoading(false);
             ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
         }
     }, [startDate, endDate])
@@ -108,7 +114,7 @@ function WarehouseTab() {
         refRBSheet.current?.close();    
     }
 
-    const labelOfTime = () => {
+    const labelOfTime = useCallback(() => {
         switch(buttonTimeType) {
             case 'homnay':
                 return 'Hôm nay';
@@ -127,9 +133,10 @@ function WarehouseTab() {
             default:
                 break;
         }
-    }
+    }, [buttonTimeType])
+    
 
-    const labelOfOverview = () => {
+    const labelOfOverview = useCallback(() => {
         switch (active) {
             case 1:
                 return 'Tổng quan giá trị kho';
@@ -142,7 +149,14 @@ function WarehouseTab() {
             default: 
                 return 'Tổng quan giá trị kho';
         }
-    }
+    }, [active])
+
+    const totalValue = useCallback(() => {
+        const rs = productToCount?.reduce((total, item) => {
+            return total + (item?.stockAmount * item.importPrice);
+        }, 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+        return rs;
+    }, [productToCount])
 
     return (  
         <View style={styles.container}>
@@ -171,9 +185,7 @@ function WarehouseTab() {
                                                 ]}>
                                     <Image source={require('../../assets/images/dollor.png')} style={styles.icon}/>
                                     <Text style={styles.text_bold}>
-                                        {`${productToCount?.reduce((total, item) => {
-                                            return total + (item?.stockAmount * item.importPrice);
-                                        }, 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}`}
+                                        {totalValue()}
                                     </Text>
                                     <Text style={styles.text_light}>Giá trị kho</Text>             
                                 </TouchableOpacity>
@@ -309,6 +321,7 @@ function WarehouseTab() {
                     onSelected={handleChangeTime}
                     handleSettingAgain={handleSettingAgain} />
             </RBSheet>
+            {loading && <LoadingSpinner />}
         </View>
     );
 }
@@ -447,4 +460,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default WarehouseTab;
+export default memo(WarehouseTab);

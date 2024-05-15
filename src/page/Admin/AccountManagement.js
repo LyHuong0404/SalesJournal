@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollView } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
 import { Searchbar, DataTable } from "react-native-paper";
@@ -49,7 +49,7 @@ function AccountManagement() {
     }, [debounceValue, isVendor])    
 
 
-    const handleChangeTypeAccount = (item) => {
+    const handleChangeTypeAccount = useCallback((item) => {
         if(item.value == "2") {
             setIsVendor(false);
         } else if (item.value == "3") {
@@ -58,7 +58,7 @@ function AccountManagement() {
             setIsVendor(null);
         }
         setTypeAccount(item.value);
-    }
+    }, [typeAccount])
 
     return ( 
         <View style={styles.container}>

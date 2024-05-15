@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text } from "react-native";
 import { TextInput, DefaultTheme } from "react-native-paper";
-import { useState } from "react";
+import { memo, useState } from "react";
 
 const theme = {
     ...DefaultTheme,
@@ -50,4 +50,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default TextInputCustom;
+export default memo(TextInputCustom);

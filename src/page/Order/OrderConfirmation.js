@@ -38,7 +38,29 @@ function OrderConfirmation({ onBack }) {
     const [isEnabled, setIsEnabled] = useState(false);
     const [buyerEmail, setBuyerEmail] = useState('');
     const [loading, setLoading] = useState(false);
+    const [isInitialInputCode, setIsInitialInputCode] = useState(route.params?.open || false);
 
+    useEffect(() => {
+        if (isInitialInputCode) {
+          refRBSheetInputCode.current?.open();
+          setIsInitialInputCode(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        let newArray = [];
+        ArrayQRAndAmount.forEach(item => {
+            let existingProductIndex = newArray?.findIndex(newItem => newItem.product.productId === item.product.productId);
+            
+            if (existingProductIndex !== -1) {
+                newArray[existingProductIndex].amount += item.amount;
+            } else {
+                newArray.push({ product: item.product, amount: item.amount });
+            }
+        });
+        setProducts(newArray);
+    }, [ArrayQRAndAmount])
+    
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
     const hideDatePicker = () => {
@@ -49,27 +71,14 @@ function OrderConfirmation({ onBack }) {
         setCreateDay(format(new Date(date), 'dd/MM/yyyy'));
         hideDatePicker();
     };
-
-    useEffect(() => {
-        let newArray = [];
-        ArrayQRAndAmount.forEach(item => {
-            let existingProductIndex = newArray?.findIndex(newItem => newItem.product.productId === item.product.productId);
-        
-            if (existingProductIndex !== -1) {
-                newArray[existingProductIndex].amount += item.amount;
-            } else {
-                newArray.push({ product: item.product, amount: item.amount });
-            }
-        });
-        setProducts(newArray);
-    }, [ArrayQRAndAmount])
-
+    
     const submitForm = () => {
         try{           
             const newArray = ArrayQRAndAmount.map(item => ({
                 productCode: item.product.code,
                 amount: item.amount
             }));
+            console.log(newArray)
             const fetchAPI = async() => {
                 setLoading(true);
                 const response = await createReceipt({ paymentMethod: "DIRECT", buyerEmail, useBonusPoint: isEnabled, receiptDetailExportModels: newArray });

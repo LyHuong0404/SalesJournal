@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
+import { memo } from "react";
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 
 
@@ -17,7 +18,7 @@ function HorizontalCategory({ category }) {
                             {/* <Text style={styles.number}>5 <Text style={styles.number}>Sản phẩm</Text></Text>  */}
                         </View>
                     </View>
-                    <Image source={require('../assets/images/move.png')} style={styles.image_move}/>
+                    {/* <Image source={require('../assets/images/move.png')} style={styles.image_move}/> */}
                 </View>
             </View>
         </TouchableOpacity>
@@ -67,4 +68,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default HorizontalCategory;
+export default memo(HorizontalCategory);

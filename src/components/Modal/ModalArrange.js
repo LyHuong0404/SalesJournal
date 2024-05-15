@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text } from "react-native";
 import { RadioButton } from "react-native-paper";
-import { useState } from "react";
+import { memo } from "react";
 
 const options = [
     {value: 'moinhat', title: "Mới nhất"},
@@ -47,4 +47,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ModalArrange;
+export default memo(ModalArrange);

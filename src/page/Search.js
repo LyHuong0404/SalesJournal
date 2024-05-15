@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { View, StyleSheet, TouchableOpacity, Image, Text, TextInput, ScrollView } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Image, Text, TextInput, ScrollView, ToastAndroid } from "react-native";
 import { IconButton } from 'react-native-paper';
 import { useState, useEffect, useRef } from "react";
 
@@ -56,7 +56,7 @@ function Search() {
                 />
                 <TextInput
                     ref={searchRef}
-                    placeholder="Tìm theo tên"
+                    placeholder="Tìm kiếm theo tên sản phẩm"
                     placeholderTextColor="#8e8e93"
                     value={searchValue}
                     autoFocus
@@ -75,9 +75,9 @@ function Search() {
                     />
                 )}
                 </View>
-                <TouchableOpacity>
+                {/* <TouchableOpacity>
                     <Image source={require('../assets/images/qr_code.png')} style={{ width: 25, height: 25, objectFit: 'contain', marginLeft: 15 }}/>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
         {/* label_search */}
             {/* <View style={styles.label_search}>

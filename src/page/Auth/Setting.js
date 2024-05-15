@@ -16,6 +16,7 @@ function Setting() {
         setLoadingLogout(false);
         navigation.navigate('LoginNav');
     }
+    
     return ( 
         <View style={styles.container}>
             <TouchableOpacity onPress={() => navigation.goBack()}>

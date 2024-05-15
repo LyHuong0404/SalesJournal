@@ -258,8 +258,8 @@ function ProfileUser() {
                             <Text style={{ marginLeft: 8, marginBottom: 15 }}>{points.length} cửa hàng</Text>      
                         </View>
                         <DataTable.Header style={{ borderColor: '#e2e5ea', borderWidth: 1 }}>
-                            <DataTable.Title style={styles.cell}><Text style={styles.header_table}>TÊN CỬA HÀNG</Text></DataTable.Title>
-                            <DataTable.Title numeric><Text style={styles.header_table}>ĐIỂM</Text></DataTable.Title>
+                            <DataTable.Title style={styles.cell}><Text style={styles.header_table}>Tên cửa hàng</Text></DataTable.Title>
+                            <DataTable.Title numeric><Text style={styles.header_table}>Điểm</Text></DataTable.Title>
                         </DataTable.Header>
                         {points.map((item, index) => 
                             <DataTable.Row key={index}>
@@ -393,7 +393,8 @@ const styles = StyleSheet.create({
         fontSize: 12
     },
     header_table: {
-        fontWeight: '500',
+        fontSize: 12,
+        color: '#888888'
     },
 })
 

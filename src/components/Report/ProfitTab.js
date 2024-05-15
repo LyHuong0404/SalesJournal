@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import { View, StyleSheet, Image, Dimensions, Text, ScrollView, ToastAndroid, TouchableOpacity } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
 import { DataTable } from "react-native-paper";
@@ -23,7 +23,6 @@ function ProfitTab() {
     const [revenueOption, setRevenueOption] = useState('1');
     const [fromDate, setFromDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
     const [toDate, setToDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
-    const [data, setData] = useState([]);
     const [revenue, setRevenue] = useState([]);
     const [loading, setLoading] = useState(false);
     const [buttonTimeType, setButtonTimeType] = useState('homnay'); 
@@ -310,9 +309,9 @@ function ProfitTab() {
                                 {revenueByTable.map((item, index) => 
                                     <DataTable.Row key={index}>
                                         <DataTable.Cell style={styles.cell}><Text style={styles.cell_text_number}>{item?.product?.name}</Text></DataTable.Cell>
-                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{`${item?.totalSaleAmount}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
-                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{`${item?.totalSaleMoney}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
-                                        <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${item.totalRevenue}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{`${item?.product?.totalSaleAmount}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{`${item?.product?.totalSaleMoney}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                        <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${item.product.totalRevenue}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
                                     </DataTable.Row>
                                 )}
                             </>}
@@ -505,4 +504,4 @@ const styles = StyleSheet.create({
     
 })
 
-export default ProfitTab;
+export default memo(ProfitTab);

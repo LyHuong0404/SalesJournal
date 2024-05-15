@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import React, { useState, memo } from 'react';
+import { View, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { CameraView, useCameraPermissions  } from 'expo-camera/next'; 
 import { useNavigation } from '@react-navigation/native';
 
@@ -80,4 +80,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default ModalCameraScreen;
+export default memo(ModalCameraScreen);

@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollView } from "react-native";
 import { format } from "date-fns";
 import { Dropdown } from 'react-native-element-dropdown';
@@ -37,7 +37,7 @@ function OrderHistory() {
                 setLoading(true);
                 const response = await filterOrderHistory({ pageIndex: 0, pageSize: 1000, fromDate, toDate });
                 if (response) {
-                    if (typeTransaction == 1){
+                    if (typeTransaction == 2){
                         response.content = response.content.filter((item) => item.totalDiscount != 0);
                     }
                     setOrders(response.content);
@@ -68,7 +68,7 @@ function OrderHistory() {
         refRBSheet.current?.close();    
     }
 
-    const labelOfTime = () => {
+    const labelOfTime = useCallback(() => {
         switch(buttonTimeType) {
             case 'homnay':
                 return 'Hôm nay';
@@ -87,7 +87,7 @@ function OrderHistory() {
             default:
                 break;
         }
-    }
+    }, [buttonTimeType])
 
 
     return ( 

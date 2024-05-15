@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import { convertTimeStamp } from "../utils/helper";
+import { memo } from "react";
 
 function VerticalProduct({product}) {
     const navigation = useNavigation();
@@ -77,4 +78,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default VerticalProduct;
+export default memo(VerticalProduct);

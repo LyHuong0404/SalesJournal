@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Button } from "react-native-paper";
 
@@ -44,7 +45,6 @@ const styles = StyleSheet.create({
         borderWidth: 1.5,
         borderColor: '#15803D',
         borderRadius: 7,
-        // margin: 10, 
     }
 })
-export default TwoButtonBottom;
+export default memo(TwoButtonBottom);

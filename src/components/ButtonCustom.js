@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button } from "react-native-paper";
 
@@ -31,4 +32,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ButtonCustom;
+export default memo(ButtonCustom);

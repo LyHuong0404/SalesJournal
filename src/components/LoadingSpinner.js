@@ -1,4 +1,6 @@
+import { memo } from 'react';
 import { StyleSheet, View, Image } from 'react-native';
+
 function LoadingSpinner() {
     return (  
     <View style={styles.loadingOverlay}>
@@ -16,4 +18,4 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 })
-export default LoadingSpinner;
+export default memo(LoadingSpinner);

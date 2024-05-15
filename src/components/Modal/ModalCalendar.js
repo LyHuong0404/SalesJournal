@@ -1,5 +1,5 @@
 import { View, StyleSheet, Text, Image, TouchableOpacity  } from "react-native";
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Button, TextInput, DefaultTheme } from "react-native-paper";
 import { format } from 'date-fns';
 import DateTimePicker from "react-native-modal-datetime-picker";
@@ -13,7 +13,6 @@ const theme = {
       underlineColor: '#abaaaa', 
     },
 };
-
 
 const buttonTimeArray = [
     { label: 'Hôm nay', value: 'homnay'},
@@ -49,11 +48,12 @@ function ModalCalendar({ valueTimeFrom, valueTimeTo, buttonTimeType, onSelected,
 
     const handleChangeButtonTime = (button) => {
         setActive(button.value);
-        onSelected({buttonType: button.value, startDate: startDate, endDate: endDate});
+        onSelected({buttonType: button.value, startDate, endDate});
     }
 
     const handleChangeTimeRange = () => {
-        onSelected({buttonType: 'none', startDate: startDate, endDate: endDate});
+        console.log(1)
+        onSelected({buttonType: 'none', startDate, endDate});
     }
 
     return (
@@ -173,4 +173,4 @@ const styles = StyleSheet.create({
     }
     
   });
-export default ModalCalendar;
+export default memo(ModalCalendar);

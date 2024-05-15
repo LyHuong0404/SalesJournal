@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { View } from 'react-native';
 import { BarChart, Grid } from 'react-native-svg-charts';
 
@@ -14,4 +14,4 @@ const Chart = () => {
   );
 };
 
-export default Chart;
+export default memo(Chart);

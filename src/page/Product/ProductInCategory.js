@@ -90,7 +90,7 @@ function ProductInCategory() {
     }
 
     const handleAddProduct = () => {
-        const categoryIfo = { product: { name: category?.name, id: category?.id }};
+        const categoryIfo = { product: { name: category?.name, id: category?.id, salePrice: category?.salePrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '') }};
         navigation.navigate('CreateProduct', { product: categoryIfo })
     }
 

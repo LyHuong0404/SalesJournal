@@ -65,7 +65,7 @@ function CategoryTab({ onSearchValue }) {
                 label="Tạo danh mục"
                 style={styles.fab}
                 onPress={() => navigation.navigate('CreateCategory')} 
-                color='white'
+                variant='secondary'
             />
             {(!categories || categories?.length == 0) && (!onSearchValue) &&
                 <View style={styles.content_noitem}>
@@ -102,10 +102,7 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         zIndex: 100,
-        backgroundColor: '#0e7bc5',
         borderRadius: 50,
-        borderColor: 'white',
-        borderWidth: 1.5
     },
     content_noitem: {
         flex: 1,

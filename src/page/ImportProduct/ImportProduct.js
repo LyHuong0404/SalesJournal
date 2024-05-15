@@ -88,7 +88,7 @@ function ImportProduct() {
                 <View style={{ marginHorizontal: 15, borderRadius: 5, backgroundColor: '#f8f9fa', borderColor: '#15803D', borderWidth: 1, height: 40, flexDirection: 'row', alignItems: 'center' }}>
                     <Searchbar
                         autoFocus
-                        placeholder="Tìm kiếm"
+                        placeholder="Tìm kiếm theo tên sản phẩm"
                         iconColor='#8e8e93'
                         value={searchValue}
                         style={{

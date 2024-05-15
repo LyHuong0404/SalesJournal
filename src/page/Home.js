@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Dimensions, ToastAndroid } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Badge, Button } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { format } from 'date-fns';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import RBSheet from "react-native-raw-bottom-sheet";
 
 import { filterReport } from '../actions/seller/receiptActions';
-import QRDemo from './QRDemo';
 import { convertTimeStamp } from '../utils/helper';
+import ModalSell from '../components/Modal/ModalSell';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -19,27 +19,27 @@ function Home() {
   const [date, setDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
   const [revenue, setRevenue] = useState([]);
 
+  const fetchAPI = async()=> {
+    const response = await filterReport({ fromDate: date, toDate: date});
+    if (response) {
+        setRevenue(response);
+    } else {
+        ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
+    }
+  }
   useEffect(() => {
-    try{
-        const fetchAPI = async()=> {
-            const response = await filterReport({ fromDate: date, toDate: date});
-            if (response) {
-                setRevenue(response);
-            } else {
-                ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
-            }
-        }
+    try{       
         fetchAPI();
     } catch(e){
         ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
     }
   }, [])
 
-  const handleClose = () => {
-    refRBSheet.current?.close();
-  }
-
-
+  useFocusEffect(
+    useCallback(() => {
+        fetchAPI();
+    }, [])
+);
 
   return (
     <View style={styles.container}>   
@@ -212,15 +212,25 @@ function Home() {
           </View> */}
         </View>
         <RBSheet
-            ref={refRBSheet}
-            customStyles={{               
-                container: {
-                  height: '100%'
-                }
+          ref={refRBSheet}
+          closeOnDragDown={true}
+          closeOnPressMask={true}
+          customStyles={{
+              wrapper: 
+              {
+                  backgroundColor: "rgba(100, 100, 100, 0.5)",
+              },
+              draggableIcon: {
+                  backgroundColor: "grey"
+              },
+              container: {
+                  height: 140,
+                  backgroundColor: '#3a3a3a',
+              }
             }}
-        >
-            <QRDemo onScanSuccess={() => refRBSheet.current?.close()} close={handleClose}/>
-        </RBSheet>
+          >
+              <ModalSell onClose={() => refRBSheet?.current.close()}/>
+          </RBSheet>
       </ScrollView>
     </View>
   );
@@ -230,6 +240,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F1F3F5',
+    paddingTop: 10
   },
   header: {
     backgroundColor: 'green',
