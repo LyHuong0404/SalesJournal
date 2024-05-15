@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { FAB } from 'react-native-paper';
 
 import { logout } from '../../actions/authActions';
-import { getNewInfoToday, sendNotificationVendorExpire } from '../../actions/admin/otherActions';
+import { getNewInfoToday, sendNotificationProductExpire, sendNotificationVendorExpire } from '../../actions/admin/otherActions';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
 const windowWidth = Dimensions.get('window').width;
@@ -47,6 +47,23 @@ function AdminHome() {
       const fetchAPI = async() => {
         setLoading(true);
         const rs = await sendNotificationVendorExpire();
+        if (rs?.code == 0) {
+          ToastAndroid.show('Gửi thông báo thành công', ToastAndroid.SHORT);
+        } else ToastAndroid.show('Gửi thông báo thất bại', ToastAndroid.SHORT);
+        setLoading(false);
+      }
+      fetchAPI();
+    } catch(e) {
+      setLoading(false);
+      ToastAndroid.show('Gửi thông báo thất bại', ToastAndroid.SHORT);
+    }
+  }
+
+  const handleSendNotificationProductExpire = () => {
+    try{
+      const fetchAPI = async() => {
+        setLoading(true);
+        const rs = await sendNotificationProductExpire();
         if (rs?.code == 0) {
           ToastAndroid.show('Gửi thông báo thành công', ToastAndroid.SHORT);
         } else ToastAndroid.show('Gửi thông báo thất bại', ToastAndroid.SHORT);
@@ -144,6 +161,17 @@ function AdminHome() {
                 icon="send"
                 style={styles.fab}
                 onPress={handleSendNotification}
+                variant='surface'
+              />
+          </View>
+          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 25 }}>
+              <View style={{ marginLeft: 20, flex: 0.7 }}>
+                  <Text style={styles.text_light}>Bấm Gửi để gửi thông báo những sản phẩm sắp hết hạn cho người bán</Text> 
+              </View>
+              <FAB
+                icon="send"
+                style={styles.fab}
+                onPress={handleSendNotificationProductExpire}
                 variant='surface'
               />
           </View>

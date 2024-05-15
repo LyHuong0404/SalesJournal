@@ -39,6 +39,15 @@ export const sendNotificationVendorExpire = async() => {
         const response = await httprequest.get('admin/send-notification-vendor-expire');
         return response;
     } catch (err) {
-        console.log("Error when admin is getting info today: ", err);
+        console.log("Error when admin is sending notifications: ", err);
+    }
+}
+
+export const sendNotificationProductExpire = async() => {
+    try {
+        const response = await httprequest.get('admin/send-notification-product-expire');
+        return response;
+    } catch (err) {
+        console.log("Error when admin is sending notifications: ", err);
     }
 }
