@@ -43,7 +43,7 @@ function ImportBook() {
                         setTotalImport('');
                     }
                 } else {
-                    ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
+                    ToastAndroid.show('Lỗi tải không thành công', ToastAndroid.SHORT);
                 }
                 setLoading(false);
             }
@@ -51,7 +51,7 @@ function ImportBook() {
 
         } catch(e){
             setLoading(false);
-            ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
+            ToastAndroid.show('Lỗi tải không thành công', ToastAndroid.SHORT);
         }
       }, [fromDate, toDate])    
 
@@ -184,7 +184,6 @@ function ImportBook() {
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 20,
         flex: 1,
         backgroundColor: '#f6f7f8',
     },

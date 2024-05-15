@@ -9,6 +9,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { filterReport } from '../actions/seller/receiptActions';
 import { convertTimeStamp } from '../utils/helper';
 import ModalSell from '../components/Modal/ModalSell';
+import ModalExpire from '../components/Modal/ModalExpire';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -18,6 +19,7 @@ function Home() {
   const refRBSheet = useRef();
   const [date, setDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
   const [revenue, setRevenue] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   const fetchAPI = async()=> {
     const response = await filterReport({ fromDate: date, toDate: date});
@@ -27,9 +29,16 @@ function Home() {
         ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
     }
   }
+
   useEffect(() => {
-    try{       
-        fetchAPI();
+    try{   
+        if((new Date(user?.profile?.expireAt) < new Date())) {
+          setShowModal(true);
+        }
+        else {
+          fetchAPI();
+          setShowModal(false);
+        };
     } catch(e){
         ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
     }
@@ -232,6 +241,7 @@ function Home() {
               <ModalSell onClose={() => refRBSheet?.current.close()}/>
           </RBSheet>
       </ScrollView>
+      {showModal && <ModalExpire />}
     </View>
   );
 }

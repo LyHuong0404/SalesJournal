@@ -434,7 +434,6 @@ function CouponDetail() {
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 20,
         flex: 1,
         backgroundColor: '#ffffff',
         paddingHorizontal: 15

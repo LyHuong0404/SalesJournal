@@ -87,14 +87,14 @@ function WarehouseTab() {
                     
                     setRevenue({ totalImportProductMoney, totalSpentMoney });
                 } else {
-                    ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
+                    ToastAndroid.show('Lỗi tải không thành công', ToastAndroid.SHORT);
                 }
                 setLoading(false);
             }
             fetchAPI();
         } catch(e){
             setLoading(false);
-            ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
+            ToastAndroid.show('Lỗi tải không thành công', ToastAndroid.SHORT);
         }
     }, [startDate, endDate])
 

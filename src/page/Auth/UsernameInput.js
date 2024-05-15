@@ -69,7 +69,6 @@ function UsernameInput() {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 20,
         flex: 1,
         paddingHorizontal: 15, 
         backgroundColor: '#fbfdff',

@@ -105,7 +105,6 @@ function OTP() {
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 20,
         flex: 1,
         paddingHorizontal: 15, 
         backgroundColor: '#f6f7f8',

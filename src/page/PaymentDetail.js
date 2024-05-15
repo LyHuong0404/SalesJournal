@@ -99,7 +99,7 @@ function PaymentDetail() {
                             </>}
                         </View>
                         <View style={[styles.display, { marginBottom: 2 }]}>
-                            {data?.receiptDetails.some((item) => item.coupon != null) && <>
+                            {(data?.receiptDetails.some((item) => item.coupon != null) || data?.coupon) && <>
                                 <Text style={[styles.text_light, { color: '#565555', width: '40%' }]}>Giảm giá</Text>                              
                                 <View style={{ flex: 1 }}>
                                     {data?.receiptDetails.map((item, index) =>
@@ -154,7 +154,6 @@ function PaymentDetail() {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 20,
         flex: 1,
         backgroundColor: '#ffffff',
     },

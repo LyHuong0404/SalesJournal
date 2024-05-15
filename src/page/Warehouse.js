@@ -167,7 +167,6 @@ function Warehouse() {
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 20,
         flex: 1,
         backgroundColor: '#f6f7f8',
     },
