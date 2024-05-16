@@ -31,10 +31,10 @@ function OrderDetail() {
                         <View style={[styles.display, { alignItems: 'center', justifyContent: 'space-between' }]}>
                             <Text style={styles.total_price}>{`${receipt?.finalPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                             <View style={styles.button_send}>
-                                <Text style={{ color: 'white', backgroundColor: '#15803D', padding: 10, borderRadius: 10, fontSize: 12 }} >Gửi hóa đơn</Text>
+                                {/* <Text style={{ color: 'white', backgroundColor: '#15803D', padding: 10, borderRadius: 10, fontSize: 12 }} >Gửi hóa đơn</Text> */}
                             </View>
                         </View>
-                        {receipt?.couponId && <Text style={{ color: '#cb870b', fontSize: 12 }}>Khuyến mãi</Text>}
+                        {(receipt?.receiptDetails.some((item) => item.coupon != null) || receipt?.coupon) && <Text style={{ color: '#cb870b', fontSize: 12 }}>Khuyến mãi</Text>}
                     </View>
                     <View style={styles.horizontalLine} />
                     <View style={[styles.display, { marginVertical: 10, alignItems: 'center' }]}>
@@ -77,9 +77,9 @@ function OrderDetail() {
                                 }, 0)} sản phẩm`}</Text>
                             <Text style={{ color: '#565555'}}>{`${receipt?.totalSalePrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                         </View>
-                        {receipt?.couponId && <View style={styles.price_container}>
+                        {(receipt?.receiptDetails.some((item) => item.coupon != null) || receipt?.coupon) && <View style={styles.price_container}>
                             <Text style={{ color: '#858585' }}>Giảm giá</Text>
-                            <Text style={{ color: '#565555'}}>{`${receipt?.discount}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
+                            <Text style={{ color: '#565555'}}>{`${receipt?.finalPrice - receipt?.totalSalePrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                         </View>}
                     </View>
                     <View>

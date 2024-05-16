@@ -13,6 +13,8 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
     const [permission, requestPermission] = useCameraPermissions();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
+    const [cameraOpen, setCameraOpen] = useState(true);
+
     let currentScanResult = null;
     if (!permission) {
         return <LoadingSpinner />
@@ -47,6 +49,7 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
         else {
             return;
         }
+        setCameraOpen(!cameraOpen);
         if(scanningResult) {            
             if (action == 'ProductDetail') {
                 try {
@@ -139,19 +142,21 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
                 </TouchableOpacity>
                 <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center'}}>{action == 'ScanCustomerInfo' ? 'Quét mã khách hàng' : 'Quét mã sản phẩm'}</Text>
             </View>
-            <CameraView 
-                style={styles.camera} 
-                barcodeScannerSettings={{
-                    barcodeTypes: ["qr", "aztec", "ean13", "ean8", "pdf417", "upc_e", "datamatrix", "code39", "code93", "itf14", "codabar", "code128", "upc_a"],
-                }}
-                onBarcodeScanned={(scanningResult) => handleBarCodeScanned(scanningResult?.data)}
-            >
-                <View style={{ flex: 1, backgroundColor: 'transparent', flexDirection: 'row' }}>
-                    <TouchableOpacity style={{ flex: 1, alignSelf: 'center', alignItems: 'center' }} >
-                    <Image source={require('../assets/images/square.png')} style={{ width: 280, height: 280 }}/>
-                    </TouchableOpacity>
-                </View>
-            </CameraView>
+            {cameraOpen && 
+                <CameraView 
+                    style={styles.camera} 
+                    barcodeScannerSettings={{
+                        barcodeTypes: ["qr", "aztec", "ean13", "ean8", "pdf417", "upc_e", "datamatrix", "code39", "code93", "itf14", "codabar", "code128", "upc_a"],
+                    }}
+                    onBarcodeScanned={(scanningResult) => handleBarCodeScanned(scanningResult?.data)}
+                >
+                    <View style={{ flex: 1, backgroundColor: 'transparent', flexDirection: 'row' }}>
+                        <TouchableOpacity style={{ flex: 1, alignSelf: 'center', alignItems: 'center' }} >
+                        <Image source={require('../assets/images/square.png')} style={{ width: 280, height: 280 }}/>
+                        </TouchableOpacity>
+                    </View>
+                </CameraView>
+            }
             {loading && <LoadingSpinner />}
         </View>
     );

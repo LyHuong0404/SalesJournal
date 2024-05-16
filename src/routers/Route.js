@@ -67,6 +67,7 @@ export const LoginNav = () => {
           <Stack.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
           <Stack.Screen name="OrderHistory" component={OrderHistory} options={{ headerShown: false }}/>
           <Stack.Screen name="RegisterStore" component={RegisterStore} options={{ headerShown: false }} />
+          <Stack.Screen name="MyQR" component={MyQR} options={{ headerShown: false }} />
       </Stack.Navigator>
     )
 }
@@ -105,6 +106,7 @@ export const AdminNav = () => {
         <Stack.Screen name="ServicePackageManagement" component={ServicePackageManagement} options={{ headerShown: false }}/>
         <Stack.Screen name="AddServicePackage" component={AddServicePackage} options={{ headerShown: false }}/>
         <Stack.Screen name="LoginNav" component={LoginNav}/>
+        <Stack.Screen name="MyQR" component={MyQR} options={{ headerShown: false }} />
       </Stack.Navigator>
   )
 }
@@ -148,6 +150,7 @@ export const VendorNav = () => {
         <Stack.Screen name="AdminNav" component={AdminNav} options={{ headerShown: false }}/>
         <Stack.Screen name="LoginNav" component={LoginNav}/>
         <Stack.Screen name="Intro" component={Intro} options={{ headerShown: false }}/>
+        <Stack.Screen name="MyQR" component={MyQR} options={{ headerShown: false }} />
       </Stack.Navigator>
   )
 }

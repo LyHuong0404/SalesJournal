@@ -21,7 +21,7 @@ function OrderItem({ receipt }) {
                     <Text>Tổng cộng</Text>
                     <Text style={styles.total_price}>{`${receipt?.finalPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                 </View>
-                {receipt?.receiptDetails.every((item) => item.coupon != null) && <Text style={{ color: '#cb870b', textAlign: 'right', fontSize: 12 }}>Khuyến mãi</Text>}
+                {(receipt?.receiptDetails.some((item) => item.coupon != null) || receipt?.coupon) && <Text style={{ color: '#cb870b', textAlign: 'right', fontSize: 12 }}>Khuyến mãi</Text>}
             </View>
         </TouchableOpacity>
     );
