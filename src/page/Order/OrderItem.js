@@ -30,7 +30,7 @@ function OrderItem({ receipt }) {
 const styles = StyleSheet.create({
     container: {
         marginHorizontal: 15,
-        marginVertical: 10,
+        marginVertical: 5,
         height: 'auto',
         backgroundColor: 'white',
         paddingHorizontal: 10,

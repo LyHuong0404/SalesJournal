@@ -169,7 +169,7 @@ function CreateCoupon() {
                         </View>
                         {proviso == 'BY_PRODUCT' ?
                             <>
-                                <Text style={{ fontWeight: '500', color: '#6f6f6f', marginTop: 20, marginBottom: 5 }}>Mua sản phẩm bất kì thuộc danh mục</Text>
+                                <Text style={{ fontWeight: '500', color: '#6f6f6f', marginTop: 20, marginBottom: 5 }}>Khuyến mãi các sản phẩm</Text>
                                 <MultiSelect
                                     style={styles.dropdown}
                                     placeholderStyle={styles.placeholderStyle}
@@ -207,7 +207,7 @@ function CreateCoupon() {
                                 {productIds?.length > 0 && 
                                     <View style={{ display: 'flex', flexDirection: 'row' }}>
                                         <Image source={require('../../assets/images/tick.png')} style={{ width: 17, height: 17, objectFit: 'contain', marginTop: 12 }}/>
-                                        <Text style={styles.text_amount_category}>{productIds?.length} danh mục được chọn</Text>
+                                        <Text style={styles.text_amount_category}>{productIds?.length} sản phẩm được chọn</Text>
                                     </View>
                                 }
                                 <View style={{ width: '52%', marginTop: 20 }}>

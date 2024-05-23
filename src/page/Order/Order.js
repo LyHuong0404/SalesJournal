@@ -95,6 +95,7 @@ function Order() {
                 </Text>
             </View>
         </TouchableOpacity>
+        <Text style={{ fontWeight: 'bold', marginLeft: 15, marginBottom: 10 }}>Tổng: <Text style={{ fontWeight: '500', color: 'red'}}>{receipts.length}</Text></Text>
         {receipts?.length > 0 && 
             <ScrollView style={styles.content}>
                 {receipts?.map((receipt, index) => <OrderItem key={index} receipt={receipt}/>)}
@@ -161,7 +162,6 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 0.9,
-        paddingHorizontal: 8, 
     },
     icon_calender: {
         width: 28,
