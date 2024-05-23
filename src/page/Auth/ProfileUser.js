@@ -309,7 +309,7 @@ function ProfileUser() {
 
                     <View style={{ alignSelf: 'flex-end', marginTop: 15 }}>
                         <Button 
-                            disabled={!newPassword || !currentPassword || hasErrors()}
+                            disabled={!newPassword || !currentPassword || hasErrors()?.length > 0}
                             mode="contained" 
                             buttonColor="#15803D" 
                             style={{ borderRadius: 7 }}
