@@ -113,7 +113,7 @@ function App() {
     screens: {
             Home: 'Home',
             ServicePackage: 'ServicePackage',
-            Report: 'Report'
+            ImportProduct: 'ImportProduct',
             // OrderHistory: 'OrderHistory'
     },
     },
@@ -142,7 +142,12 @@ function App() {
             const dateExpire = response.notification.request.content.data.dateExpire;
             getData(dateExpire);
           }
-          listener(url);
+          if(navigationRef.current) {
+            navigationRef.current.navigate(url);
+          }
+          else {
+            listener(url);
+          }
         });
     
         return () => {
@@ -195,9 +200,12 @@ async function registerForPushNotificationsAsync() {
     // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
 
     // token = (await Notifications.getExpoPushTokenAsync({ projectId: '02b29ea0-5b32-4138-babf-8f739813e5a6' })).data;
+    token = (await Notifications.getExpoPushTokenAsync({ projectId: '01af01a1-f80b-4ad9-9fc1-87771bba6e12' })).data;
     // token = (await Notifications.getDevicePushTokenAsync({ projectId: '0e674e53-ee33-403b-bb4b-7eac26af598e' })).data;
-    token = (await Notifications.getDevicePushTokenAsync({ projectId: '02b29ea0-5b32-4138-babf-8f739813e5a6' })).data;
-
+    // token = (await Notifications.getDevicePushTokenAsync({ projectId: 'b6a9ea24-72c4-4797-92ae-f2f408de0cf1' })).data;
+    //https://docs.expo.dev/push-notifications/fcm-credentials/
+    //https://docs.expo.dev/versions/latest/sdk/notifications/
+    //https://docs.expo.dev/push-notifications/sending-notifications-custom/
 
   } else {
     alert('Must use physical device for Push Notifications');

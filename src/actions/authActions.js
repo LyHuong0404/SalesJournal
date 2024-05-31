@@ -1,6 +1,6 @@
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import * as httprequest from "../utils/httprequest";
 
 //signUp
@@ -93,7 +93,7 @@ export const recoverPassword = async ({ username, newPassword }) =>{
 } 
 
 //login
-export const login = createAsyncThunk('auth', async ({ username, password, notifyToken }, { rejectWithValue }) => {
+export const login = createAsyncThunk('auth', async ({ username, password, notifyToken, idToken, provider }, { rejectWithValue }) => {
     try {
         const config = {
             headers: {
@@ -101,9 +101,10 @@ export const login = createAsyncThunk('auth', async ({ username, password, notif
             },
         };
 
-        const { data, code } = await httprequest.post('auth', { username, password, notifyToken }, config);
-
+        const { data, code } = await httprequest.post('auth', { username, password, notifyToken, idToken, provider }, config);
+        console.log(data);
         if (code == 0) {
+            console.log(data);
             await AsyncStorage.setItem('user', JSON.stringify(data));
             return data;
         } else {
@@ -114,8 +115,14 @@ export const login = createAsyncThunk('auth', async ({ username, password, notif
     }
 });
 
-export const logout = async() => {
+export const logout = async () => {
     await AsyncStorage.removeItem('user');
+    try {
+        await GoogleSignin.signOut();
+        // Perform additional cleanup and logout operations.
+    } catch (error) {
+        console.log('Google Sign-Out Error: ', error);
+    }
 }
 
 export const updateStore = createAsyncThunk('update-profile', async ({ profileId, nameStore, allowCustomerAccumulate, exchangePointToMoney, exchangeMoneyToPoint }, { rejectWithValue }) => {

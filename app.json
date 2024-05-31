@@ -2,6 +2,7 @@
   "expo": {
     "name": "Sổ Bán Hàng",
     "slug": "SoBanHang",
+    "scheme": "com.lyhuong.SoBanHang",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.jpg",
@@ -15,7 +16,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.lyhuong.SoBanHang"
     },
     "android": {
       "adaptiveIcon": {
@@ -30,7 +32,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "b6a9ea24-72c4-4797-92ae-f2f408de0cf1"
+        "projectId": "01af01a1-f80b-4ad9-9fc1-87771bba6e12"
       }
     }
   }
