@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import { View, StyleSheet, Text, Image, ToastAndroid, Pressable } from "react-native";
+import { View, StyleSheet, Text, Image, ToastAndroid, TouchableOpacity } from "react-native";
 import { Button, TextInput, DefaultTheme  } from "react-native-paper";
 import { getCodeSignUp, login } from "../../actions/authActions";
 import LoadingSpinner from "../../components/LoadingSpinner";
@@ -37,6 +37,7 @@ function UsernameInput() {
     const dispatch = useDispatch();
 	const apiLogin = async(idToken) => {
         try {
+            setLoading(true);
             const notifyToken = await AsyncStorage.getItem('notifyToken')
             const response = await dispatch(login({ notifyToken, idToken, provider: 'GOOGLE' }));
             if (response) {  
@@ -51,7 +52,9 @@ function UsernameInput() {
             } else {
                 ToastAndroid.show('Đăng nhập không thành công, vui lòng nhập lại!', ToastAndroid.SHORT);
             }
+            setLoading(false);
         } catch(err) {
+            setLoading(false);
             ToastAndroid.show('Đăng nhập không thành công, vui lòng nhập lại!', ToastAndroid.SHORT);
         }
     };
@@ -102,7 +105,15 @@ function UsernameInput() {
                         buttonColor="#15803D" style={{ borderRadius: 7, paddingHorizontal: 22 }}>
                     Tiếp tục
                 </Button>
-                <Pressable onPress={handleGoogleLogin}><Text>Continue with Google</Text></Pressable>
+                <View style={{ display: 'flex', flexDirection: 'row', marginVertical: 25, justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={styles.horizontalLine} />
+                    <Text style={{ marginHorizontal: 10, color: '#898989', fontSize: 12 }}>Hoặc</Text>
+                    <View style={styles.horizontalLine} />  
+                </View>
+                <TouchableOpacity onPress={handleGoogleLogin} style={styles.button_google}>
+                    <Image source={require('../../assets/images/google.png')} style={{ width: 18, height: 18, objectFit: 'contain', marginRight: 10 }}/>
+                    <Text style={{ color: '#767575' }}>Đăng nhập với Google</Text>
+                </TouchableOpacity>
             </View>
             <View style={{ flex: 0.3, alignItems: 'center', marginVertical: 10 }}>
                 <Image source={require('../../assets/images/guarantee.png')} style={{ width: 40, height: 40, objectFit: 'contain', marginBottom: 10 }} />
@@ -120,6 +131,24 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 15, 
         backgroundColor: '#fbfdff',
+    },
+    button_google: {
+        borderRadius: 7,
+        borderWidth: 1,
+        borderColor: '#e2e5ea',
+        backgroundColor: '#e2e8f0',
+        height: 30,
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 47
+    },
+    horizontalLine: { 
+        height: 1, 
+        backgroundColor: '#c5c5c5' ,
+        width: '15%'
     },
 })
 
