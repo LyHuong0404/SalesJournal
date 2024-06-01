@@ -47,8 +47,7 @@ function Report() {
         <View style={styles.container}>
             <TouchableOpacity style={styles.header} onPress={() => navigation.goBack()}>
                 <Image source={require('../../assets/images/right_arrow.png')} style={{ width: 17, height: 17, objectFit: 'contain' }}/>
-                <Text style={{ color: 'black', fontWeight: 'bold'}}>Báo cáo</Text>
-                <Image source={require('../../assets/images/guide.png')} style={{ width: 25, height: 25, objectFit: 'contain', tintColor: 'black' }}/>
+                <Text style={{ color: 'black', fontWeight: 'bold', marginLeft: 10 }}>Báo cáo</Text>
             </TouchableOpacity>
             <TabView
                 navigationState={{ index, routes }}
@@ -70,7 +69,6 @@ const styles = StyleSheet.create({
         display: 'flex', 
         flexDirection: 'row', 
         alignItems: 'center',
-        justifyContent: 'space-between',
         paddingHorizontal: 15, 
         height: 'auto', 
         paddingVertical: 12,

@@ -56,7 +56,7 @@ function ProfileUser() {
 
     const handleLogout = async() => {
         setLoading(true);
-        await logout();
+        await dispatch(logout());
         setLoading(false);
         navigation.navigate('UsernameInput');
     }

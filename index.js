@@ -63,14 +63,7 @@ function App() {
         setData(parsedUserData);
         dispatch(updateUser(parsedUserData.user)); 
       }
-
-      const timer = setTimeout(() => {
-        setLoading(false); 
-      }, 5000);
-  
-      return () => {
-        clearTimeout(timer); 
-      };
+      setLoading(false); 
     }
     getData();
 
@@ -156,6 +149,7 @@ function App() {
         };
       },
   };
+
   return (
     <PaperProvider theme={DefaultTheme}>
       <NavigationContainer ref={navigationRef} linking={linking}>

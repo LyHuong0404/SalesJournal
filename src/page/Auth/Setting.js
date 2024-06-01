@@ -4,15 +4,17 @@ import { useState } from "react";
 
 import { logout } from "../../actions/authActions";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import { useDispatch } from "react-redux";
 
 function Setting() {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
     const [loadingLogout, setLoadingLogout] = useState(false);
 
 
     const handleLogout = async() => {
         setLoadingLogout(true);
-        await logout();
+        await dispatch(logout());
         setLoadingLogout(false);
         navigation.navigate('LoginNav');
     }
