@@ -31,7 +31,7 @@ function ModalSelectCategory({ onSetCategory }) {
           
       } catch(err) {
         setLoading(false);
-          ToastAndroid.show('Lỗi khi tải danh mục', ToastAndroid.SHORT);
+          ToastAndroid.show('Lỗi khi tải sản phẩm', ToastAndroid.SHORT);
       }
     }, []);
 
@@ -44,7 +44,7 @@ function ModalSelectCategory({ onSetCategory }) {
     return (
       <>
         <View style={styles.container}>
-          <Text style={{ fontWeight: '600', textAlign: 'center', marginBottom: 10 }}>Danh mục</Text>
+          <Text style={{ fontWeight: '600', textAlign: 'center', marginBottom: 10 }}>Sản phẩm</Text>
           <Dropdown
               style={[styles.dropdown, isFocus && { borderColor: '#15803D', borderWidth: 1 }]}
               placeholderStyle={styles.placeholderStyle}
@@ -56,7 +56,7 @@ function ModalSelectCategory({ onSetCategory }) {
               maxHeight={300}
               labelField="label"
               valueField="value"
-              placeholder={!isFocus ? 'Chọn danh mục' : '...'}
+              placeholder={!isFocus ? 'Chọn sản phẩm' : '...'}
               searchPlaceholder="Tìm kiếm..."
               value={value}
               onFocus={() => setIsFocus(true)}

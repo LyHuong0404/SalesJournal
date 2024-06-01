@@ -18,7 +18,7 @@ const chartOptions = [
     { label: 'Hóa đơn', value: '2' },
 ];
 const revenueOptions = [
-    { label: 'Danh mục', value: '1' },
+    { label: 'Sản phẩm', value: '1' },
     { label: 'Hóa đơn', value: '2' },
     { label: 'Ngày', value: '3' },
 ];
@@ -161,7 +161,6 @@ function SellTab() {
         }
         return amount;
     }
-console.log('xqwe  ', revenueByTable)
     return (  
         <View>
             <ScrollView>
@@ -270,7 +269,7 @@ console.log('xqwe  ', revenueByTable)
                             {revenueOption == "1" && 
                                 <>
                                     <DataTable.Header>
-                                        <DataTable.Title style={styles.cell}><Text style={styles.header_table}>DANH MỤC</Text></DataTable.Title>
+                                        <DataTable.Title style={styles.cell}><Text style={styles.header_table}>SẢN PHẨM</Text></DataTable.Title>
                                         <DataTable.Title style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.header_table}>SL</Text></DataTable.Title>
                                         <DataTable.Title style={styles.cell} numeric><Text style={styles.header_table}>D.THU</Text></DataTable.Title>
                                     </DataTable.Header>

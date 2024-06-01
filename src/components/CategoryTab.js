@@ -32,14 +32,14 @@ function CategoryTab({ onSearchValue }) {
                         setCategories(prevCategories => [...prevCategories, ...response?.content]);
                     }
                 } catch (err) {
-                    ToastAndroid.show('Lỗi khi tải danh mục', ToastAndroid.SHORT);
+                    ToastAndroid.show('Lỗi khi tải sản phẩm', ToastAndroid.SHORT);
                 }
                 setLoading(false);
             };
             fetchCategories();
         } catch(err) {
             setLoading(false);
-            ToastAndroid.show('Lỗi khi tải danh mục', ToastAndroid.SHORT);
+            ToastAndroid.show('Lỗi khi tải sản phẩm', ToastAndroid.SHORT);
         }
     }, [pageIndex, resetPageIndex, onSearchValue]);
 
@@ -62,7 +62,7 @@ function CategoryTab({ onSearchValue }) {
         <View style={styles.container}>
             <FAB
                 icon="plus"
-                label="Tạo danh mục"
+                label="Tạo sản phẩm"
                 style={styles.fab}
                 onPress={() => navigation.navigate('CreateCategory')} 
                 variant='secondary'
@@ -70,7 +70,7 @@ function CategoryTab({ onSearchValue }) {
             {(!categories || categories?.length == 0) && (!onSearchValue) &&
                 <View style={styles.content_noitem}>
                     <Image source={require('../assets/images/noresults.png')} style={{ width: 200, height: 200, objectFit: 'contain' }}/>
-                    <Text style={{ color: '#8e8e93', textAlign: 'center', marginBottom: 15, marginTop: 25 }}>Bạn chưa có danh mục sản phẩm nào, hãy tạo ngay danh mục đầu tiên nhé</Text>
+                    <Text style={{ color: '#8e8e93', textAlign: 'center', marginBottom: 15, marginTop: 25 }}>Bạn chưa có sản phẩm nào, hãy tạo ngay sản phẩm đầu tiên nhé</Text>
                 </View>
             }
 

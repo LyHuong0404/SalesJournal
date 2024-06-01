@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Dimensions, ToastAndroid } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { Badge, Button } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { format } from 'date-fns';
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -11,6 +11,7 @@ import { convertTimeStamp } from '../utils/helper';
 import ModalSell from '../components/Modal/ModalSell';
 import ModalExpire from '../components/Modal/ModalExpire';
 import moment from 'moment';
+import { utils } from '../utils/utils';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -32,7 +33,9 @@ function Home() {
   }
 
   useEffect(() => {  
-      if((moment().isBefore(moment(user?.profile?.expireAt)))) {
+      const expireAt = utils.endOfDate(new Date(user?.profile?.expireAt))
+      const currentDate = new Date();
+      if(currentDate.getTime() > expireAt.getTime()) {
         setShowModal(true);
       }
       else {
@@ -155,7 +158,7 @@ function Home() {
 
               <TouchableOpacity onPress={() => navigation.navigate('ProductManagement')} style={{flex: 1, marginHorizontal: 5, backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent:'center', borderRadius: 7}}>
                 <Image source={require('../assets/images/package.png')} style={{width: 30, height: 30, objectFit: 'contain'}} />
-                <Text style={styles.text}>Sản phẩm</Text>
+                <Text style={styles.text}>Nhập hàng mới</Text>
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => navigation.navigate('Order')} style={{flex: 1, marginHorizontal: 5, backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent:'center', borderRadius: 7}}>

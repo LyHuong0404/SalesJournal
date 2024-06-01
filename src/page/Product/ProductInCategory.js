@@ -47,7 +47,7 @@ function ProductInCategory() {
             fetchData();
         } catch(err) {
             setLoading(false);
-            ToastAndroid.show('Lỗi khi tải danh mục', ToastAndroid.SHORT);
+            ToastAndroid.show('Lỗi khi tải sản phẩm', ToastAndroid.SHORT);
         }
     }, [])
 
@@ -74,10 +74,10 @@ function ProductInCategory() {
                 setLoading(true);
                 const response = await deleteCategory(categoryId);
                 if (response?.code == 0) {
-                    ToastAndroid.show('Xóa danh mục không thành công', ToastAndroid.SHORT);
+                    ToastAndroid.show('Xóa sản phẩm không thành công', ToastAndroid.SHORT);
                     navigation.navigate('ProductManagement', { index: 1 });
                 } else {
-                    ToastAndroid.show('Xóa danh mục không thành công', ToastAndroid.SHORT);
+                    ToastAndroid.show('Xóa sản phẩm không thành công', ToastAndroid.SHORT);
                 }
                 setLoading(false);
             }
@@ -85,7 +85,7 @@ function ProductInCategory() {
             setShowModal(false);
         } catch(err) {
             setLoading(false);
-            ToastAndroid.show('Xóa danh mục không thành công', ToastAndroid.SHORT);
+            ToastAndroid.show('Xóa sản phẩm không thành công', ToastAndroid.SHORT);
         }
     }
 
@@ -124,7 +124,7 @@ function ProductInCategory() {
                 <View style={{ marginHorizontal: 15, borderRadius: 5, backgroundColor: '#f8f9fa', borderColor: '#15803D', borderWidth: 1, height: 40, flexDirection: 'row', alignItems: 'center' }}>
                     <Searchbar
                         autoFocus
-                        placeholder="Tìm tên sản phẩm, barcode"
+                        placeholder="Tìm tên hàng, barcode"
                         iconColor='#8e8e93'
                         value={searchValue}
                         style={{
@@ -145,8 +145,8 @@ function ProductInCategory() {
             {renderTabContent()}
             {showModal && 
                 <ModalConfirmation 
-                    title="Xóa danh mục?" 
-                    question="Bạn có chắc rằng muốn xóa danh mục?"
+                    title="Xóa sản phẩm?" 
+                    question="Bạn có chắc rằng muốn xóa sản phẩm?"
                     textYes="Xóa"
                     textNo="Quay lại"
                     onPressCancel={() => setShowModal(false)}

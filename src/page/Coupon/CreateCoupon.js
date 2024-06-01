@@ -53,7 +53,7 @@ function CreateCoupon() {
             }
             fetchApi();
         } catch(err) {
-            ToastAndroid.show('Lỗi khi tải danh mục', ToastAndroid.SHORT);
+            ToastAndroid.show('Lỗi khi tải sản phẩm', ToastAndroid.SHORT);
         }
     }, []);
 
@@ -179,7 +179,7 @@ function CreateCoupon() {
                                     data={categories}
                                     labelField="label"
                                     valueField="value"
-                                    placeholder="Chọn danh mục"
+                                    placeholder="Chọn sản phẩm"
                                     value={productIds}
                                     search
                                     searchPlaceholder="Tìm kiếm..."

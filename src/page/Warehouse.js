@@ -155,7 +155,7 @@ function Warehouse() {
                             </View>
                         ) : <View style={styles.content_noitem}>
                                 <Image source={require('../assets/images/noresults.png')} style={{ width: 150, height: 150, objectFit: 'contain' }}/>
-                                <Text style={{ color: '#8e8e93', textAlign: 'center', marginBottom: 15, marginTop: 25 }}>Bạn chưa có danh mục sản phẩm nào trong danh mục này. </Text>
+                                <Text style={{ color: '#8e8e93', textAlign: 'center', marginBottom: 15, marginTop: 25 }}>Bạn chưa nhập hàng cho sản phẩm này. </Text>
                             </View>
                         }                   
                 </View>

@@ -76,19 +76,19 @@ function CreateCategory() {
                     response = await addCategory(formData);
                 }
                 if (response?.code == 0) {
-                    ToastAndroid.show('Lưu danh mục thành công', ToastAndroid.SHORT);
+                    ToastAndroid.show('Lưu sản phẩm thành công', ToastAndroid.SHORT);
                     if (action == 'CreatingProduct') {
                         navigation.navigate('CreateProduct');
                     } else navigation.navigate('ProductManagement', { index: 1 });
                 } else {
-                    ToastAndroid.show('Lưu danh mục không thành công', ToastAndroid.SHORT);
+                    ToastAndroid.show('Lưu sản phẩm không thành công', ToastAndroid.SHORT);
                 }
                 setLoading(false);
             }
             fetchApi();
         } catch(err) {
             setLoading(false);
-            ToastAndroid.show('Lưu danh mục không thành công', ToastAndroid.SHORT);
+            ToastAndroid.show('Lưu sản phẩm không thành công', ToastAndroid.SHORT);
         }
     }
     
@@ -98,7 +98,7 @@ function CreateCategory() {
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image source={require('../../assets/images/right_arrow.png')} style={{ width: 17, height: 17, objectFit: 'contain' }}/>
                 </TouchableOpacity>
-                <Text style={styles.title_header}>{category ? "Cập nhật danh mục" : "Tạo danh mục"}</Text>
+                <Text style={styles.title_header}>{category ? "Cập nhật sản phẩm" : "Tạo sản phẩm"}</Text>
             </View>
             <View style={styles.image_container}>
                 <View style={{ width: '37%' }}>
@@ -124,7 +124,7 @@ function CreateCategory() {
             </View>
             <View style={{ paddingHorizontal: 15, paddingVertical: 10 }}>
                 <TextInputCustom 
-                    label='Tên danh mục' 
+                    label='Tên sản phẩm' 
                     placeholder="Ví dụ: Mì Hảo Hảo" 
                     value={name} 
                     onChange={(text) => setName(text)} 

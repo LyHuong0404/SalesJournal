@@ -140,7 +140,7 @@ function CreateProduct() {
             <ScrollView style={{ flex: 1 }}>
                 <View style={{ paddingHorizontal: 15, paddingVertical: 10 }}>
                     <TextInputCustom 
-                        label='Tên sản phẩm' 
+                        label='Tên hàng' 
                         placeholder="Ví dụ: Mì Hảo Hảo" 
                         value={name} 
                         onChange={(text) => setName(text)} 
@@ -167,7 +167,7 @@ function CreateProduct() {
                             />
                         </View>
                     </View>
-                    <Text style={{ color: '#7a7a7a', fontWeight: '600' }}>Danh mục <Text style={{color: 'red' }}> *</Text></Text>
+                    <Text style={{ color: '#7a7a7a', fontWeight: '600' }}>Sản phẩm <Text style={{color: 'red' }}> *</Text></Text>
                     <View style={[styles.display, { alignItems: 'center', paddingVertical: 10 }]}>
                         <TouchableOpacity onPress={() => refRBSheet.current.open()}>
                             <Image source={require('../../assets/images/category.png')} style={{ width: 25, height: 25, marginRight: 15 }}/>
@@ -187,7 +187,7 @@ function CreateProduct() {
                             mode="contained"
                             onPress={() => navigation.navigate('CreateCategory', { action: 'CreatingProduct'})} 
                         >
-                            Tạo danh mục
+                            Tạo sản phẩm
                         </Button>
 
                     </View>

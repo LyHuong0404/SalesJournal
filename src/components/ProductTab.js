@@ -90,7 +90,7 @@ function ProductTab({ onSearchValue, onSelectedFilter }) {
 
             <FAB
                 icon="plus"
-                label="Tạo sản phẩm"
+                label="Nhập hàng"
                 style={styles.fab}
                 onPress={() => navigation.navigate('CreateProduct')}
                 variant='secondary'
@@ -98,7 +98,7 @@ function ProductTab({ onSearchValue, onSelectedFilter }) {
             {((!products || products?.length == 0) && !onSearchValue) &&
                 <View style={styles.content_noitem}>
                     <Image source={require('../assets/images/noresults.png')} style={{ width: 200, height: 200, objectFit: 'contain' }}/>
-                    <Text style={{ color: '#8e8e93', textAlign: 'center', marginBottom: 15, marginTop: 25 }}>Bạn chưa có sản phẩm nào, hãy tạo ngay sản phẩm đầu tiên nhé</Text>
+                    <Text style={{ color: '#8e8e93', textAlign: 'center', marginBottom: 15, marginTop: 25 }}>Bạn chưa nhập sản phẩm nào, hãy nhập ngay sản phẩm đầu tiên nhé</Text>
                 </View>
             }
             {((!products || products?.length == 0) && onSearchValue) && 
