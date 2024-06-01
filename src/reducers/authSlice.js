@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { login } from '../actions/authActions';
+import { login, logout } from '../actions/authActions';
 import { updateStore } from '../actions/authActions';
 import { updateProfile, registerStore, updateAvatar } from '../actions/user/authActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -120,6 +120,20 @@ const userSlice = createSlice({
         state.user = payload;
       })
       .addCase(updateAvatar.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload;
+      })
+      .addCase(logout.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(logout.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.user = null;
+        state.token = null;
+        state.isAuthenticated = false;
+      })
+      .addCase(logout.rejected, (state, { payload }) => {
         state.loading = false;
         state.error = payload;
       });

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Dimensions, ToastAndroid } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { FAB } from 'react-native-paper';
 
@@ -13,6 +13,7 @@ const windowWidth = Dimensions.get('window').width;
 function AdminHome() {
   const { user } = useSelector((state) => state.auth);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -37,7 +38,7 @@ function AdminHome() {
 
   const handleLogout = async() => {
     setLoading(true);
-    await logout();
+    await dispatch(logout());
     setLoading(false);
     navigation.navigate('LoginNav');
   }

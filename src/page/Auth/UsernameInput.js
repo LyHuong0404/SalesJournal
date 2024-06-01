@@ -7,6 +7,7 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
+
 GoogleSignin.configure({
     androidClientId: "189009872460-nscokuhej0rl0r7bmp88uvepju447b7k.apps.googleusercontent.com",
     iosClientId: "189009872460-ku6g1br9kvg4jv1hvl8hvfugk9goub9r.apps.googleusercontent.com",
@@ -100,9 +101,16 @@ function UsernameInput() {
                     theme={theme}
                 />  
        
-                <Button disabled={username == ''} mode="contained" 
-                        onPress={handleNavigation} 
-                        buttonColor="#15803D" style={{ borderRadius: 7, paddingHorizontal: 22 }}>
+                <Button 
+                    disabled={!username} 
+                    mode="contained" 
+                    onPress={handleNavigation} 
+                    buttonColor="#15803D"
+                    style={[
+                        styles.button,
+                        !username && styles.disabledButton,
+                      ]}
+                    >
                     Tiếp tục
                 </Button>
                 <View style={{ display: 'flex', flexDirection: 'row', marginVertical: 25, justifyContent: 'center', alignItems: 'center' }}>
@@ -149,6 +157,14 @@ const styles = StyleSheet.create({
         height: 1, 
         backgroundColor: '#c5c5c5' ,
         width: '15%'
+    },
+    button: {
+        borderRadius: 7,
+        paddingHorizontal: 22,
+    },
+    disabledButton: {
+        backgroundColor: '#e2e8f0', 
+        color: '#767575', 
     },
 })
 

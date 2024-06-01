@@ -33,14 +33,16 @@ export const checkCodeSignUp = async ({ username, code }) =>{
 }
 
 
-export const signUp = async ({ username, password, email }) => {
+export const signUp = async ({ username, password, email, notifyId }) =>{
     try {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
             },
         }
-        const response = await httprequest.post('signup', { username, password, email }, config);
+        notifyId = await AsyncStorage.getItem('notifyToken');
+        notifyId = JSON.parse(notifyId);
+        const response = await httprequest.post('signup', { username, password, email, notifyId }, config);
         return response;
     } catch (err) {
         console.log("Error when signup: ", err);
@@ -100,9 +102,9 @@ export const login = createAsyncThunk('auth', async ({ username, password, notif
         };
 
         const { data, code } = await httprequest.post('auth', { username, password, notifyToken, idToken, provider }, config);
-        console.log(data);
+ 
         if (code == 0) {
-            console.log(data);
+      
             await AsyncStorage.setItem('user', JSON.stringify(data));
             return data;
         } else {
@@ -113,15 +115,28 @@ export const login = createAsyncThunk('auth', async ({ username, password, notif
     }
 });
 
-export const logout = async () => {
-    await AsyncStorage.removeItem('user');
+
+export const logout = createAsyncThunk('logout', async (_, { rejectWithValue }) => {
     try {
-        await GoogleSignin.signOut();
-        // Perform additional cleanup and logout operations.
+        const config = {
+            headers: {
+            'Content-Type': 'application/json',
+            },
+        };
+        const notifyToken = await AsyncStorage.getItem('notifyToken');
+        const { data, code } = await httprequest.post('logout', { notifyToken }, config);
+
+        if (code == 0) {
+            await GoogleSignin.signOut();
+            await AsyncStorage.removeItem('user');
+            return data;
+        } else {
+            return rejectWithValue('Logout unsuccessfully');
+        }
     } catch (error) {
-        console.log('Google Sign-Out Error: ', error);
+        console.log("Error when logout: ", error);
     }
-}
+});
 
 export const updateStore = createAsyncThunk('update-profile', async ({ profileId, nameStore, allowCustomerAccumulate, exchangePointToMoney, exchangeMoneyToPoint }, { rejectWithValue }) => {
     try {
