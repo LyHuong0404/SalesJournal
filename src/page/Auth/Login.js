@@ -50,7 +50,7 @@ function Login() {
         setLoading(true);
         try {
             const notifyToken = await AsyncStorage.getItem('notifyToken')
-            const response = await dispatch(login({ username, password, notifyToken }));
+            const response = await dispatch(login({ username, password, notifyToken, provider: 'LOCAL' }));
             if (response) {      
                 if (response?.payload?.user?.profile) {
                     if (response?.payload?.roles?.some((item) => item == 'ROLE_ADMIN')) {

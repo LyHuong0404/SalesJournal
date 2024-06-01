@@ -42,7 +42,7 @@ function ExportBook() {
                         setTotalImport('');
                     }
                 } else {
-                    ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
+                    ToastAndroid.show('Lỗi tải không thành công sổ xuất hàng', ToastAndroid.SHORT);
                 }
                 setLoading(false);
             }
@@ -50,7 +50,7 @@ function ExportBook() {
 
         } catch(e){
             setLoading(false);
-            ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
+            ToastAndroid.show('Lỗi tải không thành công sổ xuất hàng', ToastAndroid.SHORT);
         }
       }, [fromDate, toDate])    
 

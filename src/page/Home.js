@@ -10,6 +10,7 @@ import { filterReport } from '../actions/seller/receiptActions';
 import { convertTimeStamp } from '../utils/helper';
 import ModalSell from '../components/Modal/ModalSell';
 import ModalExpire from '../components/Modal/ModalExpire';
+import moment from 'moment';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -26,22 +27,18 @@ function Home() {
     if (response) {
         setRevenue(response);
     } else {
-        ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
+        ToastAndroid.show('Lỗi tải trang chủ không thành công', ToastAndroid.SHORT);
     }
   }
 
-  useEffect(() => {
-    try{   
-        if((new Date(user?.profile?.expireAt) < new Date())) {
-          setShowModal(true);
-        }
-        else {
-          fetchAPI();
-          setShowModal(false);
-        };
-    } catch(e){
-        ToastAndroid.show('Lỗi tải không thành công rồi', ToastAndroid.SHORT);
-    }
+  useEffect(() => {  
+      if((moment().isBefore(moment(user?.profile?.expireAt)))) {
+        setShowModal(true);
+      }
+      else {
+        fetchAPI();
+        setShowModal(false);
+      };
   }, [])
 
   useFocusEffect(
