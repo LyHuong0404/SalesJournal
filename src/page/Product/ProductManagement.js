@@ -44,8 +44,8 @@ function ProductManagement() {
 
     const [index, setIndex] = useState(paramIndex || 0);
     const [routes] = useState([
-        { key: 'first', title: 'Sản phẩm' },
-        { key: 'second', title: 'Danh mục' },
+        { key: 'first', title: 'Hàng đã nhập' },
+        { key: 'second', title: 'Sản phẩm' },
     ]);
 
     const renderScene = ({ route }) => {
@@ -119,7 +119,7 @@ function ProductManagement() {
                 <View style={{ marginHorizontal: 15, borderRadius: 5, backgroundColor: '#f8f9fa', borderColor: '#15803D', borderWidth: 1, height: 40, flexDirection: 'row', alignItems: 'center' }}>
                     <Searchbar
                         autoFocus
-                        placeholder={index == 0 ? "Tìm theo tên sản phẩm" : "Tìm theo tên danh mục"}
+                        placeholder={"Tìm kiếm theo tên"}
                         iconColor='#8e8e93'
                         value={index == 0 ? searchProductValue : searchCategoryValue}
                         style={{

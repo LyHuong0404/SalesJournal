@@ -50,7 +50,7 @@ function ProfileUser() {
             }
             fetchAPI();
         } catch(err) {
-            ToastAndroid.show('Lỗi khi tải danh mục', ToastAndroid.SHORT);
+            ToastAndroid.show('Lỗi khi tải sản phẩm', ToastAndroid.SHORT);
         }
     }, [])
 

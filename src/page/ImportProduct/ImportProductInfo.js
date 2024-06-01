@@ -88,7 +88,7 @@ function ImportProductInfo() {
             <ScrollView style={{ flex: 1 }}>
                 <View style={{ paddingHorizontal: 15, paddingVertical: 10 }}>
                     <TextInputCustom 
-                        label='Tên sản phẩm' 
+                        label='Tên hàng' 
                         placeholder="Ví dụ: Mì Hảo Hảo" 
                         value={name} 
                         onChange={(text) => setName(text)} 
@@ -135,7 +135,7 @@ function ImportProductInfo() {
                         </View>
                     </View>
                     <View style={[styles.display, { alignItems: 'center', paddingVertical: 10 }]}>
-                        <Text style={{ color: '#7a7a7a', fontWeight: '600' }}>Danh mục <Text style={{color: 'red' }}> * </Text></Text>
+                        <Text style={{ color: '#7a7a7a', fontWeight: '600' }}>Sản phẩm <Text style={{color: 'red' }}> * </Text></Text>
                         {Object.keys(category).length > 0 && 
                             <View style={styles.category}>
                                 <Text style={{ color: '#8e8e93'}}>{category.label}</Text>

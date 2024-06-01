@@ -46,7 +46,7 @@ function DeleteProductFromCategory({ products, onBack }) {
     return (  
         <>
            <View style={styles.container_product}>
-                <Text style={{ textAlign: 'center', fontSize: 10, color: '#7a7a7a', paddingBottom: 10 }}>Chọn sản phẩm xóa khỏi danh mục</Text>
+                <Text style={{ textAlign: 'center', fontSize: 10, color: '#7a7a7a', paddingBottom: 10 }}>Chọn lịch sử nhập hàng xóa khỏi sản phẩm</Text>
                 <ScrollView>
                     {products?.map((product, index) => <HorizontalProduct key={index} product={product} checkbox={true} productIdDeleteArray={(data) => handleChangeDataDelete(data)}/>)}
                 </ScrollView> 

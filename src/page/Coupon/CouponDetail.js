@@ -284,7 +284,7 @@ function CouponDetail() {
                 <Text style={{ marginVertical: 10, fontWeight: 'bold', color: '#3a3a3a'}}>Chi tiết khuyến mãi</Text>
                 {proviso == 'BY_PRODUCT' ?
                     <View>
-                        <Text style={{ color: '#383838', marginBottom: 5 }}>• Mua sản phẩm bất kì thuộc danh mục</Text>
+                        <Text style={{ color: '#383838', marginBottom: 5 }}>• Mua sản phẩm bất kì thuộc sản phẩm</Text>
                         <View style={{ marginLeft: 15 }}>
                             <MultiSelect
                                 style={styles.dropdown}
@@ -295,7 +295,7 @@ function CouponDetail() {
                                 data={categories}
                                 labelField="label"
                                 valueField="value"
-                                placeholder="Chọn danh mục"
+                                placeholder="Chọn sản phẩm"
                                 value={productIds}
                                 search
                                 searchPlaceholder="Tìm kiếm..."
@@ -323,7 +323,7 @@ function CouponDetail() {
                             {productIds?.length > 0 && 
                                 <View style={{ display: 'flex', flexDirection: 'row', marginBottom: 15 }}>
                                     <Image source={require('../../assets/images/tick.png')} style={{ width: 17, height: 17, objectFit: 'contain', marginTop: 12 }}/>
-                                    <Text style={styles.text_amount_category}>{productIds?.length} danh mục được chọn</Text>
+                                    <Text style={styles.text_amount_category}>{productIds?.length} sản phẩm được chọn</Text>
                                 </View>
                             }
                         </View>

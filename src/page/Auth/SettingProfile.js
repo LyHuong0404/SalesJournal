@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     box: {
         marginVertical: 10,
         height: 'auto',
-        width: '90%',
+        width: '100%',
         backgroundColor: '#ffffff',
         alignSelf: 'center',
         borderRadius: 10,

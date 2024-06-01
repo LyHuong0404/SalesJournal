@@ -13,7 +13,7 @@ import LoadingSpinner from "../LoadingSpinner";
 const screenWidth = Dimensions.get('window').width;
 
 const revenueOptions = [
-    { label: 'Danh mục', value: '1' },
+    { label: 'Sản phẩm', value: '1' },
     { label: 'Hóa đơn', value: '2' },
     { label: 'Ngày', value: '3' },
 ];
@@ -301,7 +301,7 @@ function ProfitTab() {
                             {revenueOption == "1" && 
                             <>
                                 <DataTable.Header>
-                                    <DataTable.Title style={styles.cell}><Text style={styles.header_table}>DANH MỤC</Text></DataTable.Title>
+                                    <DataTable.Title style={styles.cell}><Text style={styles.header_table}>SẢN PHẨM</Text></DataTable.Title>
                                     <DataTable.Title style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.header_table}>SL</Text></DataTable.Title>
                                     <DataTable.Title style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.header_table}>D.THU</Text></DataTable.Title>
                                     <DataTable.Title style={styles.cell} numeric><Text style={styles.header_table}>L.NHUẬN</Text></DataTable.Title>
