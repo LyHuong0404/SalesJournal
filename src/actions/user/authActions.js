@@ -40,7 +40,7 @@ export const changePw = async ({ currentPassword, newPassword }) =>{
         const response = await httprequest.post('change-password', { currentPassword, newPassword }, config);
         return response;
     } catch (err) {
-        console.log("Error when getting code to sign up: ", err);
+        console.log("Error when changing password: ", err);
     }
 }
 

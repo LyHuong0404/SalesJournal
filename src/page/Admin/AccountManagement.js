@@ -32,7 +32,7 @@ function AccountManagement() {
         try{
             const fetchAPI = async()=> {
                 setLoading(true);
-                const response = await filterAccount({ pageIndex: 0, pageSize: 1000, keySearch: searchValue, isVendor });
+                const response = await filterAccount({ pageIndex: 0, pageSize: 1000, keySearch: debounceValue, isVendor });
                 if (response) {
                     setAccounts(response);
                 } else {

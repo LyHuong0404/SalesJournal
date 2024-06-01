@@ -64,7 +64,7 @@ function TransactionManagement() {
             const fetchAPI = async()=> {
                 setLoading(true);
 
-                const response = await filterTransaction({ pageIndex: 0, pageSize: 1000, fromDate, toDate, orderBy: null, servicePackageId, paid, keySearch: searchValue});
+                const response = await filterTransaction({ pageIndex: 0, pageSize: 1000, fromDate, toDate, orderBy: null, servicePackageId, paid, keySearch: debounceValue});
                 if (response) {
                     setTransactions(response.content);
                 }
