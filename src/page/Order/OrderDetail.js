@@ -63,7 +63,7 @@ function OrderDetail() {
                                 <View style={[styles.display, { justifyContent: 'space-between' }]}>
                                     <Text style={styles.text_light}>{`${item?.salePrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                                     <Text style={styles.text_light}>{`x${item?.numberProduct}`}</Text>
-                                    <Text style={styles.text_light}>{`${item?.salePrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
+                                    <Text style={styles.text_light}>{`${item?.actualPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                                 </View>
                             </View>
                         )}
