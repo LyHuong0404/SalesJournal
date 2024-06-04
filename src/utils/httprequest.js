@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const httprequest = axios.create({
     // baseURL: "https://apisalesjournal.cfapps.ap21.hana.ondemand.com/api/",
-    baseURL: "http://192.168.1.65:8888/api/",
+    baseURL: "http://192.168.1.57:8888/api/",
 
 });
 

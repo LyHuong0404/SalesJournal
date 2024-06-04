@@ -73,12 +73,21 @@ function OrderConfirmation({ onBack }) {
     };
     
     const submitForm = () => {
-        try{           
-            const newArray = ArrayQRAndAmount.map(item => ({
-                productCode: item.product.code,
-                amount: item.amount
-            }));
-            console.log(newArray)
+        try{        
+            const newArray = ArrayQRAndAmount.map(item => 
+                {
+                    let totalAmountProduct = 0;
+                    for(const p of products) {
+                        if(p.product.productId === item.product.productId) {
+                            totalAmountProduct = p.amount;
+                        }
+                    }
+                    return ({
+                        productCode: item.product.code,
+                        amount: item.amount,
+                        totalAmountProduct: totalAmountProduct
+                    });
+                });
             const fetchAPI = async() => {
                 setLoading(true);
                 const response = await createReceipt({ paymentMethod: "DIRECT", buyerEmail, useBonusPoint: isEnabled, receiptDetailExportModels: newArray });

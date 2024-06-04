@@ -68,7 +68,7 @@ function PaymentDetail() {
                             <View key={index}>
                                 <View style={{ marginVertical: 6 }}>
                                     <Text style={[styles.text_amount, { fontWeight: '500' }]}>{index + 1}. 
-                                        <Text style={[styles.text_light, { fontWeight: '500', fontSize: 12 }]}> {item?.productName}</Text>
+                                        <Text style={[styles.text_light, { fontWeight: '500', fontSize: 12 }]}> {item?.productName}: {item?.productCode}</Text>
                                     </Text>
                                 </View>
                                 <View style={[styles.display, { justifyContent: 'space-between' }]}>
@@ -109,7 +109,7 @@ function PaymentDetail() {
                                                     <View style={styles.coupon_container}>
                                                         <Text style={styles.name_coupon}>{item.coupon?.couponCode}</Text>
                                                     </View>
-                                                    <Text style={styles.text}>-{`${item.coupon.couponValue * item.numberProduct}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>
+                                                    <Text style={styles.text}>-{`${item.discount * item.numberProduct}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>
                                                 </>
                                             }
                                         </View> 
@@ -119,7 +119,7 @@ function PaymentDetail() {
                                             <View style={styles.coupon_container}>
                                                 <Text style={styles.name_coupon}>{data.coupon.couponCode}</Text>
                                             </View>
-                                            <Text style={styles.text}>-{`${data.coupon.value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>
+                                            <Text style={styles.text}>-{`${data.discountOfReceipt}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>
                                         </View> 
                                     }
                                 </View> 
