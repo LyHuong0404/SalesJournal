@@ -1,6 +1,6 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from "@react-navigation/native";
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 const httprequest = axios.create({
     // baseURL: "https://apisalesjournal.cfapps.ap21.hana.ondemand.com/api/",
@@ -105,9 +105,11 @@ const middlewareRefreshToken = async (code, args) => {
             }
             else {
                 console.log("Error when middlewareRefreshToken: ", {});
+                (await import('../store')).default.dispatch(showLogout());
             }
         } catch (error) {
             console.log("Error when middlewareRefreshToken: ", error);
+            (await import('../store')).default.dispatch(showLogout());
         } finally {
             isGetRefreshToken = false;
         }
@@ -129,3 +131,6 @@ httprequest.interceptors.request.use(
         return Promise.reject(error);
     }
 );
+
+export const showLogout = createAsyncThunk('', async () => {
+});

@@ -3,8 +3,10 @@ import { login, logout } from '../actions/authActions';
 import { updateStore } from '../actions/authActions';
 import { updateProfile, registerStore, updateAvatar } from '../actions/user/authActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { showLogout } from '../utils/httprequest';
 
 const initialState = {
+  isShowLogout: false,
   loading: false,
   user: null,
   token: null,
@@ -136,7 +138,11 @@ const userSlice = createSlice({
       .addCase(logout.rejected, (state, { payload }) => {
         state.loading = false;
         state.error = payload;
-      });
+      })
+      .addCase(showLogout.pending, (state) => {
+        state.isShowLogout = !state.isShowLogout;
+      })
+      ;
   },
 });
 
