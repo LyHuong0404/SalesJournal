@@ -1,6 +1,6 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useNavigation } from "@react-navigation/native";
 
 const httprequest = axios.create({
     // baseURL: "https://apisalesjournal.cfapps.ap21.hana.ondemand.com/api/",
@@ -54,12 +54,28 @@ const getAccessToken = async () => {
 };
 
 let isGetRefreshToken = false;
-let apiArgs = null;
+
+const waitProcessComplete = async () => {
+    await new Promise(resolve => {
+        const intervalId = setInterval(() => {
+            if (isGetRefreshToken === false) {
+                clearInterval(intervalId);
+                resolve();
+            }
+        }, 100);
+    });
+}
 
 const middlewareRefreshToken = async (code, args) => {
     if(code !== 401) return null;
     if(isGetRefreshToken) {
-        apiArgs = args;
+        await waitProcessComplete();
+        let resp;
+        switch(args.method) {
+            case 'get': resp = await get(args.apipath, args.params.params); break;
+            case 'post': resp = await post(args.apipath, args.data, args.params.params); break;
+        } 
+        return resp;
     }
     else {
         try {
@@ -81,9 +97,10 @@ const middlewareRefreshToken = async (code, args) => {
                 await AsyncStorage.setItem('user', JSON.stringify(userJson));
                 let resp;
                 switch(args.method) {
-                    case 'get': resp = await get(apiArgs.apipath, apiArgs.params.params); break;
-                    case 'post': resp = await post(apiArgs.apipath, apiArgs.data, apiArgs.params.params); break;
-                } 
+                    case 'get': resp = await get(args.apipath, args.params.params); break;
+                    case 'post': resp = await post(args.apipath, args.data, args.params.params); break;
+                }
+                isGetRefreshToken = false;
                 return resp;
             }
             else {
