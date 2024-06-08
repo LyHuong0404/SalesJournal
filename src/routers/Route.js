@@ -68,6 +68,7 @@ export const LoginNav = () => {
           <Stack.Screen name="OrderHistory" component={OrderHistory} options={{ headerShown: false }}/>
           <Stack.Screen name="RegisterStore" component={RegisterStore} options={{ headerShown: false }} />
           <Stack.Screen name="MyQR" component={MyQR} options={{ headerShown: false }} />
+          <Stack.Screen name="OrderDetail" component={OrderDetail} options={{ headerShown: false }}/>
       </Stack.Navigator>
     )
 }
@@ -88,6 +89,8 @@ export const UserLoggedNav = () => {
         <Stack.Screen name="VendorNav" component={VendorNav} options={{ headerShown: false }}/>
         <Stack.Screen name="RegisterStore" component={RegisterStore} options={{ headerShown: false }} />
         <Stack.Screen name="MyQR" component={MyQR} options={{ headerShown: false }} />
+        <Stack.Screen name="OrderDetail" component={OrderDetail} options={{ headerShown: false }}/>
+        <Stack.Screen name="AdminNav" component={AdminNav} options={{ headerShown: false }}/>
     </Stack.Navigator>
   )
 }

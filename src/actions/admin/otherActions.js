@@ -51,3 +51,31 @@ export const sendNotificationProductExpire = async() => {
         console.log("Error when admin is sending notifications: ", err);
     }
 }
+
+export const lockAccount = async(userId) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+    try{
+        const response = await httprequest.get(`admin/ban-account/${userId}`, config);
+        return response;
+    }catch(err) {
+        console.log("Error when locking account: ", err);
+    }
+}
+
+export const unlockAccount = async(userId) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+    try{
+        const response = await httprequest.get(`admin/unban-account/${userId}`, config);
+        return response;
+    }catch(err) {
+        console.log("Error when unlocking account: ", err);
+    }
+}

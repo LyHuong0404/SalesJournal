@@ -217,19 +217,11 @@ function ProfitTab() {
                                     <Text style={styles.text}>Giá vốn</Text>
                                     <Text style={{ color: '#3a3a3a'}}>{spentMoney}</Text>
                                 </View>
-                                {/* <View>
-                                    <Text></Text>
-                                    <Text style={{ color: '#3a3a3a'}}>-</Text>
-                                </View>
-                                <View>
-                                    <Text style={styles.text}>Lợi nhuận khác</Text>
-                                    <Text style={{ color: '#3a3a3a'}}>20.000</Text>
-                                </View> */}
                             </View>
                         </View>
                     </View>
                     <View>
-                        <Text style={{ color: '#6f6f6f', fontWeight: '500', padding: 15, backgroundColor: '#f1f3f5' }}>Chi tiết lãi lỗ</Text>
+                        <Text style={{ color: '#6f6f6f', fontWeight: '500', padding: 15, paddingTop: 10, backgroundColor: '#f1f3f5' }}>Chi tiết lãi lỗ</Text>
                         <DataTable.Row>
                             <DataTable.Cell style={[styles.cell, { flex: 1.5 }]} onPress={() => setDropdown(!dropdown)}>
                                 <Text style={styles.text_cell}>Doanh thu bán hàng (1)        </Text>

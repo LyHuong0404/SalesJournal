@@ -175,17 +175,19 @@ function OrderHistory() {
                             <DataTable.Title>Khuyến mãi</DataTable.Title>
                         </DataTable.Header>
                         {orders.map((item, index) => 
-                            <DataTable.Row key={index}>
-                                <DataTable.Cell><Text style={styles.cell_text_number}>{`#HD${item.id}`}</Text></DataTable.Cell>
-                                <DataTable.Cell><Text style={styles.cell_text_number}>{convertTimeStamp(item.createdAtDate, 'dd/MM/yyyy')} {item.createdAtTime}</Text></DataTable.Cell>
-                                <DataTable.Cell style={{ marginLeft: 10, marginVertical: 10 }}><Text style={styles.cell_text_number}>{item.finalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
-                                <DataTable.Cell style={{ alignItems: 'center', justifyContent: 'center'}}>
-                                    {item.totalDiscount ? 
-                                        <Image source={require('../../assets/images/check_mark.png')}  style={{ width: 17, height: 17, objectFit: 'contain' }} />
-                                        : <Image source={require('../../assets/images/wrong.png')}  style={{ width: 17, height: 17, objectFit: 'contain' }} />
-                                    }
-                                </DataTable.Cell>
-                            </DataTable.Row>
+                            <TouchableOpacity key={index} onPress={() => navigation.navigate('OrderDetail', { receipt: item })}>
+                                <DataTable.Row key={index}>
+                                    <DataTable.Cell><Text style={styles.cell_text_number}>{`#HD${item.id}`}</Text></DataTable.Cell>
+                                    <DataTable.Cell><Text style={styles.cell_text_number}>{convertTimeStamp(item.createdAtDate, 'dd/MM/yyyy')} {item.createdAtTime}</Text></DataTable.Cell>
+                                    <DataTable.Cell style={{ marginLeft: 10, marginVertical: 10 }}><Text style={styles.cell_text_number}>{item.finalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                    <DataTable.Cell style={{ alignItems: 'center', justifyContent: 'center'}}>
+                                        {item.totalDiscount ? 
+                                            <Image source={require('../../assets/images/check_mark.png')}  style={{ width: 17, height: 17, objectFit: 'contain' }} />
+                                            : <Image source={require('../../assets/images/wrong.png')}  style={{ width: 17, height: 17, objectFit: 'contain' }} />
+                                        }
+                                    </DataTable.Cell>
+                                </DataTable.Row>
+                            </TouchableOpacity>
                         )}
                     </View>
             </ScrollView>) : 

@@ -10,7 +10,7 @@ function OrderItem({ receipt }) {
         <TouchableOpacity style={styles.container} onPress={() => navigation.navigate('OrderDetail', { receipt })}>
             <View style={[styles.display, styles.content_above]}>
                 <View>
-                    <Text style={styles.text_customer}>Khách lẻ</Text>
+                    <Text style={styles.text_customer}>Khách</Text>
                     <Text style={styles.text_info_order}>{`${convertTimeStamp(receipt?.createdAtDate, 'dd/MM')} ${receipt?.createdAtTime} - HD${receipt?.id}`}</Text>
                 </View>
                 <Text style={styles.button_delivered}>{receipt?.paymentMethod}</Text>

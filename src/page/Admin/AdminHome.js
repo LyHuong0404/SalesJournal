@@ -176,6 +176,17 @@ function AdminHome() {
                 variant='primary'
               />
           </View>
+          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 25 }}>
+              <View style={{ marginLeft: 20, flex: 0.7 }}>
+                  <Text style={styles.text_light}>Bấm Gửi để gửi thông báo đến những người mua hàng</Text> 
+              </View>
+              <FAB
+                icon="send"
+                style={styles.fab}
+                onPress={handleSendNotificationProductExpire}
+                variant='tertiary'
+              />
+          </View>
         </View>
       </ScrollView>
       {loading && <LoadingSpinner />}

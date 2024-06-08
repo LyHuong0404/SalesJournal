@@ -31,25 +31,9 @@ function OrderDetail() {
                         <View style={[styles.display, { alignItems: 'center', justifyContent: 'space-between' }]}>
                             <Text style={styles.total_price}>{`${receipt?.finalPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                             <View style={styles.button_send}>
-                                {/* <Text style={{ color: 'white', backgroundColor: '#15803D', padding: 10, borderRadius: 10, fontSize: 12 }} >Gửi hóa đơn</Text> */}
                             </View>
                         </View>
                         {(receipt?.receiptDetails.some((item) => item.coupon != null) || receipt?.coupon) && <Text style={{ color: '#cb870b', fontSize: 12 }}>Khuyến mãi</Text>}
-                    </View>
-                    <View style={styles.horizontalLine} />
-                    <View style={[styles.display, { marginVertical: 10, alignItems: 'center' }]}>
-                        <View style={{ borderWidth: 1.5, borderColor: '#e2e5ea', borderRadius: 50, width: 50, height: 50, alignItems: 'center', justifyContent: 'center', marginRight: 10 }}>
-                            <Image
-                                source={require('../../assets/images/user.png')}
-                                style={{
-                                width: 20,
-                                height: 20,
-                                objectFit: 'cover',
-                                tintColor: '#15803D',
-                                }}
-                            />
-                        </View>
-                        <Text style={styles.text_customer}>Khách lẻ</Text>
                     </View>
                     <View style={styles.horizontalLine} />
                     <View style={{ marginBottom: 10 }}>
@@ -63,7 +47,7 @@ function OrderDetail() {
                                 <View style={[styles.display, { justifyContent: 'space-between' }]}>
                                     <Text style={styles.text_light}>{`${item?.salePrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                                     <Text style={styles.text_light}>{`x${item?.numberProduct}`}</Text>
-                                    <Text style={styles.text_light}>{`${item?.salePrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
+                                    <Text style={styles.text_light}>{`${item?.actualPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                                 </View>
                             </View>
                         )}
@@ -87,21 +71,9 @@ function OrderDetail() {
                             <Text style={{ fontWeight: '500' }}>Tổng cộng</Text>
                             <Text style={{ color: '#d81f1f', fontWeight: 'bold' }}>{`${receipt?.finalPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                         </View>
-                    </View>
-
-                    <View style={styles.horizontalLine} />
-                        
-                    
+                    </View>  
                 </View>
             </ScrollView>
-            {/* <TwoButtonBottom 
-                titleLeft="Hủy" 
-                titleRight="Đã giao" 
-                buttonColorLeft='transparent' 
-                textColorLeft='#575757' 
-                buttonColorRight='#15803D' 
-                borderColorLeft='#575757' 
-            /> */}
         </View>
     );
 }

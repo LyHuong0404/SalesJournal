@@ -87,7 +87,8 @@ function ServicePackageManagement() {
                 label="Tạo gói"
                 style={styles.fab}
                 onPress={() => navigation.navigate('AddServicePackage')} 
-                color='white'
+                variant='primary'
+
             />
             {loading && <LoadingSpinner />}
         </View> 
@@ -145,7 +146,6 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         zIndex: 100,
-        backgroundColor: '#0e7bc5',
         borderRadius: 50,
         borderColor: 'white',
         borderWidth: 1.5

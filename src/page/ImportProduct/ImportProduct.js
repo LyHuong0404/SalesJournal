@@ -128,6 +128,9 @@ function ImportProduct() {
                             <Image source={{ uri: product?.product?.avatar }} style={styles.item_image} />
                             <View style={{ flex: 1, justifyContent: 'space-between' }}>
                                 <Text style={styles.item_name}>{product?.name}</Text>
+                                <Text style={{ color: '#abaaaa', fontSize: 11 }}>Mã sản phẩm: {product?.code}</Text>
+                                <Text style={{ color: '#abaaaa', fontSize: 11 }}>Ngày nhập: {convertTimeStamp(product?.expireAt, 'dd/MM/yyyy')}</Text>
+                                <Text style={{ color: '#abaaaa', fontSize: 11 }}>Số lượng nhập: {product?.importAmount}</Text>
                                 <View style={styles.display}>
                                     <View style={{ display: 'flex', flexDirection: 'row' }}>
                                         <Text style={{ color: '#abaaaa', fontSize: 11 }}>{`HSD: ${convertTimeStamp(product?.expireAt, 'dd/MM/yyyy')}`}  |  </Text>
