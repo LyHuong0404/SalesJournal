@@ -25,6 +25,7 @@ function ProductTab({ onSearchValue, onSelectedFilter }) {
             setLoading(true);
             try {
                 const response = await filterProduct({ pageIndex, pageSize: 12, keySearch: onSearchValue, productId: null, orderBy: null, fromDate: null, toDate: null });      
+                console.log("filter product", response);
                 if (response) {
                     if (onSelectedFilter == 'banchay') {
                         response?.content?.sort(function(a, b) {

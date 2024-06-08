@@ -309,9 +309,9 @@ function ProfitTab() {
                                 {revenueByTable.map((item, index) => 
                                     <DataTable.Row key={index}>
                                         <DataTable.Cell style={styles.cell}><Text style={styles.cell_text_number}>{item?.product?.name}</Text></DataTable.Cell>
-                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{`${item?.product?.totalSaleAmount}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
-                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{`${item?.product?.totalSaleMoney}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
-                                        <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${item.product.totalRevenue}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{`${item?.product?.totalSaleAmount || 0}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{`${item?.product?.totalSaleMoney || 0}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                        <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${item?.product?.totalRevenue || 0}`?.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
                                     </DataTable.Row>
                                 )}
                             </>}
@@ -326,12 +326,12 @@ function ProfitTab() {
                                     <DataTable.Row key={index}>
                                         <DataTable.Cell style={styles.cell}>
                                             <View style={{ paddingVertical: 8 }}>
-                                                <Text style={styles.cell_text_number}>{`DH${item.id}`}</Text>
-                                                <Text style={{ color: '#9a9a9a', fontSize: 11 }}>{`${item.createdAtTime} ${convertTimeStamp(item.createdAtDate, 'dd/MM/yyyy')}`}</Text>
+                                                <Text style={styles.cell_text_number}>{`DH${item.id || '...'}`}</Text>
+                                                <Text style={{ color: '#9a9a9a', fontSize: 11 }}>{`${item.createdAtTime || ''} ${convertTimeStamp(item.createdAtDate, 'dd/MM/yyyy') || ''}`}</Text>
                                             </View>
                                         </DataTable.Cell>
-                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.cell_text_number}>{`${item?.totalSalePrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
-                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.cell_text_number}>{`${item?.finalPrice - item.totalImportPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.cell_text_number}>{`${item?.finalPrice || 0}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.cell_text_number}>{`${(item?.finalPrice - item.totalImportPrice) || 0}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
                                     </DataTable.Row>
                                 )}
                             </>}
@@ -346,9 +346,9 @@ function ProfitTab() {
                                 {revenueByTable.map((item, index) => 
                                     <DataTable.Row key={index}>
                                         <DataTable.Cell style={styles.cell}><Text style={styles.cell_text_number}>{convertTimeStamp(item.date, 'dd/MM/yyyy')}</Text></DataTable.Cell>
-                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{item.totalReceipt}</Text></DataTable.Cell>
-                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{`${item.totalSaleMoney}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
-                                        <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${item.totalRevenue}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{item.totalReceipt || 0}</Text></DataTable.Cell>
+                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{`${item.totalSaleMoney || 0}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                        <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${item?.totalRevenue}`?.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
                                     </DataTable.Row>
                                 )}
                             </>

@@ -3,19 +3,30 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const httprequest = axios.create({
-    baseURL: "https://apisalesjournal.cfapps.ap21.hana.ondemand.com/api/",
-    // baseURL: "http://192.168.1.57:8888/api/",
+    // baseURL: "https://apisalesjournal.cfapps.ap21.hana.ondemand.com/api/",
+    baseURL: "http://192.168.1.57:8888/api/",
 
 });
 
 export const get = async (apipath, params = {}) => {
-    const response = await httprequest.get(apipath, params);
-    return response.data;
+    const args = {method: 'get', apipath, params};
+    try {
+        const response = await httprequest.get(apipath, params);
+        return response.data;
+    } catch (error) {
+        return await middlewareRefreshToken(error.response?.status, args);
+    }
+
 };
 
 export const post = async (apipath, data, params = {}) => {
-    const response = await httprequest.post(apipath, data, params);
-    return response.data;
+    const args = {method: 'post', apipath, data, params};
+    try {
+        const response = await httprequest.post(apipath, data, params);
+        return response.data;
+    } catch(error) {
+        return await middlewareRefreshToken(error.response?.status, args);
+    }
 };
 
 export const patch = async (apipath, data, params = {}) => {
@@ -42,19 +53,62 @@ const getAccessToken = async () => {
     }
 };
 
+let isGetRefreshToken = false;
+let apiArgs = null;
+
+const middlewareRefreshToken = async (code, args) => {
+    if(code !== 401) return null;
+    if(isGetRefreshToken) {
+        apiArgs = args;
+    }
+    else {
+        try {
+            isGetRefreshToken = true;
+            const userData = await AsyncStorage.getItem('user');
+            const userJson = JSON.parse(userData);
+            const refreshToken = userJson?.refreshToken;
+            const config = {
+                headers: {
+                'Content-Type': 'application/json',
+                },
+            };
+            const { data } = await httprequest.post('refresh-token', { refreshToken }, config);
+            if (data.code == 0) {
+                userJson.refreshToken = data.data.refreshToken;
+                userJson.accessToken = data.data.accessToken;
+                userJson.expireAt = data.data.expireAt;
+                userJson.expireRefreshToken = data.data.expireRefreshToken;
+                await AsyncStorage.setItem('user', JSON.stringify(userJson));
+                let resp;
+                switch(args.method) {
+                    case 'get': resp = await get(apiArgs.apipath, apiArgs.params.params); break;
+                    case 'post': resp = await post(apiArgs.apipath, apiArgs.data, apiArgs.params.params); break;
+                } 
+                return resp;
+            }
+            else {
+                console.log("Error when middlewareRefreshToken: ", {});
+            }
+        } catch (error) {
+            console.log("Error when middlewareRefreshToken: ", error);
+        } finally {
+            isGetRefreshToken = false;
+        }
+    };
+}
+
 
 // Interceptor để thêm accessToken vào headers của mỗi yêu cầu
 httprequest.interceptors.request.use(
     async (config) => {
         const accessToken = await getAccessToken();
-
         if (accessToken) {
             config.headers.Authorization = `Bearer ${accessToken}`;
         }
         return config;
     },
     (error) => {
+        console.log("httprequest.interceptors.request.use", error);
         return Promise.reject(error);
     }
 );
-export default httprequest;

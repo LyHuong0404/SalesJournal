@@ -34,6 +34,7 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   const getData = async(expireAt) => {
+    if(!expireAt) return;
     const data = await AsyncStorage.getItem('user');
     if (data) {
       const parsedUserData = JSON.parse(data);
@@ -132,7 +133,7 @@ function App() {
         const subscription = Notifications.addNotificationResponseReceivedListener(response => {
           const url = `com.lyhuong.SoBanHang://${response.notification.request.content.data.url}`;
           if(response.notification.request.content.data.url == 'Home') {
-            const dateExpire = response.notification.request.content.data.dateExpire;
+            const dateExpire = response?.notification?.request?.content?.data?.dateExpire;
             getData(dateExpire);
           }
           if(navigationRef.current) {
@@ -153,6 +154,7 @@ function App() {
   return (
     <PaperProvider theme={DefaultTheme}>
       <NavigationContainer ref={navigationRef} linking={linking}>
+        {/* <ScreenShot/> */}
         {loading ? (
           <Intro /> 
         ) : data?.user?.profile ? (

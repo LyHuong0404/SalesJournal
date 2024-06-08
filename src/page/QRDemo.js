@@ -21,8 +21,7 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
     }
 
     async function playSound() {
-        const { sound } = await Audio.Sound.createAsync( require('../../assets/sound/scanner-beep.mp3')
-        );
+        const { sound } = await Audio.Sound.createAsync( require('../../assets/sound/scanner-beep.mp3'));
         sound.playAsync();
       }
     

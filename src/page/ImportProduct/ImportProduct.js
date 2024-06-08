@@ -26,7 +26,6 @@ function ImportProduct() {
     const getAllProduct = async() => {
         setLoading(true);     
         const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: debounceValue, productId: null, orderBy: null, fromDate: null, toDate: null });
-
         if(response) {
             if (selectedIndex == 1) {
                 response?.content?.sort(function(a, b) {

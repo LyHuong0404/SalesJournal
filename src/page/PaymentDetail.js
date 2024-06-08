@@ -1,11 +1,13 @@
-import { View, StyleSheet, Text, TouchableOpacity, Image, ScrollView } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Image, ScrollView, Button } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useSelector } from "react-redux";
-import { useState } from "react";
 import QRCode from 'react-native-qrcode-svg';
 
 import ButtonCustom from "../components/ButtonCustom";
 import { convertTimeStamp } from "../utils/helper";
+import * as MediaLibrary from 'expo-media-library';
+import { captureRef } from 'react-native-view-shot';
+import { useRef, useState } from 'react';
 
 function PaymentDetail() {
     const navigation = useNavigation();
@@ -13,9 +15,32 @@ function PaymentDetail() {
     const route = useRoute();
     const [data, setData] = useState(route.params?.data || {});
     const [buyerEmail, setBuyerEmail] = useState(route.params?.buyerEmail || '');
-
+    const [status, requestPermission] = MediaLibrary.usePermissions();
+    const viewRef = useRef();
+    const takeScreenshot = async () => {
+        try {
+            if (status === null) {
+                requestPermission();
+            }
+          const uri = await captureRef(viewRef, {
+            format: 'png',
+            quality: 0.8,
+          });
+          console.log('Image saved to', uri);
+    
+          if (status?.granted) {
+            const asset = await MediaLibrary.createAssetAsync(uri);
+            await MediaLibrary.createAlbumAsync('Screenshots', asset, false);
+            console.log('Image saved to gallery');
+          } else {
+            console.error('Permission not granted');
+          }
+        } catch (error) {
+          console.error('Oops, snapshot failed', error);
+        }
+      };
     return ( 
-        <View style={styles.container}>
+        <View ref={viewRef} style={styles.container}>
             <TouchableOpacity onPress={() => navigation.navigate('DrawerNav')}>
                 <View style={styles.header}>
                     <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center'}}>Chi tiết hóa đơn</Text>
@@ -143,6 +168,7 @@ function PaymentDetail() {
                     </View>
                 </View>
             </ScrollView>
+            <Button title="Lưu ảnh" onPress={takeScreenshot} />
             <ButtonCustom 
                 title="Trang chủ" 
                 customStyle={{ marginHorizontal: 15 }} 
