@@ -95,12 +95,12 @@ const middlewareRefreshToken = async (code, args) => {
                 userJson.expireAt = data.data.expireAt;
                 userJson.expireRefreshToken = data.data.expireRefreshToken;
                 await AsyncStorage.setItem('user', JSON.stringify(userJson));
+                isGetRefreshToken = false;
                 let resp;
                 switch(args.method) {
                     case 'get': resp = await get(args.apipath, args.params.params); break;
                     case 'post': resp = await post(args.apipath, args.data, args.params.params); break;
                 }
-                isGetRefreshToken = false;
                 return resp;
             }
             else {
