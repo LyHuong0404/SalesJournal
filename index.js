@@ -1,7 +1,7 @@
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { Platform, Linking, View, Text } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { Platform, Linking } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SplashScreen from 'react-native-splash-screen';
@@ -11,6 +11,7 @@ import * as Notifications from 'expo-notifications';
 import Intro from './src/page/Intro';
 import * as Router from './src/routers/Route';
 import { profileInfo, updateUser } from './src/actions/authActions';
+import { ShowLogout } from './src/page/ShowLogout';
 
 
 Notifications.setNotificationHandler({
@@ -150,7 +151,7 @@ function App() {
         };
       },
   };
-  const {isShowLogout} = useSelector(state => state.auth);
+
   return (
     <PaperProvider theme={DefaultTheme}>
       <NavigationContainer ref={navigationRef} linking={linking}>
@@ -164,7 +165,7 @@ function App() {
         ) : (
           <Router.LoginNav />
         )}
-        {isShowLogout && <View><Text>Okok</Text></View>}
+        <ShowLogout/>
       </NavigationContainer>
     </PaperProvider>
   );

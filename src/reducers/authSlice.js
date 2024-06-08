@@ -140,7 +140,15 @@ const userSlice = createSlice({
         state.error = payload;
       })
       .addCase(showLogout.pending, (state) => {
-        state.isShowLogout = !state.isShowLogout;
+        console.log("showLogout.pending");
+      })
+      .addCase(showLogout.fulfilled, (state, { payload }) => {
+        console.log("showLogout.fulfilled", payload);
+        state.isShowLogout = payload;
+      })
+      .addCase(showLogout.rejected, (state, { payload }) => {
+        console.log("showLogout.rejected", payload);
+        state.error = payload;
       })
       ;
   },

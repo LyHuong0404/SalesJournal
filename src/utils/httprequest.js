@@ -54,7 +54,7 @@ const getAccessToken = async () => {
 };
 
 let isGetRefreshToken = false;
-
+let isGetRefreshTokenSuccess = false;
 const waitProcessComplete = async () => {
     await new Promise(resolve => {
         const intervalId = setInterval(() => {
@@ -67,18 +67,23 @@ const waitProcessComplete = async () => {
 }
 
 const middlewareRefreshToken = async (code, args) => {
+    console.log("code", code);
     if(code !== 401) return null;
     if(isGetRefreshToken) {
         await waitProcessComplete();
-        let resp;
-        switch(args.method) {
-            case 'get': resp = await get(args.apipath, args.params.params); break;
-            case 'post': resp = await post(args.apipath, args.data, args.params.params); break;
-        } 
-        return resp;
+        if(isGetRefreshTokenSuccess) {
+            let resp;
+            switch(args.method) {
+                case 'get': resp = await get(args.apipath, args.params.params); break;
+                case 'post': resp = await post(args.apipath, args.data, args.params.params); break;
+            } 
+            return resp;
+        }
+        return null;
     }
     else {
         try {
+            isGetRefreshTokenSuccess = false;
             isGetRefreshToken = true;
             const userData = await AsyncStorage.getItem('user');
             const userJson = JSON.parse(userData);
@@ -96,6 +101,7 @@ const middlewareRefreshToken = async (code, args) => {
                 userJson.expireRefreshToken = data.data.expireRefreshToken;
                 await AsyncStorage.setItem('user', JSON.stringify(userJson));
                 isGetRefreshToken = false;
+                isGetRefreshTokenSuccess = true;
                 let resp;
                 switch(args.method) {
                     case 'get': resp = await get(args.apipath, args.params.params); break;
@@ -133,4 +139,6 @@ httprequest.interceptors.request.use(
 );
 
 export const showLogout = createAsyncThunk('', async () => {
+    console.log("createAsyncThunk");
+    return true;
 });
