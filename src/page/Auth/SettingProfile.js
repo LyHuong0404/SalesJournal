@@ -30,17 +30,17 @@ function SettingProfile() {
                     <Text style={{ flex: 1, marginLeft: 10 }}>Đổi mật khẩu</Text>
                     <Image source={require('../../assets/images/left_arrow.png')} style={[styles.icon, { tintColor: '#d9d9d9' }]} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.setting_item}>
+                {/* <TouchableOpacity style={styles.setting_item}>
                     <Image source={require('../../assets/images/message.png')} style={styles.icon} />
                     <Text style={{ flex: 1, marginLeft: 10 }}>Đóng góp ý kiến</Text>
                     <Image source={require('../../assets/images/left_arrow.png')} style={[styles.icon, { tintColor: '#d9d9d9' }]} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity style={styles.setting_item}>
                     <Image source={require('../../assets/images/info.png')} style={styles.icon} />
                     <Text style={{ flex: 1, marginLeft: 10 }}>Về ứng dụng</Text>
                     <Image source={require('../../assets/images/left_arrow.png')} style={[styles.icon, { tintColor: '#d9d9d9' }]} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.setting_item}>
+                {/* <TouchableOpacity style={styles.setting_item}>
                     <Image source={require('../../assets/images/lock.png')} style={styles.icon} />
                     <Text style={{ flex: 1, marginLeft: 10 }}>Quy chế hoạt động</Text>
                     <Image source={require('../../assets/images/left_arrow.png')} style={[styles.icon, { tintColor: '#d9d9d9' }]} />
@@ -54,7 +54,7 @@ function SettingProfile() {
                     <Image source={require('../../assets/images/lock.png')} style={styles.icon} />
                     <Text style={{ flex: 1, marginLeft: 10 }}>Giải quyết khiếu nại</Text>
                     <Image source={require('../../assets/images/left_arrow.png')} style={[styles.icon, { tintColor: '#d9d9d9' }]} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 
             </ScrollView>
             <View style={{ flex: 0.15, alignItems: 'center' }}>

@@ -42,6 +42,11 @@ export const updateCategory = async(formData) => {
 
 //delete
 export const deleteCategory = async(productId) => {
+    const config = {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    };
     try{
         const response = await httprequest.post(`delete-product/${productId}`, config);
         return response;

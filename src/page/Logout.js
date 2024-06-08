@@ -1,16 +1,16 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 function Logout() {
-
+    const dispatch = useDispatch();
     const navigation = useNavigation();
 
     useEffect(() => {
-        const logout = async () => {
-            await AsyncStorage.removeItem('user');
-            navigation.navigate('LoginNav'); 
-        }     
+        const logout = async()  => {
+            await dispatch(logout());
+            navigation.navigate('LoginNav');
+        }   
         logout();        
     }, []);
 

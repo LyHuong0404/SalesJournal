@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { View, StyleSheet, Text, TouchableOpacity, Image, ScrollView } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
 import { Button } from "react-native-paper";
 import { useState } from "react";
 import { Switch } from 'react-native-switch';

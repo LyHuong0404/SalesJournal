@@ -158,7 +158,7 @@ function Home() {
 
               <TouchableOpacity onPress={() => navigation.navigate('ProductManagement')} style={{flex: 1, marginHorizontal: 5, backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent:'center', borderRadius: 7}}>
                 <Image source={require('../assets/images/package.png')} style={{width: 30, height: 30, objectFit: 'contain'}} />
-                <Text style={styles.text}>Nhập hàng mới</Text>
+                <Text style={styles.text}>Sản phẩm</Text>
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => navigation.navigate('Order')} style={{flex: 1, marginHorizontal: 5, backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent:'center', borderRadius: 7}}>

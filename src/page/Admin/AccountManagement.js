@@ -2,12 +2,12 @@ import { useNavigation } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollView } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
-import { Searchbar, DataTable } from "react-native-paper";
+import { Searchbar, DataTable, Switch } from "react-native-paper";
 import * as Animatable from 'react-native-animatable';
 
 
 import useDebounce from "../../hooks";
-import { filterAccount } from "../../actions/admin/otherActions";
+import { filterAccount, lockAccount, unlockAccount } from "../../actions/admin/otherActions";
 import LoadingSpinner from "../../components/LoadingSpinner";
 
 
@@ -27,21 +27,19 @@ function AccountManagement() {
     const [searchBarVisible, setSearchBarVisible] = useState(false);
     const [isVendor, setIsVendor] = useState(null);
 
-
+    const getListAccouunt = async()=> {
+        setLoading(true);
+        const response = await filterAccount({ pageIndex: 0, pageSize: 1000, keySearch: debounceValue, isVendor });
+        if (response) {
+            setAccounts(response);
+        } else {
+            ToastAndroid.show('Lỗi tải danh sách tài khoản không thành công', ToastAndroid.SHORT);
+        }
+        setLoading(false);
+    }
     useEffect(() => {
-        try{
-            const fetchAPI = async()=> {
-                setLoading(true);
-                const response = await filterAccount({ pageIndex: 0, pageSize: 1000, keySearch: debounceValue, isVendor });
-                if (response) {
-                    setAccounts(response);
-                } else {
-                    ToastAndroid.show('Lỗi tải danh sách tài khoản không thành công', ToastAndroid.SHORT);
-                }
-                setLoading(false);
-            }
-            fetchAPI();
-          
+        try{           
+            getListAccouunt();
         } catch(e){
             setLoading(false);
             ToastAndroid.show('Lỗi tải danh sách tài khoản không thành công', ToastAndroid.SHORT);
@@ -59,6 +57,35 @@ function AccountManagement() {
         }
         setTypeAccount(item.value);
     }, [typeAccount])
+
+    const handleChangeStatusAccount = (item) => {
+        if (item.activate) {
+            try {
+                const fetchAPI = async() => {
+                    const response = await lockAccount(item.id);
+                    if (response?.code == 0) {
+                        ToastAndroid.show('Lưu trạng thái thành công', ToastAndroid.SHORT);
+                    } else ToastAndroid.show('Lưu trạng thái thất bại', ToastAndroid.SHORT);
+                }
+                fetchAPI();
+            } catch(e) {
+                ToastAndroid.show('Lỗi khi thay đổi trạng thái tài khoản', ToastAndroid.SHORT);
+            }
+        } else {
+            try {
+                const fetchAPI = async() => {
+                    const response = await unlockAccount(item.id);
+                    if (response?.code == 0) {
+                        ToastAndroid.show('Lưu trạng thái thành công', ToastAndroid.SHORT);
+                    } else ToastAndroid.show('Lưu trạng thái thất bại', ToastAndroid.SHORT);
+                }
+                fetchAPI();
+            } catch(e) {
+                ToastAndroid.show('Lỗi khi thay đổi trạng thái tài khoản', ToastAndroid.SHORT);
+            }
+        }
+        getListAccouunt();
+    }
 
     return ( 
         <View style={styles.container}>
@@ -138,11 +165,33 @@ function AccountManagement() {
                                 <Text style={{ fontSize: 11, color: '#929292' }}>Email</Text>
                             </View>
                         </DataTable.Title>
+
+                        <DataTable.Title style={{ marginLeft: 10 }}>
+                            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                                <Image source={require('../../assets/images/marriage.png')} style={{ width: 20, height: 18, objectFit: 'contain', tintColor: '#929292', marginRight: 5 }}/>
+                                <Text style={{ fontSize: 11, color: '#929292' }}>Trạng thái</Text>
+                            </View>
+                        </DataTable.Title>
                     </DataTable.Header>
                     {accounts.map((item, index) => 
                         <DataTable.Row key={index}>
                             <DataTable.Cell><Text style={styles.cell_text_number}>{item.username}</Text></DataTable.Cell>
-                            <DataTable.Cell style={{ marginLeft: 10, marginVertical: 10 }}><Text style={styles.cell_text_number}>{item.email}</Text></DataTable.Cell>
+                            <DataTable.Cell style={{ marginLeft: 10, marginVertical: 10 }}>
+                                <Text style={styles.cell_text_number}>{item.email}</Text>
+                            </DataTable.Cell>
+                            <DataTable.Cell style={{ marginLeft: 10, marginVertical: 10, justifyContent: 'center' }}>
+                            <Switch 
+                                value={item.activate} 
+                                activeText={''}
+                                inActiveText={''} 
+                                switchLeftPx={4}  
+                                circleSize={20}
+                                barHeight={25} 
+                                switchRightPx={4} 
+                                backgroundInactive={'#e9e7e7'}
+                                onChange={() => handleChangeStatusAccount(item)}
+                            />
+                            </DataTable.Cell>
                         </DataTable.Row>
                     )}
                 </View> 
