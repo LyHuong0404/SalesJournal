@@ -5,16 +5,19 @@ import { Button, Searchbar } from "react-native-paper";
 import SegmentedControlTab from 'react-native-segmented-control-tab';
 import * as Animatable from 'react-native-animatable';
 import RBSheet from "react-native-raw-bottom-sheet";
+import { format } from "date-fns";
 
 import { filterProduct } from "../../actions/seller/productActions";
 import useDebounce from "../../hooks";
 import QRDemo from "../QRDemo";
-import { convertTimeStamp } from "../../utils/helper";
+import { convertTimeStamp, setDateFormat } from "../../utils/helper";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import ModalCalendar from "../../components/Modal/ModalCalendar";
 
 
 function ImportProduct() {
     const refRBSheet = useRef();
+    const refRBSheetCalender = useRef();
     const navigation = useNavigation();
     const [products, setProducts] = useState([]);
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -22,10 +25,14 @@ function ImportProduct() {
     const [searchValue, setSearchValue] = useState(null);
     const debounceValue = useDebounce(searchValue, 500);
     const [loading, setLoading] = useState(false);
+    const [fromDate, setFromDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
+    const [toDate, setToDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
+    const [buttonTimeType, setButtonTimeType] = useState('homnay'); 
+
 
     const getAllProduct = async() => {
         setLoading(true);     
-        const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: debounceValue, productId: null, orderBy: null, fromDate: null, toDate: null });
+        const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: debounceValue, productId: null, orderBy: null, fromDate, toDate });
         if(response) {
             if (selectedIndex == 1) {
                 response?.content?.sort(function(a, b) {
@@ -46,7 +53,7 @@ function ImportProduct() {
             setLoading(false);     
             ToastAndroid.show('Lỗi khi tải sản phẩm', ToastAndroid.SHORT);
         }
-    }, [debounceValue, selectedIndex])
+    }, [debounceValue, selectedIndex, fromDate, toDate])
 
     const handleIndexChange = (index) => {
         setSelectedIndex(index);
@@ -57,6 +64,43 @@ function ImportProduct() {
             getAllProduct();
         }, [])
     );
+
+    const handleChangeTime = (data) => {
+        const time = setDateFormat(data.buttonType, data.startDate, data.endDate);
+    
+        setFromDate(time[0]);
+        setToDate(time[1]);
+        setButtonTimeType(data.buttonType);
+        refRBSheetCalender.current?.close();
+    };
+
+    const labelOfTime = () => {
+        switch(buttonTimeType) {
+            case 'homnay':
+                return 'Hôm nay';
+            case 'homqua':
+                return 'Hôm qua';
+            case 'tuannay':
+                return 'Tuần này';
+            case 'tuantruoc':
+                return 'Tuần trước';
+            case 'thangnay':
+                return 'Tháng này';
+            case 'thangtruoc':
+                return 'Tháng trước';
+            case 'none':
+                return 'Tùy chỉnh: ' + format(fromDate, 'dd-MM-yyyy') + ' đến ' + format(toDate, 'dd-MM-yyyy');
+            default:
+                break;
+        }
+    }
+
+    const handleSettingAgain = () => {
+        setButtonTimeType('homnay');
+        setStartDate(format(new Date(Date.now()), 'yyyy-MM-dd'));
+        setEndDate(format(new Date(Date.now()), 'yyyy-MM-dd'));
+        refRBSheetCalender.current?.close();    
+    }
 
     return ( 
         <View style={styles.container}>
@@ -104,22 +148,27 @@ function ImportProduct() {
                     />
                 </View>
             </Animatable.View>)}
-            <View style={{ paddingHorizontal: 15, paddingVertical: 10 }}>
+            <View style={{ paddingHorizontal: 15, paddingVertical: 10, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => refRBSheetCalender.current?.open()}>
+                    <Image source={require('../../assets/images/calendar.png')} style={styles.icon_calender}/>
+                </TouchableOpacity>
+                <View style={styles.button_action_container}>   
+                    <Text style={styles.text_action}>
+                        {labelOfTime()}
+                    </Text>
+                </View>
+            </View>
+            <View style={{ paddingHorizontal: 15, paddingBottom: 10 }}>
                 <SegmentedControlTab
                     values={['Tất cả', 'Bán chạy', 'Hết hàng']}
                     selectedIndex={selectedIndex}
                     onTabPress={handleIndexChange}
                     tabStyle={{ backgroundColor: 'white', borderColor: '#e5e5ea', borderWidth: 1.5, borderRadius: 8, marginRight: 10, minWidth: 70 }}
-                    activeTabStyle={{ backgroundColor: 'white', borderColor: '#4173bc', borderWidth: 1.5, borderRadius: 8 }}
+                    activeTabStyle={{ backgroundColor: '#dde7f6', borderWidth: 1.5, borderRadius: 8, borderColor: 'transparent' }}
                     tabTextStyle={{ color: '#8e8e93' }}
                     activeTabTextStyle={{ color: '#4173bc' }}
                 />
             </View>
-          
-            {/* <View style={styles.content_noitem}>
-                <Image source={require('../../assets/images/noresults.png')} style={{ width: 200, height: 200, objectFit: 'contain' }}/>
-                <Text style={{ color: '#8e8e93', textAlign: 'center', marginBottom: 15, marginTop: 25 }}>Bạn chưa có sản phẩm nào, hãy tạo ngay sản phẩm đầu tiên nhé</Text>
-            </View> */}
             {products?.length > 0 ?
                 <ScrollView style={{ paddingHorizontal: 15}}>
                     {products?.map((product, index) => 
@@ -128,7 +177,7 @@ function ImportProduct() {
                             <View style={{ flex: 1, justifyContent: 'space-between' }}>
                                 <Text style={styles.item_name}>{product?.name}</Text>
                                 <Text style={{ color: '#abaaaa', fontSize: 11 }}>Mã sản phẩm: {product?.code}</Text>
-                                <Text style={{ color: '#abaaaa', fontSize: 11 }}>Ngày nhập: {convertTimeStamp(product?.expireAt, 'dd/MM/yyyy')}</Text>
+                                <Text style={{ color: '#abaaaa', fontSize: 11 }}>Ngày nhập: {convertTimeStamp(product?.importedAt, 'dd/MM/yyyy')}</Text>
                                 <Text style={{ color: '#abaaaa', fontSize: 11 }}>Số lượng nhập: {product?.importAmount}</Text>
                                 <View style={styles.display}>
                                     <View style={{ display: 'flex', flexDirection: 'row' }}>
@@ -142,15 +191,6 @@ function ImportProduct() {
                             </View>
                         </View>
                     )}
-                    {/* <Button 
-                        icon="plus"
-                        mode="outlined" 
-                        textColor="#15803D" 
-                        buttonColor='transparent' 
-                        onPress={() => navigation.navigate('CreateProduct')} 
-                        style={{ borderWidth: 2, borderColor: '#15803D', borderRadius: 7,}}>
-                        Thêm sản phẩm
-                    </Button> */}
                 </ScrollView>
                 : <View style={styles.content_noitem}>
                     <Image source={require('../../assets/images/noresults.png')} style={{ width: 200, height: 200, objectFit: 'contain' }}/>
@@ -170,6 +210,30 @@ function ImportProduct() {
                     onScanSuccess={() => refRBSheet.current?.close()} 
                     close={() => refRBSheet.current?.close()}
                 />
+            </RBSheet>
+            <RBSheet
+                ref={refRBSheetCalender}
+                closeOnDragDown={true}
+                closeOnPressMask={true}
+                customStyles={{
+                    wrapper: 
+                    {
+                        backgroundColor: "rgba(100, 100, 100, 0.5)",
+                    },
+                    draggableIcon: {
+                        backgroundColor: "grey"
+                    },
+                    container: {
+                        height: 540
+                    }
+                }}
+            >
+                <ModalCalendar 
+                    valueTimeFrom={fromDate} 
+                    valueTimeTo={toDate}
+                    buttonTimeType={buttonTimeType}
+                    onSelected={handleChangeTime}
+                    handleSettingAgain={handleSettingAgain} />
             </RBSheet>
             {loading && <LoadingSpinner />}
         </View> 
@@ -228,6 +292,34 @@ const styles = StyleSheet.create({
         justifyContent: 'center',  
         alignItems: 'center', 
         paddingHorizontal: 8,
+    },
+    icon_calender: {
+        width: 25,
+        height: 25,
+        objectFit: 'contain',
+        tintColor: '#3a3a3a',
+        marginRight: 10,
+        alignSelf: 'center',
+    },
+    button_action_container: {
+        backgroundColor: '#e2e5ea',
+        borderRadius: 7,
+        // width: '75%',
+        height: 35,
+        display: 'flex',
+        flexDirection: 'row',
+        padding: 3,
+        justifyContent: 'space-around',
+    },
+    text_action: {
+        fontSize: 10,
+        backgroundColor: 'red',
+        textAlign: 'center',
+        paddingVertical: 6,
+        paddingHorizontal: 10,
+        borderRadius: 7,
+        color: '#15803D',
+        backgroundColor: 'white'
     },
 })
 

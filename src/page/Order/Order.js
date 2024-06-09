@@ -105,9 +105,6 @@ function Order() {
         {receipts?.length == 0 && <View style={styles.content_noitem}>
             <Image source={require('../../assets/images/checklist.png')} style={{ width: 200, height: 200, objectFit: 'contain' }}/>
             <Text style={{ color: '#8e8e93', textAlign: 'center', marginBottom: 15, marginTop: 25 }}>Chưa có hóa đơn nào, hãy bán hàng để tạo hóa đơn mới nhé</Text>
-            {/* <Button mode="contained" onPress={() => navigation.navigate('Sell')} buttonColor="#15803D" style={{ borderRadius: 7, paddingHorizontal: 20 }}>
-                Tạo đơn hàng
-            </Button> */}
         </View>}
         {loading && <LoadingSpinner />}
 

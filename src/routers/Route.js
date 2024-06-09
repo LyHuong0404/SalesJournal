@@ -5,7 +5,6 @@ import RegisterStore from '../page/Auth/RegisterStore';
 import Home from '../page/Home';
 import Order from '../page/Order/Order';
 import Warehouse from '../page/Warehouse';
-import Sell from '../page/Sell';
 import Register from '../page/Auth/Register';
 import Login from '../page/Auth/Login';
 import UsernameInput from '../page/Auth/UsernameInput';
@@ -123,7 +122,6 @@ export const VendorNav = () => {
         <Stack.Screen name="Order" component={Order} options={{ headerShown: false }}/>
         <Stack.Screen name="Warehouse" component={Warehouse} options={{ headerShown: false }}/>
         <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
-        <Stack.Screen name="Sell" component={Sell} options={{ headerShown: false }}/>
         <Stack.Screen name="Search" component={Search} options={{ headerShown: false }}/>
         <Stack.Screen name="CreateProduct" component={CreateProduct} options={{ headerShown: false }}/>
         <Stack.Screen name="ProductManagement" component={ProductManagement} options={{ headerShown: false }}/>

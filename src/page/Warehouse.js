@@ -108,7 +108,7 @@ function Warehouse() {
                         selectedIndex={selectedIndex}
                         onTabPress={handleIndexChange}
                         tabStyle={{ backgroundColor: 'white', borderColor: '#e5e5ea', borderWidth: 1.5, borderRadius: 8, marginRight: 10, paddingHorizontal: 10 }}
-                        activeTabStyle={{ backgroundColor: 'white', borderColor: '#4173bc', borderWidth: 1.5, borderRadius: 8 }}
+                        activeTabStyle={{ backgroundColor: '#dde7f6', borderWidth: 1.5, borderRadius: 8, borderColor: 'transparent' }}
                         tabTextStyle={{ color: '#8e8e93' }}
                         activeTabTextStyle={{ color: '#4173bc' }}
                     />

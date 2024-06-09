@@ -13,12 +13,15 @@ function HorizontalCategory({ category }) {
                     <View style={styles.display}>
                         <Image source={{ uri: category?.avatar }} style={styles.image_product}/>
                         <View style={{ justifyContent: 'space-around'}}>
-                            <Text style={styles.name}>{category?.name}</Text>
+                            <View style={[styles.display, { justifyContent: 'space-between', width: '85%' }]}>
+                                <Text style={styles.name}>#{category?.id} - {category?.name}</Text>
+                                {category.isPromotion && <Image source={require('../assets/images/sale.png')} style={{ width: 24, height: 24, objectFit: 'cover'}}/>}
+                            </View>           
+                            <Text style={styles.text_light}>{`Giá bán   : ${category?.salePrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>             
                             <Text style={styles.text_light}>{`Có thể bán: ${category?.stockAmount}`}</Text>             
                             {/* <Text style={styles.number}>5 <Text style={styles.number}>Sản phẩm</Text></Text>  */}
                         </View>
                     </View>
-                    {/* <Image source={require('../assets/images/move.png')} style={styles.image_move}/> */}
                 </View>
             </View>
         </TouchableOpacity>
@@ -55,7 +58,8 @@ const styles = StyleSheet.create({
     },
     name: {
         color: '#454444',
-        fontWeight: '600'
+        fontWeight: '600',
+        width: '70%'
     },
     number: {
         fontWeight: '500',

@@ -25,7 +25,6 @@ function ProductTab({ onSearchValue, onSelectedFilter }) {
             setLoading(true);
             try {
                 const response = await filterProduct({ pageIndex, pageSize: 12, keySearch: onSearchValue, productId: null, orderBy: null, fromDate: null, toDate: null });      
-                console.log("filter product", response);
                 if (response) {
                     if (onSelectedFilter == 'banchay') {
                         response?.content?.sort(function(a, b) {
@@ -77,17 +76,6 @@ function ProductTab({ onSearchValue, onSelectedFilter }) {
     
     return (  
         <View style={styles.container}>
-            {/* <View style={styles.header}>
-                <SegmentedControlTab
-                    values={['Tất cả', 'Bán chạy', 'Mới nhất']}
-                    selectedIndex={selectedIndex}
-                    onTabPress={handleIndexChange}
-                    tabStyle={{ backgroundColor: 'white', borderColor: '#e5e5ea', borderWidth: 1.5, borderRadius: 8, marginRight: 10, minWidth: 100 }}
-                    activeTabStyle={{ backgroundColor: 'white', borderColor: '#4173bc', borderWidth: 1.5, borderRadius: 8 }}
-                    tabTextStyle={{ color: Home'#8e8e93' }}
-                    activeTabTextStyle={{ color: '#4173bc' }}
-                />
-            </View> */}
 
             <FAB
                 icon="plus"

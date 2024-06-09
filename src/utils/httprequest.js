@@ -3,8 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 const httprequest = axios.create({
-    // baseURL: "https://apisalesjournal.cfapps.ap21.hana.ondemand.com/api/",
-    baseURL: "http://192.168.1.84:8888/api/",
+    baseURL: "https://apisalesjournal.cfapps.ap21.hana.ondemand.com/api/",
+    // baseURL: "http://192.168.1.84:8888/api/",
 
 });
 
@@ -67,7 +67,6 @@ const waitProcessComplete = async () => {
 }
 
 const middlewareRefreshToken = async (code, args) => {
-    console.log("code", code);
     if(code !== 401) return null;
     if(isGetRefreshToken) {
         await waitProcessComplete();
@@ -133,12 +132,10 @@ httprequest.interceptors.request.use(
         return config;
     },
     (error) => {
-        console.log("httprequest.interceptors.request.use", error);
         return Promise.reject(error);
     }
 );
 
 export const showLogout = createAsyncThunk('', async ({value}) => {
-    console.log("createAsyncThunk", value);
     return value;
 });

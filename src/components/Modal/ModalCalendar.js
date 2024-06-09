@@ -52,7 +52,6 @@ function ModalCalendar({ valueTimeFrom, valueTimeTo, buttonTimeType, onSelected,
     }
 
     const handleChangeTimeRange = () => {
-        console.log(1)
         onSelected({buttonType: 'none', startDate, endDate});
     }
 
