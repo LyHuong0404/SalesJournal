@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, TouchableOpacity, Image, ScrollView, Button } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Image, ScrollView, Button, ToastAndroid } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import QRCode from 'react-native-qrcode-svg';
@@ -17,6 +17,7 @@ function PaymentDetail() {
     const [buyerEmail, setBuyerEmail] = useState(route.params?.buyerEmail || '');
     const [status, requestPermission] = MediaLibrary.usePermissions();
     const viewRef = useRef();
+
     const takeScreenshot = async () => {
         try {
             if (status === null) {
@@ -26,24 +27,26 @@ function PaymentDetail() {
             format: 'png',
             quality: 0.8,
           });
-          console.log('Image saved to', uri);
     
           if (status?.granted) {
             const asset = await MediaLibrary.createAssetAsync(uri);
             await MediaLibrary.createAlbumAsync('Screenshots', asset, false);
-            console.log('Image saved to gallery');
+            ToastAndroid.show('Hình ảnh đã được lưu.', ToastAndroid.SHORT);
           } else {
-            console.error('Permission not granted');
+            ToastAndroid.show('Không có quyền truy cập thư viện ảnh.', ToastAndroid.SHORT);
           }
         } catch (error) {
-          console.error('Oops, snapshot failed', error);
+            ToastAndroid.show('Không có quyền truy cập thư viện ảnh.', ToastAndroid.SHORT);
         }
       };
     return ( 
         <View ref={viewRef} style={styles.container}>
             <TouchableOpacity onPress={() => navigation.navigate('DrawerNav')}>
                 <View style={styles.header}>
-                    <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center'}}>Chi tiết hóa đơn</Text>
+                    <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center', marginLeft: 25 }}>Chi tiết hóa đơn</Text>
+                    <TouchableOpacity onPress={takeScreenshot}>
+                        <Image source={require('../assets/images/download.png')} style={{ width: 26, height: 26, objectFit: 'contain' }}/>
+                    </TouchableOpacity>
                 </View>
             </TouchableOpacity>
             <View style={styles.horizontalLine} />
@@ -168,7 +171,6 @@ function PaymentDetail() {
                     </View>
                 </View>
             </ScrollView>
-            <Button title="Lưu ảnh" onPress={takeScreenshot} />
             <ButtonCustom 
                 title="Trang chủ" 
                 customStyle={{ marginHorizontal: 15 }} 

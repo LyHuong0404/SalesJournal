@@ -51,8 +51,9 @@ function App() {
       if (data) {
         const parsedUserData = JSON.parse(data);
         if (
-          parsedUserData?.roles.some((item) => item == 'ROLE_BUYER') &&
-          !parsedUserData?.roles.some((item) => item == 'ROLE_ADMIN')
+          ((parsedUserData?.roles.some((item) => item == 'ROLE_BUYER') || 
+          parsedUserData?.roles.some((item) => item == 'ROLE_VENDOR')) &&
+          !parsedUserData?.roles.some((item) => item == 'ROLE_ADMIN'))
         ) {
             const rs = await profileInfo();
             parsedUserData.user.profile = rs; 
