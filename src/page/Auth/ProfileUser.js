@@ -269,56 +269,59 @@ function ProfileUser() {
                         )}  
                     </View>
                 }
+                {
+                    user?.provider === 'LOCAL' && (
+                    <View style={{ paddingHorizontal: 15 }}>
+                        <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: 20 }} onPress={() => setDropdownPw(!dropdownPw)}>
+                            <Text style={{ fontWeight: '600', marginRight: 55 }}>Đổi mật khẩu</Text>
+                            {dropdownPw ? 
+                                <Image source={require('../../assets/images/down_arrow.png')} style={{ width: 15, height: 15, objectFit: 'contain', tintColor: '#2083c5' }}/>
+                                : <Image source={require('../../assets/images/up_arrow.png')} style={{ width: 15, height: 15, objectFit: 'contain', tintColor: '#2083c5' }}/>
+                            }
+                        </TouchableOpacity>
+                        {dropdownPw && <>
+                            <TextInput
+                                theme={theme}
+                                style={{ fontSize: 13, marginTop: 10 }}
+                                mode="outlined"
+                                label="Mật khẩu hiện tại"
+                                value={currentPassword}
+                                onChangeText={(text) => setCurrentPassword(text)}
+                                secureTextEntry={hideCurrentPassword}
+                                right={<TextInput.Icon icon={hideCurrentPassword ? "eye-off" : "eye"} onPress={() => setHideCurrentPassword(!hideCurrentPassword)}/>}
+                            />
+                            <TextInput
+                                theme={theme}
+                                style={{ fontSize: 13, marginTop: 10 }}
+                                mode="outlined"
+                                label="Mật khẩu mới"
+                                value={newPassword}
+                                onChangeText={(text) => setNewPassword(text)}
+                                secureTextEntry={hideNewPassword}
+                                right={<TextInput.Icon icon={hideNewPassword ? "eye-off" : "eye"} onPress={() => setHideNewPassword(!hideNewPassword)}/>}
+                            />
+                            {newPassword?.trim() != '' ? 
+                                hasErrors()?.map((error, index) => (
+                                    <HelperText type="error" key={index} visible={true} style={{ marginLeft: -10 }}>
+                                        {error}
+                                    </HelperText>
+                                )) : null 
+                            }
 
-                <View style={{ paddingHorizontal: 15 }}>
-                    <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: 20 }} onPress={() => setDropdownPw(!dropdownPw)}>
-                        <Text style={{ fontWeight: '600', marginRight: 55 }}>Đổi mật khẩu</Text>
-                        {dropdownPw ? 
-                            <Image source={require('../../assets/images/down_arrow.png')} style={{ width: 15, height: 15, objectFit: 'contain', tintColor: '#2083c5' }}/>
-                            : <Image source={require('../../assets/images/up_arrow.png')} style={{ width: 15, height: 15, objectFit: 'contain', tintColor: '#2083c5' }}/>
-                        }
-                    </TouchableOpacity>
-                    {dropdownPw && <>
-                        <TextInput
-                            theme={theme}
-                            style={{ fontSize: 13, marginTop: 10 }}
-                            mode="outlined"
-                            label="Mật khẩu hiện tại"
-                            value={currentPassword}
-                            onChangeText={(text) => setCurrentPassword(text)}
-                            secureTextEntry={hideCurrentPassword}
-                            right={<TextInput.Icon icon={hideCurrentPassword ? "eye-off" : "eye"} onPress={() => setHideCurrentPassword(!hideCurrentPassword)}/>}
-                        />
-                        <TextInput
-                            theme={theme}
-                            style={{ fontSize: 13, marginTop: 10 }}
-                            mode="outlined"
-                            label="Mật khẩu mới"
-                            value={newPassword}
-                            onChangeText={(text) => setNewPassword(text)}
-                            secureTextEntry={hideNewPassword}
-                            right={<TextInput.Icon icon={hideNewPassword ? "eye-off" : "eye"} onPress={() => setHideNewPassword(!hideNewPassword)}/>}
-                        />
-                        {newPassword?.trim() != '' ? 
-                            hasErrors()?.map((error, index) => (
-                                <HelperText type="error" key={index} visible={true} style={{ marginLeft: -10 }}>
-                                    {error}
-                                </HelperText>
-                            )) : null 
-                        }
-
-                    <View style={{ alignSelf: 'flex-end', marginTop: 15 }}>
-                        <Button 
-                            disabled={!newPassword || !currentPassword || hasErrors()?.length > 0}
-                            mode="contained" 
-                            buttonColor="#15803D" 
-                            style={{ borderRadius: 7 }}
-                            onPress={handleChangePw}>
-                            Cập nhật
-                        </Button>
+                        <View style={{ alignSelf: 'flex-end', marginTop: 15 }}>
+                            <Button 
+                                disabled={!newPassword || !currentPassword || hasErrors()?.length > 0}
+                                mode="contained" 
+                                buttonColor="#15803D" 
+                                style={{ borderRadius: 7 }}
+                                onPress={handleChangePw}>
+                                Cập nhật
+                            </Button>
+                        </View>
+                    </>}
                     </View>
-                </>}
-                </View>
+                    )
+                }
             </ScrollView>
             <TwoButtonBottom 
                 titleLeft="QR tích điểm" 

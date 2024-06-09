@@ -152,7 +152,6 @@ function App() {
         };
       },
   };
-
   return (
     <PaperProvider theme={DefaultTheme}>
       <NavigationContainer ref={navigationRef} linking={linking}>

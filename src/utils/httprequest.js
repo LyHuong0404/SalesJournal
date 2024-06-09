@@ -4,7 +4,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 const httprequest = axios.create({
     // baseURL: "https://apisalesjournal.cfapps.ap21.hana.ondemand.com/api/",
-    baseURL: "http://192.168.1.57:8888/api/",
+    baseURL: "http://192.168.1.84:8888/api/",
 
 });
 
@@ -111,11 +111,11 @@ const middlewareRefreshToken = async (code, args) => {
             }
             else {
                 console.log("Error when middlewareRefreshToken: ", {});
-                (await import('../store')).default.dispatch(showLogout());
+                (await import('../store')).default.dispatch(showLogout({value: true}));
             }
         } catch (error) {
             console.log("Error when middlewareRefreshToken: ", error);
-            (await import('../store')).default.dispatch(showLogout());
+            (await import('../store')).default.dispatch(showLogout({value: true}));
         } finally {
             isGetRefreshToken = false;
         }
@@ -138,7 +138,7 @@ httprequest.interceptors.request.use(
     }
 );
 
-export const showLogout = createAsyncThunk('', async () => {
-    console.log("createAsyncThunk");
-    return true;
+export const showLogout = createAsyncThunk('', async ({value}) => {
+    console.log("createAsyncThunk", value);
+    return value;
 });
