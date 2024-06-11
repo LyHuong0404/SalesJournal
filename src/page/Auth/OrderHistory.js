@@ -97,40 +97,7 @@ function OrderHistory() {
                     <Image source={require('../../assets/images/right_arrow.png')}  style={{ width: 17, height: 17, objectFit: 'contain', marginVertical: 15 }} />
                 </TouchableOpacity>
                 <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center'}}>Lịch sử mua hàng</Text>
-                {!searchBarVisible ? 
-                    (<TouchableOpacity onPress={() => setSearchBarVisible(true)}>
-                        <Image source={require('../../assets/images/search.png')} style={{ width: 25, height: 20, objectFit: 'contain', tintColor: '#000000' }}/>
-                    </TouchableOpacity>) : 
-                    (<TouchableOpacity onPress={() => {
-                            setSearchBarVisible(false);
-                            setSearchValue(null);
-                        }}>
-                        <Image source={require('../../assets/images/close.png')} style={{ width: 25, height: 20, objectFit: 'contain', tintColor: '#000000' }}/>
-                    </TouchableOpacity>
-                )} 
             </View>
-            {searchBarVisible &&
-                (<Animatable.View animation="zoomIn" duration={50} style={{ backgroundColor: 'white', marginHorizontal: 15 }}>
-                    <View style={{ borderRadius: 5, backgroundColor: 'white', borderColor: '#15803D', borderWidth: 1, height: 40, flexDirection: 'row', alignItems: 'center', width: '100%' }}>
-                        <Searchbar
-                            placeholder="Tìm kiếm"
-                            iconColor="#8e8e93"
-                            value={searchValue}
-                            style={{
-                                flex: 1,
-                                backgroundColor: 'transparent', 
-                            }}
-                            inputStyle={{
-                                fontSize: 13, 
-                            }}
-                            placeholderTextColor="#8e8e93" 
-                            onChangeText={(text) => setSearchValue(text)}
-                            clearIcon='close-circle-outline'
-                            onClearIconPress={() => setSearchValue(null)}
-                        />
-                    </View>
-                </Animatable.View>
-            )}
             <View style={{ marginHorizontal: 15 }}>
                 <View style={{ marginBottom: 15, display: 'flex', flexDirection: 'row', marginTop: 10 }}>
                     <TouchableOpacity onPress={() => refRBSheet.current?.open()}>

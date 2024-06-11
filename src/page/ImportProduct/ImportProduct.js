@@ -28,6 +28,7 @@ function ImportProduct() {
     const [fromDate, setFromDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
     const [toDate, setToDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
     const [buttonTimeType, setButtonTimeType] = useState('homnay'); 
+    const [resetPageIndex, setResetPageIndex] = useState(0);
 
 
     const getAllProduct = async() => {
@@ -53,7 +54,7 @@ function ImportProduct() {
             setLoading(false);     
             ToastAndroid.show('Lỗi khi tải sản phẩm', ToastAndroid.SHORT);
         }
-    }, [debounceValue, selectedIndex, fromDate, toDate])
+    }, [debounceValue, selectedIndex, fromDate, toDate, resetPageIndex])
 
     const handleIndexChange = (index) => {
         setSelectedIndex(index);
@@ -61,7 +62,7 @@ function ImportProduct() {
 
     useFocusEffect(
         useCallback(() => {
-            getAllProduct();
+            setResetPageIndex(prevResetIndex => prevResetIndex + 1);
         }, [])
     );
 

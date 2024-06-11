@@ -218,7 +218,7 @@ function TransactionManagement() {
                     <View style={styles.horizontalLine} />  
                 </View>
                 <View style={[styles.display, { marginVertical: 10 }]}>
-                    <Text style={{ fontWeight: '600' }}>Thống kê giao dịch</Text>
+                    <Text style={{ fontWeight: '600' }}>Danh sách giao dịch</Text>
                     <Text style={{ fontWeight: 'bold' }}>Tổng: <Text style={{ fontWeight: '500', color: 'red'}}>{transactions.length}</Text></Text>
                 </View>
             </View>

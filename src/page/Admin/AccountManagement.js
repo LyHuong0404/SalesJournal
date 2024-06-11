@@ -2,13 +2,15 @@ import { useNavigation } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollView } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
-import { Searchbar, DataTable, Switch } from "react-native-paper";
+import { Searchbar, DataTable } from "react-native-paper";
 import * as Animatable from 'react-native-animatable';
+import { Switch } from 'react-native-switch'; 
 
 
 import useDebounce from "../../hooks";
 import { filterAccount, lockAccount, unlockAccount } from "../../actions/admin/otherActions";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import ModalConfirmation from "../../components/Modal/ModalConfirmation";
 
 
 const typeAccountOptions = [
@@ -26,8 +28,10 @@ function AccountManagement() {
     const [typeAccount, setTypeAccount] = useState('1');
     const [searchBarVisible, setSearchBarVisible] = useState(false);
     const [isVendor, setIsVendor] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedItem, setSelectedItem] = useState({});
 
-    const getListAccouunt = async()=> {
+    const getListAccount = async()=> {
         setLoading(true);
         const response = await filterAccount({ pageIndex: 0, pageSize: 1000, keySearch: debounceValue, isVendor });
         if (response) {
@@ -37,9 +41,10 @@ function AccountManagement() {
         }
         setLoading(false);
     }
+
     useEffect(() => {
         try{           
-            getListAccouunt();
+            getListAccount();
         } catch(e){
             setLoading(false);
             ToastAndroid.show('Lỗi tải danh sách tài khoản không thành công', ToastAndroid.SHORT);
@@ -58,13 +63,19 @@ function AccountManagement() {
         setTypeAccount(item.value);
     }, [typeAccount])
 
-    const handleChangeStatusAccount = (item) => {
-        if (item.activate) {
+    const handleOpenModalConfirm = (item) => {
+        setShowModal(true);
+        setSelectedItem(item);
+
+    }
+    const handleChangeStatusAccount = () => {
+        if (selectedItem.activate) {
             try {
                 const fetchAPI = async() => {
-                    const response = await lockAccount(item.id);
+                    const response = await lockAccount(selectedItem.id);
                     if (response?.code == 0) {
                         ToastAndroid.show('Lưu trạng thái thành công', ToastAndroid.SHORT);
+                        getListAccount();
                     } else ToastAndroid.show('Lưu trạng thái thất bại', ToastAndroid.SHORT);
                 }
                 fetchAPI();
@@ -74,17 +85,19 @@ function AccountManagement() {
         } else {
             try {
                 const fetchAPI = async() => {
-                    const response = await unlockAccount(item.id);
+                    const response = await unlockAccount(selectedItem.id);
                     if (response?.code == 0) {
                         ToastAndroid.show('Lưu trạng thái thành công', ToastAndroid.SHORT);
+                        getListAccount();
                     } else ToastAndroid.show('Lưu trạng thái thất bại', ToastAndroid.SHORT);
                 }
                 fetchAPI();
+                
             } catch(e) {
                 ToastAndroid.show('Lỗi khi thay đổi trạng thái tài khoản', ToastAndroid.SHORT);
             }
         }
-        getListAccouunt();
+        setShowModal(false);
     }
 
     return ( 
@@ -111,7 +124,7 @@ function AccountManagement() {
                     <View style={{ borderRadius: 5, backgroundColor: 'white', borderColor: '#15803D', borderWidth: 1, height: 40, flexDirection: 'row', alignItems: 'center', width: '100%' }}>
                         <Searchbar
                             autoFocus
-                            placeholder="Tìm kiếm theo tên, email"
+                            placeholder="Tìm kiếm theo tên"
                             iconColor='#8e8e93'
                             value={searchValue}
                             style={{
@@ -144,7 +157,7 @@ function AccountManagement() {
                     />
                 </View> 
                 <View style={[styles.display, { marginBottom: 15}]}>
-                    <Text style={{ fontWeight: '600' }}>Thống kê tài khoản </Text>
+                    <Text style={{ fontWeight: '600' }}>Danh sách tài khoản </Text>
                     <Text style={{ fontWeight: 'bold' }}>Tổng: <Text style={{ fontWeight: '500', color: 'red'}}>{accounts.length}</Text></Text>
                 </View>
             </View>
@@ -189,7 +202,7 @@ function AccountManagement() {
                                 barHeight={25} 
                                 switchRightPx={4} 
                                 backgroundInactive={'#e9e7e7'}
-                                onChange={() => handleChangeStatusAccount(item)}
+                                onValueChange={() => handleOpenModalConfirm(item)}
                             />
                             </DataTable.Cell>
                         </DataTable.Row>
@@ -201,7 +214,16 @@ function AccountManagement() {
                     <Text style={{ color: '#8e8e93', textAlign: 'center', marginBottom: 15, marginTop: 25 }}>Hệ thống chưa có tài khoản nào. </Text>
                 </View>
             }
-            
+            {showModal && 
+                <ModalConfirmation 
+                    title="Thông báo?" 
+                    question={selectedItem.activate ? "Bạn chắc chắn muốn khóa tài khoản?" : "Bạn chắc chắn muốn mở khóa tài khoản?"}
+                    textYes="Đồng ý"
+                    textNo="Quay lại"
+                    onPressCancel={() => setShowModal(false)}
+                    onPressConfirm={handleChangeStatusAccount}
+                />
+            }
             {loading && <LoadingSpinner />}
         </View> 
     );

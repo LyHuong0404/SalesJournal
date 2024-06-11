@@ -22,7 +22,7 @@ function ModalConfirmation({ title, question, textYes, textNo, onPressConfirm, o
     }
 
     return (  
-        <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+        <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle} dismissable={false}>
             <View style={styles.container}>
                 <View style={styles.display}>
                     <Text style={{ fontWeight: '500', color: 'black'}}>{title}</Text>
