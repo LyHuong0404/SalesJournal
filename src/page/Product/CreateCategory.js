@@ -120,7 +120,7 @@ function CreateCategory() {
                         onPress={() => refRBSheet?.current.open()}> Chụp ảnh
                     </Button>
                 </View>
-                <Image source={{ uri: url }} style={styles.image_category} />
+                <Image source={url ? {uri: url} : require('../../assets/images/rectangle.png')} style={styles.image_category} />
             </View>
             <View style={{ paddingHorizontal: 15, paddingVertical: 10 }}>
                 <TextInputCustom 

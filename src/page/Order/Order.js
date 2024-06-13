@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { View, Image, StyleSheet, TouchableOpacity, ToastAndroid, ScrollView } from "react-native";
-import { Button, Text } from "react-native-paper";
+import { Text } from "react-native-paper";
 import { useCallback, useEffect, useRef, useState } from "react";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { format } from 'date-fns';
@@ -19,14 +19,22 @@ function Order() {
   const [buttonTimeType, setButtonTimeType] = useState('homnay'); 
   const [receipts, setReceipts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [total, setTotal] = useState(0);
+  const previousOffsetY = useRef(0);
 
   useEffect(() => {
     try{
         const fetchAPI = async() => {
             setLoading(true);
-            const response = await filterReceipt({ pageIndex: 0, pageSize: 1000, fromDate: startDate, toDate: endDate, paymentMethod: null});
+            const response = await filterReceipt({ pageIndex, pageSize: 100, fromDate: startDate, toDate: endDate, paymentMethod: null});
             if (response?.code == 0) {
-                setReceipts(response?.data?.content);
+                if (pageIndex == 0) {
+                    setReceipts(response?.data?.content);
+                } else {
+                    setReceipts(prev => [...prev, ...response?.data?.content]);
+                }
+                setTotal(response.data.totalElement)
             } else {
                 ToastAndroid.show('Lỗi khi tải hóa đơn', ToastAndroid.SHORT);
             }
@@ -37,7 +45,7 @@ function Order() {
         setLoading(false);
         ToastAndroid.show('Lỗi khi tải hóa đơn', ToastAndroid.SHORT);
     }
-  }, [startDate, endDate])
+  }, [startDate, endDate, pageIndex])
 
 
   const handleChangeTime = (data) => {
@@ -46,6 +54,7 @@ function Order() {
     setStartDate(time[0]);
     setEndDate(time[1]);
     setButtonTimeType(data.buttonType);
+    setPageIndex(0);
     refRBSheet.current?.close();
   };
 
@@ -53,6 +62,7 @@ function Order() {
     setButtonTimeType('homnay');
     setStartDate(format(new Date(Date.now()), 'yyyy-MM-dd'));
     setEndDate(format(new Date(Date.now()), 'yyyy-MM-dd'));
+    setPageIndex(0);
     refRBSheet.current?.close();
   }
 
@@ -78,6 +88,19 @@ function Order() {
 
   }, [buttonTimeType])
 
+  const handleScroll = (event) => {
+    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+    const isScrollingDown = contentOffset.y > previousOffsetY.current;
+    previousOffsetY.current = contentOffset.y;
+
+    if (isScrollingDown) {
+        const isEndOfList = layoutMeasurement.height + contentOffset.y >= contentSize.height-200;
+        if (isEndOfList) {
+            setPageIndex(prevPageIndex => prevPageIndex + 1)
+            };
+        }
+    }
+
 
   return ( 
     <View style={styles.container}>
@@ -95,9 +118,9 @@ function Order() {
                 </Text>
             </View>
         </TouchableOpacity>
-        <Text style={{ fontWeight: 'bold', marginLeft: 15, marginBottom: 10 }}>Tổng: <Text style={{ fontWeight: '500', color: 'red'}}>{receipts.length}</Text></Text>
+        <Text style={{ fontWeight: 'bold', marginLeft: 15, marginBottom: 10 }}>Tổng: <Text style={{ fontWeight: '500', color: 'red'}}>{total}</Text></Text>
         {receipts?.length > 0 && 
-            <ScrollView style={styles.content}>
+            <ScrollView style={styles.content} onScroll={handleScroll} scrollEventThrottle={16}>
                 {receipts?.map((receipt, index) => <OrderItem key={index} receipt={receipt}/>)}
             </ScrollView>
         }
@@ -159,6 +182,7 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 0.9,
+        marginBottom: 15
     },
     icon_calender: {
         width: 28,

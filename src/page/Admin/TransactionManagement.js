@@ -3,12 +3,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollView } from "react-native";
 import { format } from "date-fns";
 import { Dropdown } from 'react-native-element-dropdown';
-import { Searchbar, DataTable } from "react-native-paper";
-import * as Animatable from 'react-native-animatable';
+import { DataTable } from "react-native-paper";
 import RBSheet from "react-native-raw-bottom-sheet";
 
 
-import useDebounce from "../../hooks";
 import { setDateFormat } from "../../utils/helper";
 import ModalCalendar from "../../components/Modal/ModalCalendar";
 import { filterServicePackage } from "../../actions/otherActions";
@@ -27,10 +25,7 @@ function TransactionManagement() {
     const refRBSheet = useRef();
     const [loading, setLoading] = useState(false);
     const [transactions, setTransactions] = useState([]);
-    const [searchValue, setSearchValue] = useState(null);
-    const debounceValue = useDebounce(searchValue, 500); 
     const [typeTransaction, setTypeTransaction] = useState('1');
-    const [searchBarVisible, setSearchBarVisible] = useState(false);
     const [buttonTimeType, setButtonTimeType] = useState('homnay'); 
     const [fromDate, setFromDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
     const [toDate, setToDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
@@ -38,6 +33,9 @@ function TransactionManagement() {
     const [servicePackage, setServicePackage] = useState([]);
     const [servicePackageSelected, setServicePackageSelected] = useState(0);
     const [servicePackageId, setServicePackageId] = useState(null);
+    const [pageIndex, setPageIndex] = useState(0);
+    const [total, setTotal] = useState(0);
+    const previousOffsetY = useRef(0);
 
 
     useEffect(() => {
@@ -64,9 +62,14 @@ function TransactionManagement() {
             const fetchAPI = async()=> {
                 setLoading(true);
 
-                const response = await filterTransaction({ pageIndex: 0, pageSize: 1000, fromDate, toDate, orderBy: null, servicePackageId, paid, keySearch: debounceValue});
+                const response = await filterTransaction({ pageIndex, pageSize: 100, fromDate, toDate, orderBy: null, servicePackageId, paid, keySearch: null});
                 if (response) {
-                    setTransactions(response.content);
+                    if (pageIndex == 0) {
+                        setTransactions(response?.content);
+                    } else {
+                        setTransactions(prev => [...prev, ...response?.content]);
+                    }
+                    setTotal(response.totalElement)
                 }
                 setLoading(false);
             }
@@ -76,7 +79,7 @@ function TransactionManagement() {
             setLoading(false);
             ToastAndroid.show('Lỗi tải danh sách giao dịch không thành công', ToastAndroid.SHORT);
         }
-    }, [debounceValue, paid, servicePackageId, fromDate, toDate])    
+    }, [paid, servicePackageId, fromDate, toDate, pageIndex])    
 
     const handleChangeTime = (data) => {
         const time = setDateFormat(data.buttonType, data.startDate, data.endDate);
@@ -84,6 +87,7 @@ function TransactionManagement() {
         setFromDate(time[0]);
         setToDate(time[1]);
         setButtonTimeType(data.buttonType);
+        setPageIndex(0);
         refRBSheet.current?.close();
     };
 
@@ -91,6 +95,7 @@ function TransactionManagement() {
         setButtonTimeType('homnay');
         setStartDate(format(new Date(Date.now()), 'yyyy-MM-dd'));
         setEndDate(format(new Date(Date.now()), 'yyyy-MM-dd'));
+        setPageIndex(0);
         refRBSheet.current?.close();    
     }
 
@@ -123,6 +128,7 @@ function TransactionManagement() {
         } else if (item.value == '3') {
             setPaid(false);
         }
+        setPageIndex(0);
         setTypeTransaction(item.value);
     }   
 
@@ -130,8 +136,22 @@ function TransactionManagement() {
         if (item.value == 0) {
             setServicePackageId(null);
         } else setServicePackageId(item.value);
+        setPageIndex(0);
         setServicePackageSelected(item.value);
     }
+
+    const handleScroll = (event) => {
+        const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+        const isScrollingDown = contentOffset.y > previousOffsetY.current;
+        previousOffsetY.current = contentOffset.y;
+    
+        if (isScrollingDown) {
+            const isEndOfList = layoutMeasurement.height + contentOffset.y >= contentSize.height-200;
+            if (isEndOfList) {
+                setPageIndex(prevPageIndex => prevPageIndex + 1)
+                };
+            }
+        }
 
     return ( 
         <View style={styles.container}>
@@ -140,40 +160,7 @@ function TransactionManagement() {
                     <Image source={require('../../assets/images/right_arrow.png')}  style={{ width: 17, height: 17, objectFit: 'contain', marginVertical: 15 }} />
                 </TouchableOpacity>
                 <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center'}}>Quản lý giao dịch</Text>
-                {!searchBarVisible ? 
-                    (<TouchableOpacity onPress={() => setSearchBarVisible(true)}>
-                        <Image source={require('../../assets/images/search.png')} style={{ width: 25, height: 20, objectFit: 'contain', tintColor: '#000000' }}/>
-                    </TouchableOpacity>) : 
-                    (<TouchableOpacity onPress={() => {
-                            setSearchBarVisible(false);
-                            setSearchValue(null);
-                        }}>
-                        <Image source={require('../../assets/images/close.png')} style={{ width: 25, height: 20, objectFit: 'contain', tintColor: '#000000' }}/>
-                    </TouchableOpacity>
-                )} 
             </View>
-            {searchBarVisible &&
-                (<Animatable.View animation="zoomIn" duration={50} style={{ backgroundColor: 'white', marginHorizontal: 15 }}>
-                    <View style={{ borderRadius: 5, backgroundColor: 'white', borderColor: '#15803D', borderWidth: 1, height: 40, flexDirection: 'row', alignItems: 'center', width: '100%' }}>
-                        <Searchbar
-                            placeholder="Tìm kiếm theo tên tài khoản"
-                            iconColor="#8e8e93"
-                            value={searchValue}
-                            style={{
-                                flex: 1,
-                                backgroundColor: 'transparent', 
-                            }}
-                            inputStyle={{
-                                fontSize: 13, 
-                            }}
-                            placeholderTextColor="#8e8e93" 
-                            onChangeText={(text) => setSearchValue(text)}
-                            clearIcon='close-circle-outline'
-                            onClearIconPress={() => setSearchValue(null)}
-                        />
-                    </View>
-                </Animatable.View>
-            )}
             <View style={{ marginHorizontal: 15 }}>
                 <View style={{ marginBottom: 15, display: 'flex', flexDirection: 'row', marginTop: 10 }}>
                     <TouchableOpacity onPress={() => refRBSheet.current?.open()}>
@@ -223,7 +210,7 @@ function TransactionManagement() {
                 </View>
             </View>
             {transactions?.length > 0 ?
-                (<ScrollView style={{ flex: 1, marginHorizontal: 15, marginBottom: 15 }}>     
+                (<ScrollView style={{ flex: 1, marginHorizontal: 15, marginBottom: 15 }} onScroll={handleScroll} scrollEventThrottle={16}>     
                     <View style={{ backgroundColor: 'white' }}>
                         <DataTable.Header>
                             <DataTable.Title>Tài khoản</DataTable.Title>

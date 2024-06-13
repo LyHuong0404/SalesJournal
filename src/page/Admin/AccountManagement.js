@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
-import { useCallback, useEffect, useState } from "react";
-import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollView } from "react-native";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { View, StyleSheet, Text, Image, TouchableOpacity, ToastAndroid, ScrollView } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
 import { Searchbar, DataTable } from "react-native-paper";
 import * as Animatable from 'react-native-animatable';
@@ -30,12 +30,20 @@ function AccountManagement() {
     const [isVendor, setIsVendor] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [selectedItem, setSelectedItem] = useState({});
+    const [pageIndex, setPageIndex] = useState(0);
+    const [total, setTotal] = useState(0);
+    const previousOffsetY = useRef(0);
 
     const getListAccount = async()=> {
         setLoading(true);
-        const response = await filterAccount({ pageIndex: 0, pageSize: 1000, keySearch: debounceValue, isVendor });
+        const response = await filterAccount({ pageIndex, pageSize: 100, keySearch: debounceValue, isVendor });
         if (response) {
-            setAccounts(response);
+            if (pageIndex == 0) {
+                setAccounts(response?.content);
+            } else {
+                setAccounts(prev => [...prev, ...response?.content]);
+            }
+            setTotal(response.totalElement)
         } else {
             ToastAndroid.show('Lỗi tải danh sách tài khoản không thành công', ToastAndroid.SHORT);
         }
@@ -49,7 +57,7 @@ function AccountManagement() {
             setLoading(false);
             ToastAndroid.show('Lỗi tải danh sách tài khoản không thành công', ToastAndroid.SHORT);
         }
-    }, [debounceValue, isVendor])    
+    }, [debounceValue, isVendor, pageIndex])    
 
 
     const handleChangeTypeAccount = useCallback((item) => {
@@ -60,14 +68,15 @@ function AccountManagement() {
         } else if (item.value == "1") {
             setIsVendor(null);
         }
+        setPageIndex(0);
         setTypeAccount(item.value);
     }, [typeAccount])
 
     const handleOpenModalConfirm = (item) => {
         setShowModal(true);
         setSelectedItem(item);
-
     }
+
     const handleChangeStatusAccount = () => {
         if (selectedItem.activate) {
             try {
@@ -75,6 +84,7 @@ function AccountManagement() {
                     const response = await lockAccount(selectedItem.id);
                     if (response?.code == 0) {
                         ToastAndroid.show('Lưu trạng thái thành công', ToastAndroid.SHORT);
+                        setPageIndex(0);
                         getListAccount();
                     } else ToastAndroid.show('Lưu trạng thái thất bại', ToastAndroid.SHORT);
                 }
@@ -88,6 +98,7 @@ function AccountManagement() {
                     const response = await unlockAccount(selectedItem.id);
                     if (response?.code == 0) {
                         ToastAndroid.show('Lưu trạng thái thành công', ToastAndroid.SHORT);
+                        setPageIndex(0);
                         getListAccount();
                     } else ToastAndroid.show('Lưu trạng thái thất bại', ToastAndroid.SHORT);
                 }
@@ -99,6 +110,20 @@ function AccountManagement() {
         }
         setShowModal(false);
     }
+
+    const handleScroll = (event) => {
+        const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+        const isScrollingDown = contentOffset.y > previousOffsetY.current;
+        previousOffsetY.current = contentOffset.y;
+    
+        if (isScrollingDown) {
+            const isEndOfList = layoutMeasurement.height + contentOffset.y >= contentSize.height-200;
+            if (isEndOfList) {
+                setPageIndex(prevPageIndex => prevPageIndex + 1)
+            }
+        }
+    }
+
 
     return ( 
         <View style={styles.container}>
@@ -113,6 +138,7 @@ function AccountManagement() {
                     </TouchableOpacity>) : 
                     (<TouchableOpacity onPress={() => {
                             setSearchBarVisible(false);
+                            setPageIndex(0);
                             setSearchValue(null);
                         }}>
                         <Image source={require('../../assets/images/close.png')} style={{ width: 25, height: 20, objectFit: 'contain', tintColor: '#000000' }}/>
@@ -135,9 +161,17 @@ function AccountManagement() {
                                 fontSize: 13, 
                             }}
                             placeholderTextColor="#8e8e93" 
-                            onChangeText={(text) => setSearchValue(text)}
+                            onChangeText={(text) => {
+                                setSearchValue(text)
+                                setPageIndex(0);
+                                }
+                            }
                             clearIcon='close-circle-outline'
-                            onClearIconPress={() => setSearchValue(null)}
+                            onClearIconPress={() => {
+                                setSearchValue(null);
+                                setPageIndex(0);
+                                }
+                            }
                         />
                     </View>
                 </Animatable.View>
@@ -158,11 +192,11 @@ function AccountManagement() {
                 </View> 
                 <View style={[styles.display, { marginBottom: 15}]}>
                     <Text style={{ fontWeight: '600' }}>Danh sách tài khoản </Text>
-                    <Text style={{ fontWeight: 'bold' }}>Tổng: <Text style={{ fontWeight: '500', color: 'red'}}>{accounts.length}</Text></Text>
+                    <Text style={{ fontWeight: 'bold' }}>Tổng: <Text style={{ fontWeight: '500', color: 'red'}}>{total}</Text></Text>
                 </View>
             </View>
             {accounts?.length > 0 ?
-                (<ScrollView style={{ flex: 1, marginHorizontal: 15, marginBottom: 15 }}> 
+                (<ScrollView style={{ flex: 1, marginHorizontal: 15, marginBottom: 15 }} onScroll={handleScroll} scrollEventThrottle={16}> 
                     <View style={{ backgroundColor: 'white' }}>
                     <DataTable.Header>
                         <DataTable.Title>

@@ -6,7 +6,7 @@ export const filterAccount = async({ pageIndex, pageSize, keySearch, isVendor })
         const filters = { pageIndex, pageSize, keySearch, isVendor  };
         const filteredParams = Object.fromEntries(Object.entries(filters).filter(([_, value]) => value !== null));
         const response = await httprequest.get('admin/filter-user', { params: filteredParams });
-        return response?.content;
+        return response;
     } catch (err) {
         console.log("Error when filtering account: ", err);
     }

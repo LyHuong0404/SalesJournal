@@ -79,7 +79,7 @@ function App() {
     registerForPushNotificationsAsync().then(token => {
       const setNotifyToken = async() => {
         const notifyToken = await AsyncStorage.getItem('notifyToken');
-        if (!notifyToken) {
+        if (notifyToken) {
           await AsyncStorage.setItem('notifyToken', token);
         }
       }

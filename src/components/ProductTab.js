@@ -1,5 +1,5 @@
 import { View, StyleSheet, ScrollView, ToastAndroid, Image, Text } from "react-native";
-import { useCallback, useEffect, useState, memo } from "react";
+import { useCallback, useEffect, useState, memo, useRef } from "react";
 import { FAB } from 'react-native-paper';
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
@@ -13,6 +13,7 @@ function ProductTab({ onSearchValue, onSelectedFilter }) {
     const [resetPageIndex, setResetPageIndex] = useState(0);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
+    const previousOffsetY = useRef(0);
  
 
     useEffect(() => {
@@ -24,7 +25,7 @@ function ProductTab({ onSearchValue, onSelectedFilter }) {
         const fetchProducts = async () => {
             setLoading(true);
             try {
-                const response = await filterProduct({ pageIndex, pageSize: 12, keySearch: onSearchValue, productId: null, orderBy: null, fromDate: null, toDate: null });      
+                const response = await filterProduct({ pageIndex, pageSize: 50, keySearch: onSearchValue, productId: null, orderBy: null, fromDate: null, toDate: null });      
                 if (response) {
                     if (onSelectedFilter == 'banchay') {
                         response?.content?.sort(function(a, b) {
@@ -59,20 +60,25 @@ function ProductTab({ onSearchValue, onSelectedFilter }) {
         fetchProducts();
     }, [pageIndex, resetPageIndex, onSearchValue, onSelectedFilter]);
 
-    const handleScroll = (event) => {
-        const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
-        const isEndOfList = layoutMeasurement.height + contentOffset.y >= contentSize.height - 25;
-        if (isEndOfList) {
-            setPageIndex(prevPageIndex => prevPageIndex + 1);
-        }
-    };
-    
+
     useFocusEffect(
         useCallback(() => {
             setResetPageIndex(prevResetIndex => prevResetIndex + 1);
         }, [])
     );
 
+    const handleScroll = (event) => {
+        const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+        const isScrollingDown = contentOffset.y > previousOffsetY.current;
+        previousOffsetY.current = contentOffset.y;
+    
+        if (isScrollingDown) {
+            const isEndOfList = layoutMeasurement.height + contentOffset.y >= contentSize.height-25;
+            if (isEndOfList) {
+                setPageIndex(prevPageIndex => prevPageIndex + 1)
+            };
+        }
+    }
     
     return (  
         <View style={styles.container}>

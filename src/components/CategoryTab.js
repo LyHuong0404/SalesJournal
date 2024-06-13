@@ -25,7 +25,7 @@ function CategoryTab({ onSearchValue }) {
             const fetchCategories = async () => {
                 setLoading(true);
                 try {
-                    const response = await filterCategory({ pageIndex, pageSize: 20, keySearch: onSearchValue });                   
+                    const response = await filterCategory({ pageIndex, pageSize: 100, keySearch: onSearchValue });                   
                     if (pageIndex == 0) {
                         setCategories(response?.content);
                     } else {

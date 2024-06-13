@@ -2,10 +2,14 @@ import { useNavigation } from "@react-navigation/native";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollView, Dimensions } from "react-native";
 import SegmentedControlTab from 'react-native-segmented-control-tab';
+import * as Animatable from 'react-native-animatable';
+import { Searchbar } from "react-native-paper";
+
 
 import { filterProduct } from "../actions/seller/productActions";
 import { filterCategory } from "../actions/seller/categoryActions";
 import LoadingSpinner from "../components/LoadingSpinner";
+import useDebounce from "../hooks";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -17,14 +21,18 @@ function Warehouse() {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
     const [productId, setProductId] = useState(null);
+    const [searchbarVisible, setSearchbarVisible] = useState(false);
+    const [searchValue, setSearchValue] = useState(null);
+    const debounceValue = useDebounce(searchValue, 500);
+
 
     useEffect(() => {
         try{      
             const getAllProduct = async() => {
                 setLoading(true);
-                const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: null, productId, orderBy: null, fromDate: null, toDate: null });
+                const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: debounceValue, productId, orderBy: null, fromDate: null, toDate: null });
                 
-                if (response?.content && response.content.length > 0) {
+                if (response?.content) {
                     setProducts(response.content);
                 } else setProducts([]);
                 setLoading(false);
@@ -35,7 +43,7 @@ function Warehouse() {
             setLoading(false);
             ToastAndroid.show('Lỗi khi tải sản phẩm', ToastAndroid.SHORT);
         }
-    }, [productId])
+    }, [productId, debounceValue])
 
     useEffect(() => {
         try{      
@@ -78,14 +86,52 @@ function Warehouse() {
 
     return ( 
         <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <Image source={require('../assets/images/right_arrow.png')} style={{ width: 17, height: 17, objectFit: 'contain' }}/>
-                        <Text style={{ fontWeight: 'bold', marginLeft: 10 }}>Kho hàng</Text>
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.header}>
+                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <Image source={require('../assets/images/right_arrow.png')} style={{ width: 17, height: 17, objectFit: 'contain' }}/>
+                    <Text style={{ fontWeight: 'bold', marginLeft: 10 }}>Kho hàng</Text>
+                </View>
+                {!searchbarVisible ? 
+                    (<TouchableOpacity onPress={() => setSearchbarVisible(true)}>
+                        <Image source={require('../assets/images/search.png')} style={{ width: 25, height: 20, objectFit: 'contain', tintColor: '#000000' }}/>
+                    </TouchableOpacity>) : 
+                    (<TouchableOpacity onPress={() => {
+                            setSearchbarVisible(false);
+                            setSearchValue(null);
+                        }}>
+                        <Image source={require('../assets/images/close.png')} style={{ width: 25, height: 20, objectFit: 'contain', tintColor: '#000000' }}/>
+                    </TouchableOpacity>
+                )} 
+            </TouchableOpacity>
+            {searchbarVisible &&
+                (<Animatable.View animation="zoomIn" duration={50} style={{ backgroundColor: 'white', marginHorizontal: 15, marginTop: 10 }}>
+                    <View style={{ borderRadius: 5, backgroundColor: 'white', borderColor: '#15803D', borderWidth: 1, height: 40, flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+                        <Searchbar
+                            autoFocus
+                            placeholder="Tìm kiếm theo tên"
+                            iconColor='#8e8e93'
+                            value={searchValue}
+                            style={{
+                                flex: 1,
+                                backgroundColor: 'transparent', 
+                            }}
+                            inputStyle={{
+                                fontSize: 13, 
+                            }}
+                            placeholderTextColor="#8e8e93" 
+                            onChangeText={(text) => {
+                                setSearchValue(text)
+                                }
+                            }
+                            clearIcon='close-circle-outline'
+                            onClearIconPress={() => {
+                                setSearchValue(null);
+                                }
+                            }
+                        />
                     </View>
-                </TouchableOpacity>
-            </View>
+                </Animatable.View>
+            )}
             <View style={{ display: 'flex', flexDirection: 'row', margin: 15, marginBottom: 0 }}>
                 <TouchableOpacity onPress={() => navigation.navigate('ImportBook')} style={{ backgroundColor: 'white', borderRadius: 7, justifyContent: 'center', alignItems: 'center', width: 80, paddingVertical: 5, marginRight: 15 }}>
                     <Image source={require('../assets/images/import_product.png')} style={{ width: 40, height: 40, objectFit: 'contain' }}/>
