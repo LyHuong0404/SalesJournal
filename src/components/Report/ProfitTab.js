@@ -4,6 +4,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { DataTable } from "react-native-paper";
 import { format } from 'date-fns';
 import RBSheet from "react-native-raw-bottom-sheet";
+import { PermissionsAndroid, Platform } from 'react-native';
 
 import { filterReceipt, filterReport, revenueOfProduct } from "../../actions/seller/receiptActions";
 import ModalCalendar from "../Modal/ModalCalendar";
@@ -184,6 +185,26 @@ function ProfitTab() {
         setSpentMoney(amount);
     }
 
+    const handleExportFile = async () => {
+        if (Platform.OS === 'android') {
+            const granted = await PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+              {
+                title: 'Write Storage Permission',
+                message: 'App needs access to memory to download the file ',
+                buttonNeutral: 'Ask Me Later',
+                buttonNegative: 'Cancel',
+                buttonPositive: 'OK',
+              }
+            );
+            if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+              console.error('Write Storage permission denied');
+              return;
+            }
+          }
+          
+    };
+
     return (  
         <View>
             <ScrollView>
@@ -193,10 +214,15 @@ function ProfitTab() {
                             <TouchableOpacity onPress={() => refRBSheet.current?.open()}>
                                 <Image source={require('../../assets/images/calendar.png')} style={styles.icon_calender}/>
                             </TouchableOpacity>
-                            <View style={styles.button_action_container}>   
-                                <Text style={styles.text_action}>
-                                    {labelOfTime()}
-                                </Text>
+                            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                                <View style={styles.button_action_container}>   
+                                    <Text style={styles.text_action}>
+                                        {labelOfTime()}
+                                    </Text>
+                                </View>
+                                <TouchableOpacity onPress={handleExportFile}>
+                                    <Image source={require('../../assets/images/download.png')} style={{ width:20, height: 20 }}/>
+                                </TouchableOpacity>
                             </View>
                         </View>
                         <View style={styles.box_container}>

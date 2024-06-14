@@ -103,7 +103,7 @@ function ProductTab({ onSearchValue, onSelectedFilter }) {
             </View>
             }
             {products?.length > 0 && 
-                <ScrollView onScroll={handleScroll}>
+                <ScrollView onScroll={handleScroll} scrollEventThrottle={16}>
                     <View style={styles.container_product}>
                         {products?.map((product, index) => <VerticalProduct key={index} product={product}/>)}
                     </View>

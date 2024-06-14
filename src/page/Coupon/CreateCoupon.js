@@ -51,7 +51,9 @@ function CreateCoupon() {
                 }
                 setCategories(convertFormat);
             }
-            fetchApi();
+            if (proviso == "BY_PRODUCT") {
+                fetchApi();
+            }
         } catch(err) {
             ToastAndroid.show('Lỗi khi tải sản phẩm', ToastAndroid.SHORT);
         }
@@ -144,6 +146,13 @@ function CreateCoupon() {
       );
     };
 
+    const handleChangeValue = (text) => {
+        const numericValue = parseInt(text);
+        if (type == 2 && numericValue > 100) {
+          return;
+        }
+        setValue(text);
+    };
 
     return ( 
         <View style={styles.container}>
@@ -238,7 +247,7 @@ function CreateCoupon() {
                                     placeholder='0'
                                     keyboardType='numeric'
                                     value={value} 
-                                    onChange={(text) => setValue(text)} 
+                                    onChange={handleChangeValue} 
                                     required={true}
                                 />
                             </View>
@@ -249,7 +258,11 @@ function CreateCoupon() {
                                             styles.text_button_type,
                                             {color: type == button.id ? '#15803D' : '#727171',
                                             backgroundColor: type == button.id ? '#ffffff' : 'transparent',}]}
-                                            onPress={() => setType(button.id)}>
+                                            onPress={() => {
+                                                setType(button.id)
+                                                setValue('');
+                                                }
+                                            }>
                                         {button.label}
                                         </Text>
                                     </View>

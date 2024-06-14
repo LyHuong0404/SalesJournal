@@ -73,7 +73,7 @@ function PaymentDetail() {
                     <View style={{ paddingVertical: 10, borderBottomWidth: 0.5, }}>
                         <View style={{ alignItems: 'center' }}>
                             <Text style={{ fontWeight: '500', color: '#3a3a3a' }}>HÓA ĐƠN BÁN HÀNG</Text>
-                            <Text style={{color: '#565555', fontSize: 12 }}>{`EUNAAB - ${convertTimeStamp(data?.createdAtDate, 'dd/MM/yyyy')} ${data?.createdAtTime}`}</Text>  
+                            <Text style={{color: '#565555', fontSize: 12 }}>{`#HD${data?.id} - ${convertTimeStamp(data?.createdAtDate, 'dd/MM/yyyy')} ${data?.createdAtTime}`}</Text>  
                         </View>
                         <View style={{ marginVertical: 5 }}>
                             <View style={[styles.display, { marginBottom: 5 }]}>

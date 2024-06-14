@@ -5,7 +5,6 @@ import { TabView, SceneMap, TabBar  } from 'react-native-tab-view';
 
 import SellTab from "../../components/Report/SellTab";
 import ProfitTab from "../../components/Report/ProfitTab";
-import RevenueTab from "../../components/Report/RevenueTab";
 import WarehouseTab from "../../components/Report/WarehouseTab";
 
 
@@ -13,7 +12,6 @@ const renderScene = SceneMap({
     first: ProfitTab,
     second: SellTab,
     third: WarehouseTab,
-    // four: RevenueTab,
 });
 
 const CustomTabBar = (props) => {
@@ -38,8 +36,7 @@ function Report() {
     const [routes] = useState([
         { key: 'first', title: 'Lãi lỗ' },
         { key: 'second', title: 'Bán hàng' },
-        { key: 'third', title: 'Kho hàng' },
-        // { key: 'four', title: 'Thu chi' },
+        { key: 'third', title: 'Kho hàng' }, 
     ]);
 
 
