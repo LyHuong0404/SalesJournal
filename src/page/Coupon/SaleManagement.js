@@ -1,7 +1,7 @@
 import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollView} from "react-native";
 import { useNavigation, useFocusEffect  } from "@react-navigation/native";
 import { FAB, Searchbar } from 'react-native-paper';
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import * as Animatable from 'react-native-animatable';
 
 import { filterCoupon } from "../../actions/couponActions";
@@ -16,11 +16,14 @@ function SaleManagement() {
     const [searchValue, setSearchValue] = useState(null);
     const debounceValue = useDebounce(searchValue, 500);
     const [loading, setLoading] = useState(false);
+    const [pageIndex, setPageIndex] = useState(0);
+    const [resetPageIndex, setResetPageIndex] = useState(0);
+    const previousOffsetY = useRef(0);
 
     const getAllCoupon = async () => {
         try {
             setLoading(true);
-            const response = await filterCoupon({ pageIndex: 0, pageSize: 1000, keySearch: debounceValue, orderBy: null });
+            const response = await filterCoupon({ pageIndex, pageSize: 40, keySearch: debounceValue, orderBy: null });
             if(response) {
                 if (response?.content.length > 0) {
                     response?.content?.map((element) => {
@@ -28,7 +31,11 @@ function SaleManagement() {
                         element.endDate = convertTimeStamp(element.endDate, 'dd/MM/yyyy');
                     });
                 }
-                setCoupons(response?.content); 
+                if (pageIndex === 0) {
+                    setCoupons(response?.content);
+                } else {
+                    setCoupons(prev => [...prev, ...response?.content]);
+                }
             }    
             setLoading(false);
         } catch (err) {
@@ -39,11 +46,11 @@ function SaleManagement() {
 
     useEffect(() => {  
         getAllCoupon();
-    }, [debounceValue]);
+    }, [debounceValue, resetPageIndex, pageIndex]);
 
     useFocusEffect(
         useCallback(() => {
-            getAllCoupon();
+            setResetPageIndex(prevResetIndex => prevResetIndex + 1);
         }, [])
     );
    
@@ -55,6 +62,19 @@ function SaleManagement() {
         }
     }
     
+    const handleScroll = (event) => {
+        const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+        const isScrollingDown = contentOffset.y > previousOffsetY.current;
+        previousOffsetY.current = contentOffset.y;
+    
+        if (isScrollingDown) {
+            const isEndOfList = layoutMeasurement.height + contentOffset.y >= contentSize.height-25;
+            if (isEndOfList) {
+                setPageIndex(prevPageIndex => prevPageIndex + 1)
+            };
+        }
+    }
+
     return ( 
         <View style={styles.container}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -78,7 +98,7 @@ function SaleManagement() {
                 <View style={{ marginHorizontal: 15, borderRadius: 5, backgroundColor: '#f8f9fa', borderColor: '#15803D', borderWidth: 1, height: 40, flexDirection: 'row', alignItems: 'center' }}>
                     <Searchbar
                         autoFocus
-                        placeholder="Tìm kiếm"
+                        placeholder="Tìm kiếm theo tên khuyến mãi"
                         iconColor='#8e8e93'
                         value={searchValue}
                         style={{
@@ -89,14 +109,22 @@ function SaleManagement() {
                             fontSize: 13, 
                         }}
                         placeholderTextColor="#8e8e93" 
-                        onChangeText={(text) => setSearchValue(text)}
+                        onChangeText={(text) => {
+                            setSearchValue(text);
+                            setPageIndex(0);
+                            }
+                        }
                         clearIcon='close-circle-outline'
-                        onClearIconPress={() => setSearchValue(null)}
+                        onClearIconPress={() => {
+                            setSearchValue(null);
+                            setPageIndex(0);
+                            }
+                        }
                     />
                 </View>
             </Animatable.View>)}
             {coupons?.length > 0 && 
-                <ScrollView style={{ marginHorizontal: 15 }}>
+                <ScrollView style={{ marginHorizontal: 15 }} onScroll={handleScroll} scrollEventThrottle={16}>
                     {coupons.map((coupon, index) => {
                         return (<View key={index} style={{ marginBottom: 10 }}>
                                     <TouchableOpacity onPress={() => navigation.navigate('CouponDetail', { couponId: coupon?.couponId })}>
