@@ -17,8 +17,6 @@ export const ShowLogout = () => {
     await dispatch(logout());
     navigation.navigate("LoginNav");
   }
-  useEffect(() => {
-  }, [isShowLogout]);
 
   return ( 
     <>

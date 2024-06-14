@@ -17,18 +17,18 @@ function PaymentDetail() {
     const [buyerEmail, setBuyerEmail] = useState(route.params?.buyerEmail || '');
     const [status, requestPermission] = MediaLibrary.usePermissions();
     const viewRef = useRef();
-
     const takeScreenshot = async () => {
         try {
-            if (status === null) {
-                requestPermission();
+            let permission = status;
+        if (!permission?.granted) {
+                permission = await requestPermission();
             }
           const uri = await captureRef(viewRef, {
             format: 'png',
             quality: 0.8,
           });
     
-          if (status?.granted) {
+          if (permission?.granted) {
             const asset = await MediaLibrary.createAssetAsync(uri);
             await MediaLibrary.createAlbumAsync('Screenshots', asset, false);
             ToastAndroid.show('Hình ảnh đã được lưu.', ToastAndroid.SHORT);
@@ -36,7 +36,7 @@ function PaymentDetail() {
             ToastAndroid.show('Không có quyền truy cập thư viện ảnh.', ToastAndroid.SHORT);
           }
         } catch (error) {
-            ToastAndroid.show('Không có quyền truy cập thư viện ảnh.', ToastAndroid.SHORT);
+            ToastAndroid.show('Có lỗi xảy ra khi lưu hóa đơn.', ToastAndroid.SHORT);
         }
       };
     return ( 

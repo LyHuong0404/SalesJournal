@@ -14,14 +14,14 @@ function ModalSell({ onClose }) {
 
     const handleChooseScanCode = () => {
         setLoading(true);
-        onClose;
+        onClose();
         refRBSheet.current?.open();
         setLoading(false);
     }
 
     const handleChooseInputCode = () => {
         setLoading(true);
-        onClose;
+        onClose();
         navigation.navigate('OrderConfirmation', { open: true })
         setLoading(false);
     }
