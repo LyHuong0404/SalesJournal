@@ -9,20 +9,17 @@ import LoadingSpinner from "../LoadingSpinner";
 
 function ModalSell({ onClose }) {
     const navigation = useNavigation();
-    const refRBSheet = useRef();
+    const refRBSheetScan = useRef();
     const [loading, setLoading] = useState(false);
 
     const handleChooseScanCode = () => {
-        setLoading(true);
-        onClose();
-        refRBSheet.current?.open();
-        setLoading(false);
+        refRBSheetScan.current?.open();
     }
 
     const handleChooseInputCode = () => {
         setLoading(true);
         onClose();
-        navigation.navigate('OrderConfirmation', { open: true })
+        navigation.navigate('OrderConfirmation', { open: true });
         setLoading(false);
     }
     
@@ -38,14 +35,18 @@ function ModalSell({ onClose }) {
             </TouchableOpacity>
 
             <RBSheet
-                ref={refRBSheet}
+                ref={refRBSheetScan}
                 customStyles={{               
                     container: {
                     height: '100%'
                     }
                 }}
             >
-                <QRDemo onScanSuccess={() => refRBSheet.current?.close()} close={() => refRBSheet.current?.close()}/>
+                <QRDemo onScanSuccess={() => {
+                        refRBSheetScan.current?.close(); 
+                        onClose();
+                    }} 
+                    close={() => refRBSheetScan.current?.close()}/>
             </RBSheet>
             {loading && <LoadingSpinner />}
         </View>

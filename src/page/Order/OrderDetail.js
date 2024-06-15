@@ -1,7 +1,9 @@
-import { View, StyleSheet, Text, TouchableOpacity, Image, ScrollView } from "react-native";
-import { useState } from "react";
+import { View, StyleSheet, Text, TouchableOpacity, Image, ScrollView, ToastAndroid } from "react-native";
+import { useRef, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import * as MediaLibrary from 'expo-media-library';
+import { captureRef } from 'react-native-view-shot';
+
 
 import { convertTimeStamp } from "../../utils/helper";
 
@@ -10,19 +12,21 @@ function OrderDetail() {
     const route = useRoute();
     const [receipt, setReceipt] = useState(route.params?.receipt || {});
     const [status, requestPermission] = MediaLibrary.usePermissions();
+    const viewRef = useRef();
 
 
     const takeScreenshot = async () => {
         try {
-            if (status === null) {
-                requestPermission();
+            let permission = status;
+        if (!permission?.granted) {
+                permission = await requestPermission();
             }
           const uri = await captureRef(viewRef, {
             format: 'png',
             quality: 0.8,
           });
     
-          if (status?.granted) {
+          if (permission?.granted) {
             const asset = await MediaLibrary.createAssetAsync(uri);
             await MediaLibrary.createAlbumAsync('Screenshots', asset, false);
             ToastAndroid.show('Hình ảnh đã được lưu.', ToastAndroid.SHORT);
@@ -30,12 +34,12 @@ function OrderDetail() {
             ToastAndroid.show('Không có quyền truy cập thư viện ảnh.', ToastAndroid.SHORT);
           }
         } catch (error) {
-            ToastAndroid.show('Không có quyền truy cập thư viện ảnh.', ToastAndroid.SHORT);
+            ToastAndroid.show('Có lỗi xảy ra khi lưu hóa đơn.', ToastAndroid.SHORT);
         }
     };
 
     return ( 
-        <View style={styles.container}>
+        <View style={styles.container} ref={viewRef}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image source={require('../../assets/images/right_arrow.png')}  style={{ width: 17, height: 17, objectFit: 'contain', marginVertical: 15 }} />
