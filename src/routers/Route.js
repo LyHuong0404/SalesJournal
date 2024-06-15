@@ -4,7 +4,7 @@ import Intro from '../page/Intro';
 import RegisterStore from '../page/Auth/RegisterStore';
 import Home from '../page/Home';
 import Order from '../page/Order/Order';
-import Warehouse from '../page/Warehouse';
+import Warehouse from '../page/Report/Warehouse';
 import Register from '../page/Auth/Register';
 import Login from '../page/Auth/Login';
 import UsernameInput from '../page/Auth/UsernameInput';
@@ -21,9 +21,7 @@ import ProductInCategory from '../page/Product/ProductInCategory';
 import Customers from '../page/Customers/Customers';
 import SettingStore from '../page/Auth/SettingStore';
 import PaymentDetail from '../page/PaymentDetail';
-import Payment from '../page/Payment';
 import OrderDetail from '../page/Order/OrderDetail';
-import TransactionDetails from '../page/TransactionDetails';
 import Report from '../page/Report/Report';
 import CreateCategory from '../page/Product/CreateCategory';
 import ImportProduct from '../page/ImportProduct/ImportProduct';
@@ -32,10 +30,10 @@ import SaleType from '../page/Coupon/SaleType';
 import CreateCoupon from '../page/Coupon/CreateCoupon';
 import SaleManagement from '../page/Coupon/SaleManagement';
 import CouponDetail from '../page/Coupon/CouponDetail';
-import ImportBook from '../page/ImportBook';
-import ExportBook from '../page/ExportBook';
+import ImportBook from '../page/Report/ImportBook';
+import ExportBook from '../page/Report/ExportBook';
 import ProfileUser from '../page/Auth/ProfileUser';
-import Logout from '../page/Logout';
+import Logout from '../page/Auth/Logout';
 import ServicePackage from '../page/ServicePackage';
 import Setting from '../page/Auth/Setting';
 import AdminHome from '../page/Admin/AdminHome';
@@ -46,6 +44,7 @@ import AddServicePackage from '../page/Admin/AddServicePackage';
 import OrderHistory from '../page/Auth/OrderHistory';
 import MyQR from '../page/Auth/MyQR';
 import { Image } from 'react-native';
+import AboutUs from '../page/AboutUs';
 
 
 const Tab = createBottomTabNavigator();
@@ -68,6 +67,7 @@ export const LoginNav = () => {
           <Stack.Screen name="RegisterStore" component={RegisterStore} options={{ headerShown: false }} />
           <Stack.Screen name="MyQR" component={MyQR} options={{ headerShown: false }} />
           <Stack.Screen name="OrderDetail" component={OrderDetail} options={{ headerShown: false }}/>
+          <Stack.Screen name="AboutUs" component={AboutUs} options={{ headerShown: false }}/>
       </Stack.Navigator>
     )
 }
@@ -90,6 +90,8 @@ export const UserLoggedNav = () => {
         <Stack.Screen name="MyQR" component={MyQR} options={{ headerShown: false }} />
         <Stack.Screen name="OrderDetail" component={OrderDetail} options={{ headerShown: false }}/>
         <Stack.Screen name="AdminNav" component={AdminNav} options={{ headerShown: false }}/>
+        <Stack.Screen name="AboutUs" component={AboutUs} options={{ headerShown: false }}/>
+        <Stack.Screen name="LoginNav" component={LoginNav}/>
     </Stack.Navigator>
   )
 }
@@ -109,6 +111,7 @@ export const AdminNav = () => {
         <Stack.Screen name="AddServicePackage" component={AddServicePackage} options={{ headerShown: false }}/>
         <Stack.Screen name="LoginNav" component={LoginNav}/>
         <Stack.Screen name="MyQR" component={MyQR} options={{ headerShown: false }} />
+        <Stack.Screen name="AboutUs" component={AboutUs} options={{ headerShown: false }}/>
       </Stack.Navigator>
   )
 }
@@ -129,9 +132,7 @@ export const VendorNav = () => {
         <Stack.Screen name="OrderConfirmation" component={OrderConfirmation} options={{ headerShown: false }}/>
         <Stack.Screen name="Customers" component={Customers} options={{ headerShown: false }}/>
         <Stack.Screen name="PaymentDetail" component={PaymentDetail} options={{ headerShown: false }}/>
-        <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }}/>
         <Stack.Screen name="OrderDetail" component={OrderDetail} options={{ headerShown: false }}/>
-        <Stack.Screen name="TransactionDetails" component={TransactionDetails} options={{ headerShown: false }}/>
         <Stack.Screen name="Report" component={Report} options={{ headerShown: false }}/>
         <Stack.Screen name="CreateCategory" component={CreateCategory} options={{ headerShown: false }}/>
         <Stack.Screen name="ImportProduct" component={ImportProduct} options={{ headerShown: false }}/>
@@ -152,6 +153,7 @@ export const VendorNav = () => {
         <Stack.Screen name="LoginNav" component={LoginNav}/>
         <Stack.Screen name="Intro" component={Intro} options={{ headerShown: false }}/>
         <Stack.Screen name="MyQR" component={MyQR} options={{ headerShown: false }} />
+        <Stack.Screen name="AboutUs" component={AboutUs} options={{ headerShown: false }}/>
       </Stack.Navigator>
   )
 }

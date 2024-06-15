@@ -35,7 +35,7 @@ function SettingProfile() {
                     <Text style={{ flex: 1, marginLeft: 10 }}>Đóng góp ý kiến</Text>
                     <Image source={require('../../assets/images/left_arrow.png')} style={[styles.icon, { tintColor: '#d9d9d9' }]} />
                 </TouchableOpacity> */}
-                <TouchableOpacity style={styles.setting_item}>
+                <TouchableOpacity style={styles.setting_item} onPress={() => navigation.navigate("AboutUs")}>
                     <Image source={require('../../assets/images/info.png')} style={styles.icon} />
                     <Text style={{ flex: 1, marginLeft: 10 }}>Về ứng dụng</Text>
                     <Image source={require('../../assets/images/left_arrow.png')} style={[styles.icon, { tintColor: '#d9d9d9' }]} />

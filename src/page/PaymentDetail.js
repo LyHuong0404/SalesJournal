@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, TouchableOpacity, Image, ScrollView, Button, ToastAndroid } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Image, ScrollView, ToastAndroid } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import QRCode from 'react-native-qrcode-svg';
@@ -38,7 +38,8 @@ function PaymentDetail() {
         } catch (error) {
             ToastAndroid.show('Có lỗi xảy ra khi lưu hóa đơn.', ToastAndroid.SHORT);
         }
-      };
+    };
+
     return ( 
         <View ref={viewRef} style={styles.container}>
             <TouchableOpacity onPress={() => navigation.navigate('DrawerNav')}>
@@ -67,7 +68,6 @@ function PaymentDetail() {
                                 <Image source={require('../assets/images/earth.png')} style={{ width: 17, height: 17, objectFit: 'contain', marginRight: 5 }} />
                                 <Text style={{ fontStyle: 'italic', color: '#565555', width: 240 }}>{user?.email}</Text>
                             </View>
-                            {/* <Text style={{ color: '#565555' }}>0123456789</Text> */}
                         </View>
                     </View>
                     <View style={{ paddingVertical: 10, borderBottomWidth: 0.5, }}>
@@ -80,10 +80,6 @@ function PaymentDetail() {
                                 <Text style={{ flex: 0.4, color: '#565555'}}>Khách:</Text>
                                 <Text style={[styles.text, { flex: 1 }]}>{buyerEmail}</Text>
                             </View>
-                            {/* <View style={styles.display}>
-                                <Text style={{ flex: 0.4, color: '#565555'}}>SĐT:</Text>
-                                <Text style={[styles.text, { flex: 1 }]}>0888484545</Text>
-                            </View> */}
                         </View>
                     </View>
                     <View style={{ paddingVertical: 20, borderBottomWidth: 1, borderStyle: 'dashed' }}>
@@ -113,14 +109,6 @@ function PaymentDetail() {
                     </View>
                     <View style={{ paddingVertical: 20, borderBottomWidth: 1, borderStyle: 'dashed' }}>
                         <View style={[styles.display, { justifyContent: 'space-between', marginBottom: 2 }]}>
-                            {/* <Text style={[styles.text_light, { color: '#565555'}]}>
-                                {`Tổng ${data?.receiptDetails.reduce((total, item) => {
-                                    return total + item?.numberProduct;
-                                }, 0)} sản phẩm`}
-                            </Text> */}
-                            {/* <Text style={styles.text}>26.000 ₫</Text> */}
-                        </View>
-                        <View style={[styles.display, { justifyContent: 'space-between', marginBottom: 2 }]}>
                             {data?.receiptDetails.some((item) => item.coupon != null) && <>
                                 <Text style={[styles.text_light, { color: '#565555'}]}>Tổng đơn gốc</Text>
                                 <Text style={styles.text}>{`${data?.totalSalePrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>
@@ -135,7 +123,7 @@ function PaymentDetail() {
                                             {item.coupon && 
                                                 <>
                                                     <View style={styles.coupon_container}>
-                                                        <Text style={styles.name_coupon}>{item.coupon?.couponCode}</Text>
+                                                        <Text style={styles.name_coupon} onPress={() => navigation.navigate('CouponDetail', {couponId: item.coupon?.couponId})}>{item.coupon?.couponCode}</Text>
                                                     </View>
                                                     <Text style={styles.text}>-{`${item.discount * item.numberProduct}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>
                                                 </>
@@ -145,7 +133,7 @@ function PaymentDetail() {
                                     {data?.coupon && 
                                         <View style={[styles.display, { justifyContent: 'space-between', marginBottom: 2 }]}>
                                             <View style={styles.coupon_container}>
-                                                <Text style={styles.name_coupon}>{data.coupon.couponCode}</Text>
+                                                <Text style={styles.name_coupon} onPress={() => navigation.navigate('CouponDetail', {couponId: item.coupon?.couponId})}>{data.coupon.couponCode}</Text>
                                             </View>
                                             <Text style={styles.text}>-{`${data.discountOfReceipt}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>
                                         </View> 
@@ -155,7 +143,7 @@ function PaymentDetail() {
                         </View>
                         <View style={[styles.display, { justifyContent: 'space-between', marginBottom: 2 }]}>
                             <Text style={styles.text}>Tổng cộng</Text>
-                            <Text style={styles.text}>{`${data?.finalPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>
+                            <Text style={[styles.text, { color: '#d81f1f' }]}>{`${data?.finalPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>
                         </View>
                     </View>
                     <View style={{ paddingVertical: 10, borderBottomWidth: 1, borderStyle: 'dashed' }}>

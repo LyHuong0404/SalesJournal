@@ -5,10 +5,10 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { format } from "date-fns";
 
 
-import ModalCalendar from "../components/Modal/ModalCalendar";
-import { setDateFormat } from "../utils/helper";
-import LoadingSpinner from "../components/LoadingSpinner";
-import { filterProduct } from "../actions/seller/productActions";
+import ModalCalendar from "../../components/Modal/ModalCalendar";
+import { setDateFormat } from "../../utils/helper";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import { filterProduct } from "../../actions/seller/productActions";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -30,15 +30,15 @@ function ImportBook() {
                 const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: null, productId: null, orderBy: null, fromDate, toDate });;
                 if (response) {
                     const totalImportProductMoney = response?.content?.reduce((total, item) => {
-                        return total + (item?.product?.totalImportMoney);
+                        return total + (item.importPrice * item.importAmount);
                     }, 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '');
-                    const totalImportAmount = response?.content?.reduce((total, item) => {
-                        return total + (item?.product?.totalImportAmount);
+                    const totalImportAmount = response.content?.reduce((total, item) => {
+                        return total + (item.importAmount);
                     }, 0);
                     if (totalImportProductMoney > 0 || totalImportAmount > 0){
                         setTotalImport({ totalImportProductMoney, totalImportAmount });
-                        response.content = response.content.filter((item) => item.product.totalImportAmount > 0);
-                        setProducts(response?.content);
+                        response.content = response.content.filter((item) => item.importAmount > 0);
+                        setProducts(response.content);
                     } else {
                         setTotalImport('');
                     }
@@ -96,13 +96,13 @@ function ImportBook() {
         <View style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <Image source={require('../assets/images/right_arrow.png')}  style={{ width: 17, height: 17, objectFit: 'contain', marginVertical: 15 }} />
-                    </TouchableOpacity>
+                    <Image source={require('../../assets/images/right_arrow.png')}  style={{ width: 17, height: 17, objectFit: 'contain', marginVertical: 15 }} />
+                </TouchableOpacity>
                 <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center'}}>Sổ nhập hàng</Text>
             </View>
             <View style={[styles.display_center, { margin: 15 }]}>
                 <TouchableOpacity onPress={() => refRBSheet.current?.open()}>
-                    <Image source={require('../assets/images/calendar.png')} style={styles.icon_calender}/>
+                    <Image source={require('../../assets/images/calendar.png')} style={styles.icon_calender}/>
                 </TouchableOpacity>
                 <View style={styles.button_action_container}>   
                     <Text style={styles.text_action}>
@@ -116,14 +116,14 @@ function ImportBook() {
                         <View style={{ paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#e2e5ea' }}>
                             <View style={[styles.display, { marginVertical: 10 }]}>
                                 <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                    <Image source={require('../assets/images/distributions.png')} style={{ width: 28, height: 28, marginRight: 10 }}/>
+                                    <Image source={require('../../assets/images/distributions.png')} style={{ width: 28, height: 28, marginRight: 10 }}/>
                                     <Text style={{ color: '#969696', fontSize: 13 }}>Tổng số lượng nhập</Text>                
                                 </View>
                                 <Text style={{ color: '#3a3a3a', fontSize: 13, fontWeight: '500' }}>{totalImport.totalImportAmount}</Text>                
                             </View> 
                             <View style={[styles.display, { marginVertical: 10 }]}>
                                 <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                    <Image source={require('../assets/images/dollar.png')} style={{ width: 28, height: 28, marginRight: 10 }}/>
+                                    <Image source={require('../../assets/images/dollar.png')} style={{ width: 28, height: 28, marginRight: 10 }}/>
                                     <Text style={{ color: '#969696', fontSize: 13 }}>Tổng số tiền nhập</Text>                
                                 </View>
                                 <Text style={{ color: '#3a3a3a', fontSize: 13, fontWeight: '500' }}>{totalImport.totalImportProductMoney}</Text>                
@@ -140,7 +140,7 @@ function ImportBook() {
                             <Text>{item.name}</Text>
                             <View style={[styles.display, { marginVertical: 6 }]}>
                                 <Text style={{ color: '#969696', fontSize: 12 }}>{`#SP00${item.id}`}</Text>                
-                                <Text style={{ color: '#3a3a3a', fontSize: 12, fontWeight: '500' }}>SL: + {item.product.totalImportAmount}</Text>                
+                                <Text style={{ color: '#3a3a3a', fontSize: 12, fontWeight: '500' }}>SL: + {item.importAmount}</Text>                
                             </View>              
                         </View>
                     )}
@@ -149,7 +149,7 @@ function ImportBook() {
 
             {!totalImport &&
                 <View style={styles.no_content}>
-                    <Image source={require('../assets/images/notes.png')} style={{ width: 80, height: 80, objectFit: 'contain', marginVertical: 10 }}/>
+                    <Image source={require('../../assets/images/notes.png')} style={{ width: 80, height: 80, objectFit: 'contain', marginVertical: 10 }}/>
                     <Text style={{ color: '#767676' }}>Bạn chưa có báo cáo nào được ghi lại.</Text>
                 </View>
             }

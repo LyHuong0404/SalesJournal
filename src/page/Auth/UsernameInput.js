@@ -126,7 +126,7 @@ function UsernameInput() {
             <View style={{ flex: 0.3, alignItems: 'center', marginVertical: 10 }}>
                 <Image source={require('../../assets/images/guarantee.png')} style={{ width: 40, height: 40, objectFit: 'contain', marginBottom: 10 }} />
                 <Text style={{ marginBottom: 20, fontSize: 11 }}>An toàn & bảo mật 100%</Text>
-                <Text style={{ color: '#888888' }}>Bằng việc ấn vào Tiếp tục, bạn đã đồng ý với <Text style={{ color: '#15803D'}}>Điều khoản và Điều kiện sử dụng </Text>của ứng dụng</Text>
+                <Text style={{ color: '#888888' }}>Bằng việc ấn vào Tiếp tục, bạn đã đồng ý với <Text style={{ color: '#15803D'}} onPress={() => navigation.navigate("AboutUs")}>Điều khoản và Điều kiện sử dụng </Text>của ứng dụng</Text>
             </View>
             {loading && <LoadingSpinner />}
             

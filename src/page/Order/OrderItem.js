@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { View, StyleSheet, Text, Button, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
 
 import { convertTimeStamp } from "../../utils/helper";
 
@@ -13,15 +13,14 @@ function OrderItem({ receipt }) {
                     <Text style={styles.text_customer}>{`#${receipt?.id}`}</Text>
                     <Text style={styles.text_info_order}>{`${convertTimeStamp(receipt?.createdAtDate, 'dd/MM')} ${receipt?.createdAtTime} - HD${receipt?.id}`}</Text>
                 </View>
-                <Text style={styles.button_delivered}>{receipt?.paymentMethod}</Text>
-
+                {(receipt?.receiptDetails.some((item) => item.coupon != null) || receipt?.coupon) && <Image source={require('../../assets/images/sale.png')} style={{ width: 24, height: 24, objectFit: 'cover'}} />}
             </View>
             <View style={styles.content_below}>
                 <View style={styles.display}>
                     <Text>Tổng cộng</Text>
                     <Text style={styles.total_price}>{`${receipt?.finalPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                 </View>
-                {(receipt?.receiptDetails.some((item) => item.coupon != null) || receipt?.coupon) && <Text style={{ color: '#cb870b', textAlign: 'right', fontSize: 12 }}>Khuyến mãi</Text>}
+                {(receipt?.receiptDetails.some((item) => item.coupon != null) || receipt?.coupon) && <Text style={{ color: '#d81f1f', textAlign: 'right', fontSize: 12 }}>Khuyến mãi</Text>}
             </View>
         </TouchableOpacity>
     );
@@ -49,15 +48,6 @@ const styles = StyleSheet.create({
     },
     content_below: {
         paddingVertical: 10,
-    },
-    button_delivered: {
-        paddingHorizontal: 6, 
-        fontSize: 12, 
-        color: '#15803D', 
-        backgroundColor: '#bbf0cf', 
-        height: 24, 
-        fontWeight: '500', 
-        borderRadius: 10
     },
     total_price: {
         fontWeight: 'bold',

@@ -6,15 +6,14 @@ import * as Animatable from 'react-native-animatable';
 import { Searchbar } from "react-native-paper";
 
 
-import { filterProduct } from "../actions/seller/productActions";
-import { filterCategory } from "../actions/seller/categoryActions";
-import LoadingSpinner from "../components/LoadingSpinner";
-import useDebounce from "../hooks";
+import { filterProduct } from "../../actions/seller/productActions";
+import { filterCategory } from "../../actions/seller/categoryActions";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import useDebounce from "../../hooks";
 
 const screenWidth = Dimensions.get('window').width;
 
 function Warehouse() {
-    const refRBSheet = useRef();
     const navigation = useNavigation();
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [products, setProducts] = useState([]);
@@ -31,7 +30,6 @@ function Warehouse() {
             const getAllProduct = async() => {
                 setLoading(true);
                 const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: debounceValue, productId, orderBy: null, fromDate: null, toDate: null });
-                
                 if (response?.content) {
                     setProducts(response.content);
                 } else setProducts([]);
@@ -88,18 +86,18 @@ function Warehouse() {
         <View style={styles.container}>
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.header}>
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                    <Image source={require('../assets/images/right_arrow.png')} style={{ width: 17, height: 17, objectFit: 'contain' }}/>
+                    <Image source={require('../../assets/images/right_arrow.png')} style={{ width: 17, height: 17, objectFit: 'contain' }}/>
                     <Text style={{ fontWeight: 'bold', marginLeft: 10 }}>Kho hàng</Text>
                 </View>
                 {!searchbarVisible ? 
                     (<TouchableOpacity onPress={() => setSearchbarVisible(true)}>
-                        <Image source={require('../assets/images/search.png')} style={{ width: 25, height: 20, objectFit: 'contain', tintColor: '#000000' }}/>
+                        <Image source={require('../../assets/images/search.png')} style={{ width: 25, height: 20, objectFit: 'contain', tintColor: '#000000' }}/>
                     </TouchableOpacity>) : 
                     (<TouchableOpacity onPress={() => {
                             setSearchbarVisible(false);
                             setSearchValue(null);
                         }}>
-                        <Image source={require('../assets/images/close.png')} style={{ width: 25, height: 20, objectFit: 'contain', tintColor: '#000000' }}/>
+                        <Image source={require('../../assets/images/close.png')} style={{ width: 25, height: 20, objectFit: 'contain', tintColor: '#000000' }}/>
                     </TouchableOpacity>
                 )} 
             </TouchableOpacity>
@@ -134,12 +132,12 @@ function Warehouse() {
             )}
             <View style={{ display: 'flex', flexDirection: 'row', margin: 15, marginBottom: 0 }}>
                 <TouchableOpacity onPress={() => navigation.navigate('ImportBook')} style={{ backgroundColor: 'white', borderRadius: 7, justifyContent: 'center', alignItems: 'center', width: 80, paddingVertical: 5, marginRight: 15 }}>
-                    <Image source={require('../assets/images/import_product.png')} style={{ width: 40, height: 40, objectFit: 'contain' }}/>
+                    <Image source={require('../../assets/images/import_product.png')} style={{ width: 40, height: 40, objectFit: 'contain' }}/>
                     <Text style={{ textAlign: 'center', fontWeight: '500', fontSize: 11 }}>Sổ nhập hàng</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => navigation.navigate('ExportBook')} style={{ backgroundColor: 'white', borderRadius: 7, justifyContent: 'center', alignItems: 'center', width: 80, paddingVertical: 5 }}>
-                    <Image source={require('../assets/images/export_product.png')} style={{ width: 40, height: 40, objectFit: 'contain' }}/>
+                    <Image source={require('../../assets/images/export_product.png')} style={{ width: 40, height: 40, objectFit: 'contain' }}/>
                     <Text style={{ textAlign: 'center', fontWeight: '500', fontSize: 11 }}>Sổ xuất hàng</Text>
                 </TouchableOpacity>
             </View>
@@ -200,7 +198,7 @@ function Warehouse() {
                                 </View>
                             </View>
                         ) : <View style={styles.content_noitem}>
-                                <Image source={require('../assets/images/noresults.png')} style={{ width: 150, height: 150, objectFit: 'contain' }}/>
+                                <Image source={require('../../assets/images/noresults.png')} style={{ width: 150, height: 150, objectFit: 'contain' }}/>
                                 <Text style={{ color: '#8e8e93', textAlign: 'center', marginBottom: 15, marginTop: 25 }}>Bạn chưa nhập hàng cho sản phẩm này. </Text>
                             </View>
                         }                   

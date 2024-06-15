@@ -220,9 +220,9 @@ function ProfitTab() {
                                         {labelOfTime()}
                                     </Text>
                                 </View>
-                                <TouchableOpacity onPress={handleExportFile}>
+                                {/* <TouchableOpacity onPress={handleExportFile}>
                                     <Image source={require('../../assets/images/download.png')} style={{ width:20, height: 20 }}/>
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
                             </View>
                         </View>
                         <View style={styles.box_container}>
@@ -302,7 +302,6 @@ function ProfitTab() {
                             style={styles.dropdown}
                             selectedTextStyle={styles.selectedTextStyle}
                             itemTextStyle={{ fontSize: 12 }}
-                            // activeColor
                             iconColor='#2083c5'
                             data={revenueOptions}
                             labelField="label"
@@ -317,28 +316,29 @@ function ProfitTab() {
                         <DataTable>
                             {loadingTable && <LoadingSpinner />}
                             {revenueOption == "1" && 
-                            <>
-                                <DataTable.Header>
-                                    <DataTable.Title style={styles.cell}><Text style={styles.header_table}>SẢN PHẨM</Text></DataTable.Title>
-                                    <DataTable.Title style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.header_table}>SL</Text></DataTable.Title>
-                                    <DataTable.Title style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.header_table}>D.THU</Text></DataTable.Title>
-                                    <DataTable.Title style={styles.cell} numeric><Text style={styles.header_table}>L.NHUẬN</Text></DataTable.Title>
-                                </DataTable.Header>
-                                {revenueByTable.map((item, index) => 
-                                    <DataTable.Row key={index}>
-                                        <DataTable.Cell style={styles.cell}><Text style={styles.cell_text_number}>{item?.product?.name}</Text></DataTable.Cell>
-                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{`${item?.product?.totalSaleAmount || 0}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
-                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{`${item?.product?.totalSaleMoney || 0}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
-                                        <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${item?.product?.totalRevenue || 0}`?.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
-                                    </DataTable.Row>
-                                )}
-                            </>}
+                                <>
+                                    <DataTable.Header>
+                                        <DataTable.Title style={styles.cell}><Text style={styles.header_table}>SẢN PHẨM</Text></DataTable.Title>
+                                        <DataTable.Title style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.header_table}>SL</Text></DataTable.Title>
+                                        <DataTable.Title style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.header_table}>D.THU</Text></DataTable.Title>
+                                        <DataTable.Title numeric><Text style={styles.header_table}>L.NHUẬN</Text></DataTable.Title>
+                                    </DataTable.Header>
+                                    {revenueByTable.map((item, index) => 
+                                        <DataTable.Row key={index}>
+                                            <DataTable.Cell style={styles.cell}><Text style={styles.cell_text_number}>{item?.product?.name}</Text></DataTable.Cell>
+                                            <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{`${item.totalSaleAmount || 0}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                            <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{`${item.totalSaleMoney || 0}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                            <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${item.totalRevenue || 0}`?.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                        </DataTable.Row>
+                                    )}
+                                </>
+                            }
                             {revenueOption == "2" && 
                             <>
                                 <DataTable.Header>
                                     <DataTable.Title style={styles.cell}><Text style={styles.header_table}>ĐƠN HÀNG</Text></DataTable.Title>
                                     <DataTable.Title style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.header_table}>D.THU</Text></DataTable.Title>
-                                    <DataTable.Title style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.header_table}>L.NHUẬN</Text></DataTable.Title>
+                                    <DataTable.Title numeric><Text style={styles.header_table}>L.NHUẬN</Text></DataTable.Title>
                                 </DataTable.Header>
                                 {revenueByTable.map((item, index) => 
                                     <DataTable.Row key={index}>
@@ -349,7 +349,7 @@ function ProfitTab() {
                                             </View>
                                         </DataTable.Cell>
                                         <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.cell_text_number}>{`${item?.finalPrice || 0}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
-                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.cell_text_number}>{`${(item?.finalPrice - item.totalImportPrice) || 0}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                        <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${(item?.finalPrice - item.totalImportPrice) || 0}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
                                     </DataTable.Row>
                                 )}
                             </>}
@@ -359,14 +359,14 @@ function ProfitTab() {
                                     <DataTable.Title style={styles.cell}><Text style={styles.header_table}>NGÀY</Text></DataTable.Title>
                                     <DataTable.Title style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.header_table}>ĐƠN</Text></DataTable.Title>
                                     <DataTable.Title style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.header_table}>D.THU</Text></DataTable.Title>
-                                    <DataTable.Title style={styles.cell} numeric><Text style={styles.header_table}>L.NHUẬN</Text></DataTable.Title>
+                                    <DataTable.Title numeric><Text style={styles.header_table}>L.NHUẬN</Text></DataTable.Title>
                                 </DataTable.Header>
                                 {revenueByTable.map((item, index) => 
                                     <DataTable.Row key={index}>
                                         <DataTable.Cell style={styles.cell}><Text style={styles.cell_text_number}>{convertTimeStamp(item.date, 'dd/MM/yyyy')}</Text></DataTable.Cell>
                                         <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{item.totalReceipt || 0}</Text></DataTable.Cell>
                                         <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{`${item.totalSaleMoney || 0}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
-                                        <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${item?.totalRevenue}`?.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                        <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${item?.totalRevenue || 0}`?.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
                                     </DataTable.Row>
                                 )}
                             </>
