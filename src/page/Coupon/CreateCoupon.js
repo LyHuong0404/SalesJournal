@@ -154,6 +154,18 @@ function CreateCoupon() {
         setValue(text);
     };
 
+    const handleDisable = () => {
+        if (step == 1) {
+            if (proviso == 'BY_PRODUCT') {
+                return (!value || !provisoMinAmount || productIds?.length == 0);
+            } else {
+                return (!value || !provisoMinPrice);
+            }
+        } else {
+            return (!saleName || !couponCode || !startDate || !endDate || !limitUse);
+        }
+    }
+
     return ( 
         <View style={styles.container}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -296,7 +308,7 @@ function CreateCoupon() {
                         </View>
                         <Text style={{ marginTop: 20, fontWeight: 'bold', color: '#3a3a3a'}}>Cài đặt nâng cao</Text>
                         <View style={[styles.display, { alignItems: 'flex-end',  }]}>
-                            <Text style={{ color: '#5a5a5a' }}>Ngày bắt đầu</Text>
+                            <Text style={{ color: '#5a5a5a' }}>Ngày bắt đầu <Text style={{color: 'red' }}> *</Text></Text>
                             <View style={{ width: '40%'}}>
                                 <TextInputCustom
                                     required={false}
@@ -314,7 +326,7 @@ function CreateCoupon() {
                         </View>
 
                         <View style={[styles.display, { alignItems: 'flex-end',  }]}>
-                            <Text style={{ color: '#5a5a5a'}}>Ngày kết thúc</Text>
+                            <Text style={{ color: '#5a5a5a'}}>Ngày kết thúc <Text style={{color: 'red' }}> *</Text></Text>
                             <View style={{ width: '40%'}}>
                                 <TextInputCustom
                                     required={false}
@@ -331,7 +343,7 @@ function CreateCoupon() {
                             />
                         </View>
                         <View style={[styles.display, { alignItems: 'flex-end',  }]}>
-                            <Text style={{ color: '#5a5a5a'}}>Số lượng khuyến mãi</Text>
+                            <Text style={{ color: '#5a5a5a'}}>Số lượng khuyến mãi <Text style={{color: 'red' }}> *</Text></Text>
                             <View style={{ width: '40%'}}>
                                 <TextInputCustom
                                     required={false}
@@ -354,6 +366,7 @@ function CreateCoupon() {
                 borderColorLeft='#8b8b8b' 
                 onBack={handleBack}
                 onPressRight={handleContinues}
+                disableRightButton={handleDisable()}
             />
             {loading && <LoadingSpinner />}
         </View> 

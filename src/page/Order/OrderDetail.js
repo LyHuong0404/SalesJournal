@@ -1,6 +1,7 @@
 import { View, StyleSheet, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import * as MediaLibrary from 'expo-media-library';
 
 import { convertTimeStamp } from "../../utils/helper";
 
@@ -8,6 +9,30 @@ function OrderDetail() {
     const navigation = useNavigation();
     const route = useRoute();
     const [receipt, setReceipt] = useState(route.params?.receipt || {});
+    const [status, requestPermission] = MediaLibrary.usePermissions();
+
+
+    const takeScreenshot = async () => {
+        try {
+            if (status === null) {
+                requestPermission();
+            }
+          const uri = await captureRef(viewRef, {
+            format: 'png',
+            quality: 0.8,
+          });
+    
+          if (status?.granted) {
+            const asset = await MediaLibrary.createAssetAsync(uri);
+            await MediaLibrary.createAlbumAsync('Screenshots', asset, false);
+            ToastAndroid.show('Hình ảnh đã được lưu.', ToastAndroid.SHORT);
+          } else {
+            ToastAndroid.show('Không có quyền truy cập thư viện ảnh.', ToastAndroid.SHORT);
+          }
+        } catch (error) {
+            ToastAndroid.show('Không có quyền truy cập thư viện ảnh.', ToastAndroid.SHORT);
+        }
+    };
 
     return ( 
         <View style={styles.container}>
@@ -15,7 +40,10 @@ function OrderDetail() {
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image source={require('../../assets/images/right_arrow.png')}  style={{ width: 17, height: 17, objectFit: 'contain', marginVertical: 15 }} />
                 </TouchableOpacity>
-                <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center'}}>Chi tiết hóa đơn</Text>
+                <Text style={{ fontWeight: 'bold'}}>Chi tiết hóa đơn</Text>
+                <TouchableOpacity onPress={takeScreenshot} >
+                    <Image source={require('../../assets/images/download.png')} style={{ width:20, height: 20 }}/>
+                </TouchableOpacity>
             </View>
             <View style={styles.horizontalLine} />
             <ScrollView>
@@ -25,7 +53,7 @@ function OrderDetail() {
                             <Text style={styles.text_customer}>{`HD${receipt?.id}`}</Text>
                             <Text style={styles.text_info_order}>{`${receipt?.createdAtTime} - ${convertTimeStamp(receipt?.createdAtDate, 'dd/MM')}`}</Text>
                         </View>
-                    <Text style={styles.button_delivered}>{receipt?.paymentMethod}</Text>
+                        {(receipt?.receiptDetails.some((item) => item.coupon != null) || receipt?.coupon) && <Image source={require('../../assets/images/sale.png')} style={{ width: 24, height: 24, objectFit: 'cover'}} />}
                     </View>
                     <View style={styles.content_below}>
                         <View style={[styles.display, { alignItems: 'center', justifyContent: 'space-between' }]}>
@@ -71,17 +99,18 @@ function OrderDetail() {
                                             {item.coupon && 
                                                 <>
                                                     <View style={styles.coupon_container}>
-                                                        <Text style={styles.name_coupon}>{item.coupon?.couponCode}</Text>
+                                                        <Text style={styles.name_coupon} onPress={() => navigation.navigate('CouponDetail', {couponId: item.coupon?.couponId})}>{item.coupon?.couponCode}</Text>
                                                     </View>
                                                     <Text style={styles.text}>-{`${item.discount * item.numberProduct}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>
                                                 </>
                                             }
                                         </View> 
+                                        
                                     )}
                                     {receipt?.coupon && 
                                         <View style={[styles.display, { justifyContent: 'space-between', marginBottom: 2 }]}>
                                             <View style={styles.coupon_container}>
-                                                <Text style={styles.name_coupon}>{receipt.coupon.couponCode}</Text>
+                                                <Text style={styles.name_coupon} onPress={() => navigation.navigate('CouponDetail', {couponId: item.coupon?.couponId})}>{receipt.coupon.couponCode}</Text>
                                             </View>
                                             <Text style={styles.text}>-{`${receipt.discountOfReceipt}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>
                                         </View> 
@@ -92,8 +121,8 @@ function OrderDetail() {
                     </View>
                     <View>
                         <View style={[styles.display, { justifyContent: 'space-between', marginBottom: 5 }]}>
-                            <Text style={{ fontWeight: '500' }}>Tổng cộng</Text>
-                            <Text style={{ color: '#d81f1f', fontWeight: 'bold' }}>{`${receipt?.finalPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
+                            <Text style={{ fontWeight: '500', fontSize: 18 }}>Tổng cộng</Text>
+                            <Text style={{ color: '#d81f1f', fontWeight: 'bold', fontSize: 18 }}>{`${receipt?.finalPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                         </View>
                     </View>  
                 </View>
@@ -116,6 +145,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center', 
         paddingHorizontal: 15,
+        justifyContent: 'space-between'
     },
     price_container: {
         display: 'flex',

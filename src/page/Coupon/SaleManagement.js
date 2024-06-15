@@ -128,8 +128,8 @@ function SaleManagement() {
                     {coupons.map((coupon, index) => {
                         return (<View key={index} style={{ marginBottom: 10 }}>
                                     <TouchableOpacity onPress={() => navigation.navigate('CouponDetail', { couponId: coupon?.couponId })}>
-                                        <Text style={{ fontWeight: '500', color: '#6f6f6f', marginTop: 15, marginBottom: 5 }}>{statusOfCoupon(coupon.status)}</Text>
-                                        <View style={styles.coupon_item_container}> 
+                                        <Text style={{ fontWeight: '500', color: '#6f6f6f', marginTop: 15, marginBottom: 5, color: coupon.status ? '#15803D' : '#d81f1f' }}>{statusOfCoupon(coupon.status)}</Text>
+                                        <View style={[styles.coupon_item_container, { borderColor: coupon.status ? '#15803D' : '#d81f1f' }]}> 
                                             <View style={styles.display}>
                                                 <Text style={styles.coupon_code}>{coupon?.couponCode}</Text>
                                                 <Text style={styles.text_light}>{`${coupon?.startDate} - ${coupon?.endDate}`}</Text>
@@ -219,7 +219,8 @@ const styles = StyleSheet.create({
     coupon_item_container: {
         backgroundColor: 'white',
         borderRadius: 10,
-        padding: 10
+        padding: 10,
+        borderWidth: 1, 
     },
     coupon_code: {
         fontSize: 10,

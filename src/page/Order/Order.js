@@ -110,15 +110,17 @@ function Order() {
             </TouchableOpacity>
             <Text style={{ flex: 1, fontWeight: 'bold', textAlign: 'center' }}>Quản lý hóa đơn</Text>            
         </View>
-        <TouchableOpacity onPress={() => refRBSheet.current?.open()} style={{ display: 'flex', flexDirection: 'row', margin: 15, alignItems: 'flex-end' }}>
-            <Image source={require('../../assets/images/calendar.png')} style={styles.icon_calender}/>
-            <View style={styles.button_action_container}>   
-                <Text style={styles.text_action}>
-                    {labelOfTime()}
-                </Text>
+        <TouchableOpacity onPress={() => refRBSheet.current?.open()} style={{ display: 'flex', flexDirection: 'row', margin: 15, justifyContent: 'space-between', alignItems: 'flex-end' }}>
+            <View style={{ display: 'flex', flexDirection: 'row'}}>
+                <Image source={require('../../assets/images/calendar.png')} style={styles.icon_calender}/>
+                <View style={styles.button_action_container}>   
+                    <Text style={styles.text_action}>
+                        {labelOfTime()}
+                    </Text>
+                </View>
             </View>
+            <Text style={{ fontWeight: 'bold' }}>Tổng: <Text style={{ fontWeight: '500', color: 'red'}}>{total}</Text></Text>
         </TouchableOpacity>
-        <Text style={{ fontWeight: 'bold', marginLeft: 15, marginBottom: 10 }}>Tổng: <Text style={{ fontWeight: '500', color: 'red'}}>{total}</Text></Text>
         {receipts?.length > 0 && 
             <ScrollView style={styles.content} onScroll={handleScroll} scrollEventThrottle={16}>
                 {receipts?.map((receipt, index) => <OrderItem key={index} receipt={receipt}/>)}

@@ -2,7 +2,7 @@ import { memo } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Button } from "react-native-paper";
 
-function TwoButtonBottom({onBack, textColorLeft, titleLeft, buttonColorLeft, iconLeft, buttonColorRight, borderColorLeft, titleRight, onPressRight }) {
+function TwoButtonBottom({onBack, textColorLeft, titleLeft, buttonColorLeft, iconLeft, buttonColorRight, borderColorLeft, titleRight, onPressRight, disableRightButton }) {
     return (  
         <View style={styles.button_group}>
             <View style={styles.display}>
@@ -20,6 +20,7 @@ function TwoButtonBottom({onBack, textColorLeft, titleLeft, buttonColorLeft, ico
                     mode="contained" 
                     buttonColor={buttonColorRight} 
                     style={styles.button}
+                    disabled={disableRightButton}
                 >
                     {titleRight}
                 </Button>

@@ -333,12 +333,11 @@ function CouponDetail() {
                         }
                     </View> 
                     : 
-                        (type == 1 ? <Text style={{ color: '#383838', marginBottom: 5 }}>{`Giảm ${value} đơn tối thiểu ${provisoMinPrice}`}</Text>
+                        (type == 1 ? <Text style={{ color: '#383838', marginBottom: 5 }}>{`Giảm ${value} đơn tối thiểu ${provisoMinPrice.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`}</Text>
                         : <Text style={{ color: '#383838', marginBottom: 5 }}>{`Giảm ${value}% đơn tối thiểu ${provisoMinPrice}`}</Text>)  
                 }
-                <View style={styles.horizontalLine} />
                 <Text style={{ marginTop: 10, fontWeight: 'bold', color: '#3a3a3a'}}>Hiệu suất</Text>
-                <View style={{ display: 'flex', flexDirection: 'row', marginVertical: 10}}>
+                <View style={{ display: 'flex', flexDirection: 'row', marginVertical: 20}}>
                     <View style={{ display: 'flex', flexDirection: 'row'}}>
                         <Image source={require('../../assets/images/shopping_bag.png')} style={{ width: 20, height: 20, objectFit: 'contain', tintColor: '#2083c5' }}/>
                         <View style={{ display: 'flex', flexDirection: 'column', marginTop: 2, marginLeft: 5, marginRight: 50}}>
@@ -357,9 +356,9 @@ function CouponDetail() {
 
                 </View>
                 <View style={styles.horizontalLine} />
-                <Text style={{ marginTop: 20, fontWeight: 'bold', color: '#3a3a3a'}}>Cài đặt nâng cao</Text>
+                <Text style={{ marginTop: 10, fontWeight: 'bold', color: '#3a3a3a'}}>Cài đặt nâng cao</Text>
                 <View style={[styles.display, { alignItems: 'flex-end' }]}>
-                    <Text style={{ color: '#5a5a5a' }}>Ngày bắt đầu</Text>
+                    <Text style={{ color: '#5a5a5a' }}>Ngày bắt đầu <Text style={{color: 'red' }}> *</Text></Text>
                     <View style={{ width: '40%'}}>
                         <TextInputCustom
                             required={false}
@@ -377,7 +376,7 @@ function CouponDetail() {
                 </View>
 
                 <View style={[styles.display, { alignItems: 'flex-end',  }]}>
-                    <Text style={{  color: '#5a5a5a'}}>Ngày kết thúc</Text>
+                    <Text style={{  color: '#5a5a5a'}}>Ngày kết thúc <Text style={{color: 'red' }}> *</Text></Text>
                     <View style={{ width: '40%'}}>
                         <TextInputCustom
                             required={false}
@@ -393,8 +392,8 @@ function CouponDetail() {
                         onCancel={hideDatePicker}
                     />
                 </View>
-                <View style={[styles.display, { alignItems: 'flex-end',  }]}>
-                    <Text style={{ color: '#5a5a5a'}}>Số lượng khuyến mãi</Text>
+                <View style={[styles.display, { alignItems: 'flex-end', gap: 10 }]}>
+                    <Text style={{ color: '#5a5a5a'}}>Số lượng khuyến mãi <Text style={{color: 'red' }}> *</Text></Text>
                     <View style={{ width: '40%'}}>
                         <TextInputCustom
                             required={false}

@@ -4,10 +4,10 @@ import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid, ScrollV
 import RBSheet from "react-native-raw-bottom-sheet";
 import { format } from "date-fns";
 
-import ModalCalendar from "../components/Modal/ModalCalendar";
-import { setDateFormat } from "../utils/helper";
-import LoadingSpinner from "../components/LoadingSpinner";
-import { filterProduct } from "../actions/seller/productActions";
+import ModalCalendar from "../../components/Modal/ModalCalendar";
+import { setDateFormat } from "../../utils/helper";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import { revenueOfProduct } from "../../actions/seller/receiptActions";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -18,7 +18,7 @@ function ExportBook() {
     const [fromDate, setFromDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
     const [toDate, setToDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
     const [buttonTimeType, setButtonTimeType] = useState('homnay'); 
-    const [totalImport, setTotalImport] = useState(''); 
+    const [totalExport, setTotalExport] = useState(''); 
     const [products, setProducts] = useState([]); 
 
 
@@ -26,20 +26,20 @@ function ExportBook() {
         try{
             const getTotalImport = async()=> {
                 setLoading(true);
-                const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: null, productId: null, orderBy: null, fromDate, toDate });;
+                const response = await revenueOfProduct({ pageIndex: 0, pageSize: 1000, fromDate, toDate});
                 if (response) {
-                    const totalImportProductMoney = response?.content?.reduce((total, item) => {
-                        return total + (item?.product?.totalSaleAmount * item?.importPrice);
+                    const totalExportProductMoney = response.reduce((total, item) => {
+                        return total + (item.totalSaleMoney);
                     }, 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '');
-                    const totalImportAmount = response?.content?.reduce((total, item) => {
-                        return total + (item?.product?.totalSaleAmount);
+                    const totalExportAmount = response.reduce((total, item) => {
+                        return total + (item.totalSaleAmount);
                     }, 0);
-                    if (totalImportProductMoney > 0 || totalImportAmount > 0){
-                        setTotalImport({ totalImportProductMoney, totalImportAmount });
-                        response.content = response.content.filter((item) => item.product.totalSaleAmount > 0);
-                        setProducts(response?.content);
+                    if (totalExportProductMoney > 0 || totalExportAmount > 0){
+                        setTotalExport({ totalExportProductMoney, totalExportAmount });
+                        response.content = response.filter((item) => item.totalSaleAmount > 0);
+                        setProducts(response);
                     } else {
-                        setTotalImport('');
+                        setTotalExport('');
                     }
                 } else {
                     ToastAndroid.show('Lỗi tải không thành công sổ xuất hàng', ToastAndroid.SHORT);
@@ -95,13 +95,13 @@ function ExportBook() {
         <View style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <Image source={require('../assets/images/right_arrow.png')}  style={{ width: 17, height: 17, objectFit: 'contain', marginVertical: 15 }} />
+                        <Image source={require('../../assets/images/right_arrow.png')}  style={{ width: 17, height: 17, objectFit: 'contain', marginVertical: 15 }} />
                     </TouchableOpacity>
                 <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center'}}>Sổ xuất hàng</Text>
             </View>
             <View style={[styles.display_center, { margin: 15 }]}>
                 <TouchableOpacity onPress={() => refRBSheet.current?.open()}>
-                    <Image source={require('../assets/images/calendar.png')} style={styles.icon_calender}/>
+                    <Image source={require('../../assets/images/calendar.png')} style={styles.icon_calender}/>
                 </TouchableOpacity>
                 <View style={styles.button_action_container}>   
                     <Text style={styles.text_action}>
@@ -109,23 +109,23 @@ function ExportBook() {
                     </Text>
                 </View>
             </View>
-            {totalImport && 
+            {totalExport && 
                 <ScrollView style={{ flex: 1 }}>
                     <View style={styles.box_container}>
                         <View style={{ paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#e2e5ea' }}>
                             <View style={[styles.display, { marginVertical: 10 }]}>
                                 <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                    <Image source={require('../assets/images/distribution.png')} style={{ width: 28, height: 28, marginRight: 10 }}/>
+                                    <Image source={require('../../assets/images/distribution.png')} style={{ width: 28, height: 28, marginRight: 10 }}/>
                                     <Text style={{ color: '#969696', fontSize: 13 }}>Tổng số lượng xuất</Text>                
                                 </View>
-                                <Text style={{ color: '#3a3a3a', fontSize: 13, fontWeight: '500' }}>{totalImport.totalImportAmount}</Text>                
+                                <Text style={{ color: '#3a3a3a', fontSize: 13, fontWeight: '500' }}>{totalExport.totalExportAmount}</Text>                
                             </View> 
                             <View style={[styles.display, { marginVertical: 10 }]}>
                                 <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                    <Image source={require('../assets/images/dollar.png')} style={{ width: 28, height: 28, marginRight: 10 }}/>
+                                    <Image source={require('../../assets/images/dollar.png')} style={{ width: 28, height: 28, marginRight: 10 }}/>
                                     <Text style={{ color: '#969696', fontSize: 13 }}>Tổng số tiền xuất</Text>                
                                 </View>
-                                <Text style={{ color: '#3a3a3a', fontSize: 13, fontWeight: '500' }}>{totalImport.totalImportProductMoney}</Text>                
+                                <Text style={{ color: '#3a3a3a', fontSize: 13, fontWeight: '500' }}>{totalExport.totalExportProductMoney}</Text>                
                             </View>                                     
                         </View>  
                     </View>
@@ -139,16 +139,16 @@ function ExportBook() {
                             <Text>{item.product.name}</Text>
                             <View style={[styles.display, { marginVertical: 6 }]}>
                                 <Text style={{ color: '#969696', fontSize: 12 }}>{`#SP00${item.product.id}`}</Text>                
-                                <Text style={{ color: '#3a3a3a', fontSize: 12, fontWeight: '500' }}>SL: - {item.product.totalSaleAmount}</Text>                
+                                <Text style={{ color: '#3a3a3a', fontSize: 12, fontWeight: '500' }}>SL: - {item.totalSaleAmount}</Text>                
                             </View>              
                         </View>
                     )}
                 </ScrollView>
             }
 
-            {!totalImport &&
+            {!totalExport &&
                 <View style={styles.no_content}>
-                    <Image source={require('../assets/images/notes.png')} style={{ width: 80, height: 80, objectFit: 'contain', marginVertical: 10 }}/>
+                    <Image source={require('../../assets/images/notes.png')} style={{ width: 80, height: 80, objectFit: 'contain', marginVertical: 10 }}/>
                     <Text style={{ color: '#767676' }}>Bạn chưa có báo cáo nào được ghi lại.</Text>
                 </View>
             }

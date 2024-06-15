@@ -161,6 +161,7 @@ function SellTab() {
         }
         return amount;
     }
+    
     return (  
         <View>
             <ScrollView>
@@ -191,11 +192,7 @@ function SellTab() {
                                     </Text>
                                 </View>
                                 <View style={styles.verticalLine}></View>
-                                {/* <View>
-                                    <Text style={styles.text}>Khách hàng</Text>
-                                    <Text style={{ color: '#3a3a3a'}}>20</Text>
-                                </View>
-                                <View style={styles.verticalLine}></View> */}
+        
                                 <View>
                                     <Text style={styles.text}>Sản phẩm</Text>
                                     <Text style={{ color: '#3a3a3a'}}>
@@ -208,20 +205,6 @@ function SellTab() {
                         </View>
                         <View style={[styles.display, { alignItems: 'center', marginVertical: 15 }]}>
                             <Text style={{ color: '#6f6f6f', fontWeight: '500', marginRight: 10 }}>Biểu đồ xu hướng theo<Text style={{ color: '#3a3a3a' }}> Doanh thu</Text></Text>
-                            {/* <Dropdown
-                                style={styles.dropdown}
-                                selectedTextStyle={styles.selectedTextStyle}
-                                itemTextStyle={{ fontSize: 12 }}
-                                // activeColor
-                                iconColor='#2083c5'
-                                data={chartOptions}
-                                labelField="label"
-                                valueField="value"
-                                value={chartOption}
-                                onChange={(item) => {
-                                    setChartOption(item.value);
-                                }}
-                            /> */}
                         </View>   
                     </View>
                     <View style={{ marginHorizontal: 15 }}>
@@ -271,13 +254,13 @@ function SellTab() {
                                     <DataTable.Header>
                                         <DataTable.Title style={styles.cell}><Text style={styles.header_table}>SẢN PHẨM</Text></DataTable.Title>
                                         <DataTable.Title style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.header_table}>SL</Text></DataTable.Title>
-                                        <DataTable.Title style={styles.cell} numeric><Text style={styles.header_table}>D.THU</Text></DataTable.Title>
+                                        <DataTable.Title numeric><Text style={styles.header_table}>D.THU</Text></DataTable.Title>
                                     </DataTable.Header>
                                     {revenueByTable.map((product, index) => 
                                         <DataTable.Row key={index}>
-                                            <DataTable.Cell style={styles.cell}><Text style={styles.cell_text_number}>{product?.product?.name}</Text></DataTable.Cell>
-                                            <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{product.product.totalSaleAmount}</Text></DataTable.Cell>
-                                            <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${product.product.totalSaleMoney}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                            <DataTable.Cell style={styles.cell}><Text style={styles.cell_text_number}>{product?.product?.name || ''}</Text></DataTable.Cell>
+                                            <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{product.totalSaleAmount || 0}</Text></DataTable.Cell>
+                                            <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${product.totalSaleMoney || 0}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
                                         </DataTable.Row>
                                     )}
                                 </>             
@@ -286,17 +269,17 @@ function SellTab() {
                             <>
                                 <DataTable.Header>
                                     <DataTable.Title style={styles.cell}><Text style={styles.header_table}>ĐƠN HÀNG</Text></DataTable.Title>
-                                    <DataTable.Title style={styles.cell} numeric><Text style={styles.header_table}>D.THU</Text></DataTable.Title>
+                                    <DataTable.Title numeric><Text style={styles.header_table}>D.THU</Text></DataTable.Title>
                                 </DataTable.Header>
                                 {revenueByTable.map((item, index) => 
                                     <DataTable.Row key={index}>
                                         <DataTable.Cell style={styles.cell}>
                                             <View style={{ paddingVertical: 8 }}>
-                                                <Text style={styles.cell_text_number}>{`DH${item.id}`}</Text>
-                                                <Text style={{ color: '#9a9a9a', fontSize: 11 }}>{`${item.createdAtTime} ${convertTimeStamp(item.createdAtDate, 'dd/MM/yyyy')}`}</Text>
+                                                <Text style={styles.cell_text_number}>{`DH${item.id || '...'}`}</Text>
+                                                <Text style={{ color: '#9a9a9a', fontSize: 11 }}>{`${item.createdAtTime || ''} ${convertTimeStamp(item.createdAtDate, 'dd/MM/yyyy') || ''}`}</Text>
                                             </View>
                                         </DataTable.Cell>
-                                        <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${item?.totalSalePrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                        <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${item?.finalPrice || 0}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
                                     </DataTable.Row>
                                 )}
                             </>}
@@ -305,15 +288,14 @@ function SellTab() {
                                 <DataTable.Header>
                                     <DataTable.Title style={styles.cell}><Text style={styles.header_table}>NGÀY</Text></DataTable.Title>
                                     <DataTable.Title style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.header_table}>ĐƠN</Text></DataTable.Title>
-                                    <DataTable.Title style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={styles.header_table}>KHÁCH</Text></DataTable.Title>
                                     <DataTable.Title numeric><Text style={styles.header_table}>D.THU</Text></DataTable.Title>
                                 </DataTable.Header>
                                 {revenueByTable.map((item, index) => 
                                     <DataTable.Row key={index}>
-                                        <DataTable.Cell style={styles.cell}><Text style={styles.cell_text_number}>{convertTimeStamp(item.date, 'dd/MM/yyyy')}</Text></DataTable.Cell>
-                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{item.totalReceipt}</Text></DataTable.Cell>
-                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>2</Text></DataTable.Cell>
-                                        <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${item.totalSaleMoney}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text></DataTable.Cell>
+                                        <DataTable.Cell style={styles.cell}><Text style={styles.cell_text_number}>{convertTimeStamp(item.date, 'dd/MM/yyyy') || ''}</Text></DataTable.Cell>
+                                        <DataTable.Cell style={[styles.cell, {paddingRight: 10 }]} numeric><Text style={[styles.cell_text_number, { marginRight: 10 }]}>{item.totalReceipt || 0}</Text></DataTable.Cell>
+                                        <DataTable.Cell numeric><Text style={styles.cell_text_number}>{`${item.totalSaleMoney || 0}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
+                                    </DataTable.Cell>
                                     </DataTable.Row>
                                 )}
                             </>}

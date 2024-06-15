@@ -23,7 +23,7 @@ function ImportProductInfo() {
     const [capitalPrice, setCapitalPrice] = useState(product?.importPrice || '');
     const [salePrice, setSalePrice] = useState(product?.product?.salePrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '') || '')
     const [importAmount, setImportAmount] = useState('');
-    const [stockAmount, setStockAmount] = useState(product?.stockAmount.toString() || '');
+    const [stockAmount, setStockAmount] = useState(product?.product?.stockAmount.toString() || '');
     const [category, setCategory] = useState({label: product?.product?.name, value: product?.product?.id});
     const [expirationDate, setExpirationDate] = useState('');
     const [QR, setQR] = useState(product?.code || '');
