@@ -79,7 +79,7 @@ function App() {
     registerForPushNotificationsAsync().then(token => {
       const setNotifyToken = async() => {
         const notifyToken = await AsyncStorage.getItem('notifyToken');
-        if (notifyToken) {
+        if (!notifyToken) {
           await AsyncStorage.setItem('notifyToken', token);
         }
       }
@@ -198,7 +198,7 @@ async function registerForPushNotificationsAsync() {
     // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
 
     // token = (await Notifications.getExpoPushTokenAsync({ projectId: '02b29ea0-5b32-4138-babf-8f739813e5a6' })).data;
-    token = (await Notifications.getExpoPushTokenAsync({ projectId: '01af01a1-f80b-4ad9-9fc1-87771bba6e12' })).data;
+    token = (await Notifications.getDevicePushTokenAsync({ projectId: '01af01a1-f80b-4ad9-9fc1-87771bba6e12' })).data;
     // token = (await Notifications.getDevicePushTokenAsync({ projectId: '0e674e53-ee33-403b-bb4b-7eac26af598e' })).data;
     // token = (await Notifications.getDevicePushTokenAsync({ projectId: 'b6a9ea24-72c4-4797-92ae-f2f408de0cf1' })).data;
     //https://docs.expo.dev/push-notifications/fcm-credentials/

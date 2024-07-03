@@ -3,11 +3,11 @@ import { Checkbox } from 'react-native-paper';
 import { memo, useState } from 'react';
 import { convertTimeStamp } from '../utils/helper';
 
-function HorizontalProduct({ product, checkbox, productIdDeleteArray }) {
+function HorizontalProduct({ product, checkbox, funcProductIdDeleteArray }) {
     const [checked, setChecked] = useState(false);
 
     const handleCheckboxToggle = () => {
-        productIdDeleteArray(product.id);
+        funcProductIdDeleteArray && funcProductIdDeleteArray(product.id);
         setChecked(!checked);
     };
 
