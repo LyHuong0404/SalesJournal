@@ -1,7 +1,6 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { View, StyleSheet, Text, Image, TouchableOpacity , ToastAndroid} from "react-native";
-import { HelperText, TextInput, DefaultTheme } from "react-native-paper";
+import { View, StyleSheet, Text, Image, TouchableOpacity, ToastAndroid} from "react-native";
 
 import { checkCodeForgotPassword, getCodeForgotPassword } from "../../actions/authActions";
 import VerificationCodeInput from "../../components/VerificationCodeInput";
@@ -43,13 +42,12 @@ function OTP() {
                 const response = await getCodeForgotPassword({ username });
                 if (response?.code == 0) {
                     resetTimer();
-                    ToastAndroid.show('Đã gửi mã xác thực', ToastAndroi1d.SHORT);
+                    ToastAndroid.show('Đã gửi mã xác thực', ToastAndroid.SHORT);
                 } else {
                     ToastAndroid.show('Lỗi khi gửi mã xác thực', ToastAndroid.SHORT);
                 }
             }
         } catch(err) {
-            console.log(err)
             ToastAndroid.show('Lỗi khi gửi mã xác thực', ToastAndroid.SHORT);
         }
     }
@@ -61,7 +59,7 @@ function OTP() {
                 if (response?.code === 0) {
                     navigation.navigate("RecoveryPassword", { username});
                 } else {
-                    ToastAndroid.show('Sai mã OTP', ToastAndroid.SHORT);
+                    ToastAndroid.show('Mã OTP không hợp lệ', ToastAndroid.SHORT);
                 }
             } 
             else if (code.length === 6 && !isForgotPw){
@@ -71,7 +69,7 @@ function OTP() {
                     ToastAndroid.show('Đăng ký thành công, vui lòng đăng nhập lại', ToastAndroid.SHORT);
                     navigation.navigate("UsernameInput");
                 } else {
-                    ToastAndroid.show('Sai mã OTP', ToastAndroid.SHORT);
+                    ToastAndroid.show('Mã OTP không hợp lệ', ToastAndroid.SHORT);
                 }
             }
         }catch (err) {

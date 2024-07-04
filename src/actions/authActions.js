@@ -101,12 +101,12 @@ export const login = createAsyncThunk('auth', async ({ username, password, notif
             },
         };
 
-        const { data, code } = await httprequest.post('auth', { username, password, notifyToken, idToken, provider }, config);
+        const response = await httprequest.post('auth', { username, password, notifyToken, idToken, provider }, config);
  
-        if (code == 0) {
+        if (response?.code == 0) {
       
-            await AsyncStorage.setItem('user', JSON.stringify(data));
-            return data;
+            await AsyncStorage.setItem('user', JSON.stringify(response?.data));
+            return response?.data;
         } else {
             return rejectWithValue('Invalid Email Or Password');
         }

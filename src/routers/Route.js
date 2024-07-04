@@ -114,6 +114,7 @@ export const AdminNav = () => {
         <Stack.Screen name="AddServicePackage" component={AddServicePackage} options={{ headerShown: false }}/>
         <Stack.Screen name="LoginNav" component={LoginNav}/>
         <Stack.Screen name="MyQR" component={MyQR} options={{ headerShown: false }} />
+        <Stack.Screen name="UsernameInput" component={UsernameInput} options={{ headerShown: false }}/>
         <Stack.Screen name="AboutUs" component={AboutUs} options={{ headerShown: false }}/>
       </Stack.Navigator>
   )

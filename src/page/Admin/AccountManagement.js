@@ -83,9 +83,9 @@ function AccountManagement() {
                 const fetchAPI = async() => {
                     const response = await lockAccount(selectedItem.id);
                     if (response?.code == 0) {
-                        ToastAndroid.show('Lưu trạng thái thành công', ToastAndroid.SHORT);
                         setPageIndex(0);
                         getListAccount();
+                        ToastAndroid.show('Lưu trạng thái thành công', ToastAndroid.SHORT);
                     } else ToastAndroid.show('Lưu trạng thái thất bại', ToastAndroid.SHORT);
                 }
                 fetchAPI();
@@ -97,9 +97,9 @@ function AccountManagement() {
                 const fetchAPI = async() => {
                     const response = await unlockAccount(selectedItem.id);
                     if (response?.code == 0) {
-                        ToastAndroid.show('Lưu trạng thái thành công', ToastAndroid.SHORT);
                         setPageIndex(0);
                         getListAccount();
+                        ToastAndroid.show('Lưu trạng thái thành công', ToastAndroid.SHORT);
                     } else ToastAndroid.show('Lưu trạng thái thất bại', ToastAndroid.SHORT);
                 }
                 fetchAPI();

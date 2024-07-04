@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     package_container: {
-        marginTop: 10, 
+        marginBottom: 10, 
         borderRadius: 10,
         alignSelf: 'center',
         width: screenWidth - 30,

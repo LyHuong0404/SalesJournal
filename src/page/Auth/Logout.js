@@ -10,7 +10,7 @@ function Logout() {
     useEffect(() => {
         const handleLogout = async()  => {
             await dispatch(logout());
-            navigation.navigate('LoginNav');
+            navigation.navigate('UsernameInput');
         }   
         handleLogout();        
     }, []);

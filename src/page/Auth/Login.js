@@ -50,7 +50,7 @@ function Login() {
         try {
             const notifyToken = await AsyncStorage.getItem('notifyToken')
             const response = await dispatch(login({ username, password, notifyToken, provider: 'LOCAL' }));
-            if (response) {      
+            if (response?.type.includes('fulfilled')) {      
                 if (response?.payload?.user?.profile) {
                     if (response?.payload?.roles?.some((item) => item == 'ROLE_ADMIN')) {
                         navigation.navigate('AdminNav');

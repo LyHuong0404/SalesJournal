@@ -20,10 +20,10 @@ function RecoveryPassword() {
 
     const handleRecoverPassword = async() =>{
         try {
-            const fetchApi = await recoverPassword({ username, newPassword });
+            const fetchApi = await recoverPassword({ username, newPassword: password });
             if (fetchApi?.code == 0) {
                 ToastAndroid.show('Đổi mật khẩu thành công, vui lòng đăng nhập lại', ToastAndroid.SHORT);
-                navigation.navigate("LoginNav");
+                navigation.navigate("UsernameInput");
             } else {
                 ToastAndroid.show('Đổi mật khẩu thất bại', ToastAndroid.SHORT);
             }
