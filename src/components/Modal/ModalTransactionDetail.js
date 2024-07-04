@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text, Image } from "react-native";
-import TwoButtonBottom from "../TwoButtonBottom";
 import { memo } from "react";
+
+import TwoButtonBottom from "../TwoButtonBottom";
 
 
 function ModalTransactionDetail() {

@@ -3,6 +3,7 @@ import { Text, StyleSheet, View } from "react-native";
 import { useState, memo } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
+
 import { logout } from "../../actions/authActions";
 import LoadingSpinner from "../LoadingSpinner";
 

@@ -53,7 +53,6 @@ function Register() {
       
     return ( 
         <View style={styles.container}>
-            {/* <ImageBackground source={require('../assets/images/bg-top-1.png')} style={{ flex: 1 , resizeMode: 'contain' }}> */}
                 <View style={{ paddingHorizontal: 15, flex: 1 }}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <Image source={require('../../assets/images/right_arrow.png')}  style={{ width: 17, height: 17, objectFit: 'contain', marginVertical: 15 }} />
@@ -116,13 +115,11 @@ function Register() {
                 </View>
 
                 <ButtonCustom 
-                    disabled={confirmPassword == '' || passwordRef.current?.hasErrors() || password != confirmPassword} 
+                    disabled={passwordRef.current?.hasErrors()?.length > 0 || confirmPassword == '' || password != confirmPassword} 
                     onPress={handleGetCodeSignUp} 
                     customStyle={{ marginHorizontal: 15 }}
                     title="Đăng ký">
                 </ButtonCustom>
-
-            {/* </ImageBackground> */}
         </View> 
     );
 }

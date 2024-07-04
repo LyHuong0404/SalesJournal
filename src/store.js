@@ -4,7 +4,6 @@ import userSlice from './reducers/authSlice';
 
 const rootReducer = combineReducers({
     auth: userSlice,
-    // Add other reducers if needed
 });
 
 const store = configureStore({

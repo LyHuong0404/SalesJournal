@@ -1,5 +1,7 @@
+import { Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import Intro from '../page/Intro';
 import RegisterStore from '../page/Auth/RegisterStore';
 import Home from '../page/Home';
@@ -43,7 +45,6 @@ import ServicePackageManagement from '../page/Admin/ServicePackageManagement';
 import AddServicePackage from '../page/Admin/AddServicePackage';
 import OrderHistory from '../page/Auth/OrderHistory';
 import MyQR from '../page/Auth/MyQR';
-import { Image } from 'react-native';
 import AboutUs from '../page/AboutUs';
 
 
@@ -68,6 +69,7 @@ export const LoginNav = () => {
           <Stack.Screen name="MyQR" component={MyQR} options={{ headerShown: false }} />
           <Stack.Screen name="OrderDetail" component={OrderDetail} options={{ headerShown: false }}/>
           <Stack.Screen name="AboutUs" component={AboutUs} options={{ headerShown: false }}/>
+          <Stack.Screen name="CouponDetail" component={CouponDetail} options={{ headerShown: false }}/>
       </Stack.Navigator>
     )
 }
@@ -92,6 +94,7 @@ export const UserLoggedNav = () => {
         <Stack.Screen name="AdminNav" component={AdminNav} options={{ headerShown: false }}/>
         <Stack.Screen name="AboutUs" component={AboutUs} options={{ headerShown: false }}/>
         <Stack.Screen name="LoginNav" component={LoginNav}/>
+        <Stack.Screen name="CouponDetail" component={CouponDetail} options={{ headerShown: false }}/>
     </Stack.Navigator>
   )
 }

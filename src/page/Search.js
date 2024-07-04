@@ -34,6 +34,7 @@ function Search() {
         }
         setSearchValue(text);
     }
+
     return ( 
         <View style={styles.container}>
             <View style={styles.header}>
@@ -104,7 +105,6 @@ function Search() {
                     :
                     <View style={styles.no_result_container}>
                         <Image source={require('../assets/images/noresults.png')} style={styles.image_no_result}/>
-                        <Text style={{ color: '#8e8e93', fontSize: 13 }}>Không tìm thấy kết quả phù hợp</Text>
                     </View>
                 } 
             </ScrollView>

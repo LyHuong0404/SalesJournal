@@ -4,13 +4,12 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { format } from 'date-fns';
 import moment from 'moment';
+import { useNavigation } from "@react-navigation/native";
 
 import ModalCalendar from "../Modal/ModalCalendar";
 import { convertTimeStamp, setDateFormat } from "../../utils/helper";
 import { filterProduct } from "../../actions/seller/productActions";
-import { useNavigation } from "@react-navigation/native";
 import LoadingSpinner from "../LoadingSpinner";
-import { filterReport } from "../../actions/seller/receiptActions";
 
 const buttonAction = [
     {id: 1, label: 'Tổng quan'},
@@ -55,10 +54,10 @@ function WarehouseTab() {
             const getAllProduct = async() => {
                 setLoading(true);
                 const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: null, productId: null, orderBy: null, fromDate: null, toDate: null});
-                
-                if (response?.content && response.content.length > 0) {
+                if (response?.content) {
                     let filteredContent = response.content;
-                    if (active === 3) filteredContent = filteredContent.filter(item => item.stockAmount > 0);
+                    if (active === 2) filteredContent = filteredContent.filter(item => item.stockAmount <= 20);
+                    else if (active === 3) filteredContent = filteredContent.filter(item => item.stockAmount > 0);
                     else if (active === 4) filteredContent = filteredContent.filter(item => moment(item.expireAt).isBefore(moment()));
                     setProducts(filteredContent);
                 }
@@ -141,7 +140,7 @@ function WarehouseTab() {
             case 1:
                 return 'Tổng quan giá trị kho';
             case 2:
-                return 'Tổng quan số lượng hàng';
+                return 'Tổng quan hàng sắp hết';
             case 3:
                 return 'Tổng quan hàng còn bán';
             case 4:
@@ -194,8 +193,8 @@ function WarehouseTab() {
                                                         { borderColor: active == 2 ? '#cb870b' : 'transparent'},
                                                         { backgroundColor: active == 2 ? '#FFFAFA' : '#f6f7f8'},]}>
                                     <Image source={require('../../assets/images/cubes.png')} style={styles.icon}/>
-                                    <Text style={styles.text_bold}>{productToCount.length}</Text>
-                                    <Text style={styles.text_light}>Số lượng</Text>             
+                                    <Text style={styles.text_bold}>{(productToCount.filter((item) => item.stockAmount <= 20)).length}</Text>
+                                    <Text style={styles.text_light}>Sản phẩm sắp hết hàng</Text>             
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.display}>

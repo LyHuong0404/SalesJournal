@@ -8,7 +8,6 @@ import { getCodeForgotPassword } from "../../actions/authActions";
 import { login } from "../../actions/authActions";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { addNotifyToken } from "../../actions/otherActions";
 
 const theme = {
     ...DefaultTheme,

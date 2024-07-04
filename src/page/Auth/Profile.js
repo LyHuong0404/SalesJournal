@@ -3,9 +3,9 @@ import { useRef, useState } from 'react';
 import { StyleSheet, View, Image, TouchableOpacity, Text, ToastAndroid } from 'react-native';
 import { Button, TextInput, DefaultTheme } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import RBSheet from 'react-native-raw-bottom-sheet';
 
 import { updateAvatar, updateProfile } from '../../actions/user/authActions';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import ModalConfirmCamera from '../../components/Modal/ModalConfirmCamera';
 import LoadingSpinner from '../../components/LoadingSpinner';
 

@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { StyleSheet, View, Image } from 'react-native';
+
 function Loading() {
     return (  
     <View style={styles.loadingOverlay}>

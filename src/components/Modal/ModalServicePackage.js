@@ -1,9 +1,8 @@
 import { memo, useState } from "react";
 import { StyleSheet, View, Text, Linking } from "react-native";
 import { Button } from "react-native-paper";
+
 import { createURLPayment } from "../../actions/otherActions";
-
-
 import LoadingSpinner from "../LoadingSpinner";
 
 

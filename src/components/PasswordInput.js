@@ -54,7 +54,6 @@ const PasswordInput = forwardRef(({ label, value, isHide, onPress, onChange, che
                 secureTextEntry={isHide}
                 theme={theme}
                 style={styles.input_style}
-                placeholder="Từ 6-32 ký tự"
                 placeholderTextColor='#abaaaa'
                 right={<TextInput.Icon icon={isHide ? "eye-off" : "eye"} onPress={onPress}/>}
                 value={value}

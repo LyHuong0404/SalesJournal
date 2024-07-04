@@ -17,7 +17,6 @@ function PaymentDetail() {
     const [buyerEmail, setBuyerEmail] = useState(route.params?.buyerEmail || '');
     const [status, requestPermission] = MediaLibrary.usePermissions();
     const viewRef = useRef();
-
     const takeScreenshot = async () => {
         try {
             let permission = status;

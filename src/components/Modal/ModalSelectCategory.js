@@ -4,7 +4,6 @@ import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useFocusEffect } from "@react-navigation/native";
 
-
 import { filterCategory } from "../../actions/seller/categoryActions";
 import LoadingSpinner from "../LoadingSpinner";
 

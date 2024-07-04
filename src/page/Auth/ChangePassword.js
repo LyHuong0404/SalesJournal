@@ -1,23 +1,32 @@
 import { useState, useRef } from 'react';
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, TouchableOpacity, Image, View, Text, ScrollView, ToastAndroid } from 'react-native';
-import { HelperText } from 'react-native-paper';
+import { HelperText, TextInput, DefaultTheme } from 'react-native-paper';
 
 import ButtonCustom from '../../components/ButtonCustom';
 import PasswordInput from '../../components/PasswordInput';
 import { changePw } from '../../actions/user/authActions';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
+const theme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#15803D', 
+      underlineColor: '#888888', 
+    },
+};
+
 
 function ChangePassword() {
     const navigation = useNavigation();
+    const [focus, setFocus] = useState(false);
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
     const [hideCurrentPassword, setHideCurrentPassword] = useState(true);
     const [hideNewPassword, setHideNewPassword] = useState(true);
     const [hideConfirmNewPassword, setHideConfirmNewPassword] = useState(true);
-    const currentPwRef = useRef(null);
     const newPwRef = useRef(null);
     const confirmPwRef = useRef(null);
     const [loading, setLoading] = useState(false);
@@ -54,14 +63,18 @@ function ChangePassword() {
             <ScrollView>
                 <View style={{ flex: 1 }}>            
                     <View style={{ marginTop: 40}}>
-                        <PasswordInput 
-                            label="Mật khẩu hiện tại"
-                            checkInput={true} 
-                            ref={currentPwRef}
+                        <Text style={{ color: focus ? '#15803D' : '#7a7a7a', fontWeight: '600' }}>Mật khẩu hiện tại<Text style={{color: 'red'}}> *</Text></Text>
+                        <TextInput
+                            secureTextEntry={hideCurrentPassword}
+                            theme={theme}
+                            style={styles.input_style}
+                            placeholderTextColor='#abaaaa'
+                            right={<TextInput.Icon icon={hideCurrentPassword ? "eye-off" : "eye"} onPress={() => setHideCurrentPassword(!hideCurrentPassword)}/>}
                             value={currentPassword}
-                            isHide={hideCurrentPassword} 
-                            onPress={() => setHideCurrentPassword(!hideCurrentPassword)} 
-                            onChange={(text) => setCurrentPassword(text)} />
+                            onChangeText={(text) => setCurrentPassword(text)}
+                            onFocus={() => setFocus(true)}
+                            onBlur={() => setFocus(false)}
+                        />
 
                         <PasswordInput 
                             label="Mật khẩu mới" 
@@ -90,9 +103,9 @@ function ChangePassword() {
             </ScrollView>
 
             <ButtonCustom 
-                disabled={currentPwRef.current?.hasErrors() || 
-                    newPwRef.current?.hasErrors() ||
-                    confirmPwRef.current?.hasErrors() ||
+                disabled={
+                    newPwRef.current?.hasErrors()?.length > 0 ||
+                    confirmPwRef.current?.hasErrors()?.length > 0 ||
                     newPassword != confirmNewPassword || 
                     newPassword == ''}
                     onPress={handleChangePassword} 
@@ -108,6 +121,14 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 15, 
         backgroundColor: '#fbfdff',
+    },
+    input_style:{
+        height: 40, 
+        backgroundColor: 'transparent', 
+        paddingHorizontal: 0, 
+        fontSize: 14, 
+        paddingVertical: 5,
+        marginBottom: 20
     },
 })
 

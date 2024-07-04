@@ -1,7 +1,8 @@
 import { StyleSheet, View, Text } from "react-native";
 import { Button } from "react-native-paper";
-import TextInputCustom from "../TextInputCustom";
 import { useState } from "react";
+
+import TextInputCustom from "../TextInputCustom";
 
 
 function ModalCreateCustomer({ onBack }) {

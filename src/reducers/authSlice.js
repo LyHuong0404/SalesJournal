@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { login, logout } from '../actions/authActions';
 import { updateStore } from '../actions/authActions';
 import { updateProfile, registerStore, updateAvatar } from '../actions/user/authActions';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { showLogout } from '../utils/httprequest';
 
 const initialState = {

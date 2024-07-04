@@ -29,7 +29,7 @@ function ExportBook() {
                 const response = await revenueOfProduct({ pageIndex: 0, pageSize: 1000, fromDate, toDate});
                 if (response) {
                     const totalExportProductMoney = response.reduce((total, item) => {
-                        return total + (item.totalSaleMoney);
+                        return total + (item.totalSpentMoney);
                     }, 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '');
                     const totalExportAmount = response.reduce((total, item) => {
                         return total + (item.totalSaleAmount);

@@ -71,7 +71,7 @@ function RecoveryPassword() {
                 </View>
             </ScrollView> 
             <ButtonCustom 
-                disabled={passwordRef.current?.hasErrors() || confirmPassword == '' || password != confirmPassword} 
+                disabled={passwordRef.current?.hasErrors()?.length > 0 || confirmPassword == '' || password != confirmPassword} 
                 onPress={handleRecoverPassword} 
                 title="Hoàn tất">
             </ButtonCustom>

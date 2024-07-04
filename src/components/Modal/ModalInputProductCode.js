@@ -1,7 +1,8 @@
 import { StyleSheet, View, Text, ToastAndroid } from "react-native";
 import { TextInput, Button, DefaultTheme } from "react-native-paper";
 import { memo, useState } from "react";
-import { getProductByCode } from "../../actions/seller/productActions";
+
+import { getImportProductByCode } from "../../actions/seller/productActions";
 
 const theme = {
     ...DefaultTheme,
@@ -17,13 +18,13 @@ function ModalInputProductCode({ ArrayQRAndAmount, onScanSuccess }) {
 
     const submitForm = () => {   
         try {
-            const index = Array.isArray(ArrayQRAndAmount) ? ArrayQRAndAmount.findIndex((item) => item?.product?.code == code) : -1;
+            const index = Array.isArray(ArrayQRAndAmount) ? ArrayQRAndAmount.findIndex((item) => item?.code == code) : -1;
             if (index == -1) {
                 try {
                     const fetchData = async() => {
-                        const response = await getProductByCode(code);
-                        if (response) {
-                            const newFormatProductDisplay = { product: response, amount: 1 }
+                        const response = await getImportProductByCode(code);
+                        if (response?.success) {
+                            const newFormatProductDisplay = { product: response.data, amount: 1 }
                             onScanSuccess(newFormatProductDisplay)
                         } else {
                             onScanSuccess('');

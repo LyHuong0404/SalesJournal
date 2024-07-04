@@ -3,7 +3,6 @@ import { useNavigation } from "@react-navigation/native";
 import { memo, useRef, useState } from "react";
 import RBSheet from "react-native-raw-bottom-sheet";
 
-
 import QRDemo from "../../page/QRDemo";
 import LoadingSpinner from "../LoadingSpinner";
 

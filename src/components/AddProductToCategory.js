@@ -1,8 +1,8 @@
 import { StyleSheet, ScrollView, Text, View } from "react-native";
 import { Button } from "react-native-paper";
+import { memo } from "react";
 
 import HorizontalProduct from "./HorizontalProduct";
-import { memo } from "react";
 
 
 function AddProductToCategory({ onBack }) {

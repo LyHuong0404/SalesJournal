@@ -4,7 +4,6 @@ import * as ImagePicker from 'expo-image-picker';
 import { useRef, memo } from "react";
 import RBSheet from "react-native-raw-bottom-sheet";
 
-
 import ModalCameraScreen from "../../components/Modal/ModalCameraScreen";
 
 function ModalConfirmCamera({ onUpdateAvatar, actor }) {

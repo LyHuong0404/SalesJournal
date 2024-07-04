@@ -134,7 +134,7 @@ function CreateProduct() {
             <TouchableOpacity onPress={() => navigation.goBack()}>
                 <View style={styles.header}>
                         <Image source={require('../../assets/images/right_arrow.png')} style={{ width: 17, height: 17, objectFit: 'contain' }}/>
-                    <Text style={styles.title_header}>{product ? 'Cập nhật sản phẩm' : 'Tạo sản phẩm'}</Text>
+                    <Text style={styles.title_header}>{product ? 'Cập nhật sản phẩm nhập' : 'Tạo sản phẩm nhập'}</Text>
                 </View>
             </TouchableOpacity>
             <ScrollView style={{ flex: 1 }}>

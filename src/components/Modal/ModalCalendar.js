@@ -1,8 +1,9 @@
-import { View, StyleSheet, Text, Image, TouchableOpacity  } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { useState, memo } from "react";
 import { Button, TextInput, DefaultTheme } from "react-native-paper";
 import { format } from 'date-fns';
 import DateTimePicker from "react-native-modal-datetime-picker";
+
 import TwoButtonBottom from "../TwoButtonBottom";
 
 const theme = {

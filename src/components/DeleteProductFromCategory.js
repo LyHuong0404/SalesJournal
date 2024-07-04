@@ -1,8 +1,8 @@
 import { StyleSheet, ScrollView, Text, View, ToastAndroid } from "react-native";
 import { Button } from "react-native-paper";
-import HorizontalProduct from "./HorizontalProduct";
 import { memo, useState } from "react";
 
+import HorizontalProduct from "./HorizontalProduct";
 import { deleteProduct } from "../actions/seller/productActions";
 import ModalConfirmation from "./Modal/ModalConfirmation";
 import LoadingSpinner from "./LoadingSpinner";

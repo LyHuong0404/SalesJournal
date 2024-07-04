@@ -45,21 +45,3 @@ export const createURLPayment = async({ servicePackageId, bankCode }) => {
         console.log("Error when creating URL payment: ", err);
     }
 }
-
-export const addNotifyToken = async({ notifyToken}) => { 
-    const config = {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    };
-    
-    try {
-        const response = await httprequest.post('add-notify-token', { notifyToken } , config);
-        if (response?.code == 0) {
-            await AsyncStorage.setItem('notifyToken', JSON.stringify(response?.data.id));
-        }
-        return response;
-    } catch(err) {
-        console.log("Error when getting notifyToken: ", err);
-    }
-}
