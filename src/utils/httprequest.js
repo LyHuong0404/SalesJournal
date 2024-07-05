@@ -67,7 +67,8 @@ const waitProcessComplete = async () => {
 }
 
 const middlewareRefreshToken = async (code, args) => {
-    if(code !== 401) return null;
+    console.log(args.apipath);
+    if(code !== 401 || ['auth'].includes(args.apipath)) return null;
     if(isGetRefreshToken) {
         await waitProcessComplete();
         if(isGetRefreshTokenSuccess) {
