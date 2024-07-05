@@ -10,6 +10,7 @@ import ModalCalendar from "../Modal/ModalCalendar";
 import { convertTimeStamp, setDateFormat } from "../../utils/helper";
 import { filterProduct } from "../../actions/seller/productActions";
 import LoadingSpinner from "../LoadingSpinner";
+import { revenueOfProduct } from "../../actions/seller/receiptActions";
 
 const buttonAction = [
     {id: 1, label: 'Tổng quan'},
@@ -28,7 +29,7 @@ function WarehouseTab() {
     const [products, setProducts] = useState([]);
     const [productToCount, setProductToCount] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [revenue, setRevenue] = useState({});
+    const [revenue, setRevenue] = useState({totalImportProductMoney: 0, totalExportProductMoney: 0});
 
 
     useEffect(() => {
@@ -74,19 +75,28 @@ function WarehouseTab() {
         try{
             const fetchAPI = async()=> {
                 setLoading(true);
+                let totalImportProductMoney = 0;
+                let totalExportProductMoney = 0;
                 const response = await filterProduct({ pageIndex: 0, pageSize: 1000, keySearch: null, productId: null, orderBy: null, fromDate: startDate, toDate: endDate });
                 if (response) {
-                    const totalImportProductMoney = response?.content?.reduce((total, item) => {
+                    totalImportProductMoney = response?.content?.reduce((total, item) => {
                         return total + (item?.product?.totalImportMoney)
                     }, 0);
-
-                    const totalSpentMoney = response?.content?.reduce((total, item) => {
-                        return total + (item?.product?.totalSaleAmount * item?.importPrice)
-                    }, 0);
-                    
-                    setRevenue({ totalImportProductMoney, totalSpentMoney });
                 } else {
                     ToastAndroid.show('Lỗi tải không thành công', ToastAndroid.SHORT);
+                }
+
+                const result = await revenueOfProduct({ pageIndex: 0, pageSize: 1000, fromDate: startDate, toDate: endDate});
+                if (result) {
+                    totalExportProductMoney = result.reduce((total, item) => {
+                        return total + (item.totalSpentMoney);
+                    }, 0);
+                    
+                } else {
+                    ToastAndroid.show('Lỗi tải không thành công', ToastAndroid.SHORT);
+                }
+                if (totalImportProductMoney > 0 || totalExportProductMoney > 0) {
+                    setRevenue({totalImportProductMoney, totalExportProductMoney})
                 }
                 setLoading(false);
             }
@@ -283,14 +293,14 @@ function WarehouseTab() {
                                 <View style={styles.verticalLine} />
                                 <TouchableOpacity style={[styles.item_report_container, { borderBottomColor: buttonAnalysis == 2 ? '#15803D' : 'transparent' }]} onPress={() => setButtonAnalysis(2)}>
                                     <Text style={{ color: '#565555', fontWeight: '500', marginBottom: 5 }}>Xuất kho</Text>
-                                    <Text style={{ fontWeight: '500', color: buttonAnalysis == 2 ? '#15803D' : '#7a7a7a'}}>{`${revenue?.totalSpentMoney}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
+                                    <Text style={{ fontWeight: '500', color: buttonAnalysis == 2 ? '#15803D' : '#7a7a7a'}}>{`${revenue?.totalExportProductMoney}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                                 </TouchableOpacity>
                             </View>          
                         </View>
                         <View style={[styles.report_container, { marginVertical: 10 }]}>
                             <Text style={styles.text_bold}>Tồn kho thay đổi</Text>
                             <Text style={{ color: '#15803D', fontWeight: 'bold', fontSize: 16 }}>
-                                {`${revenue?.totalImportProductMoney - revenue?.totalSpentMoney}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                                {`${revenue?.totalImportProductMoney - revenue?.totalExportProductMoney}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                             </Text>
                         </View>
                     </>
