@@ -169,7 +169,7 @@ function ProfitTab() {
                                 </View>
                                 <View>
                                     <Text></Text>
-                                    <Text style={{ color: '#3a3a3a'}}>-</Text>
+                                    <Text style={{ color: '#3a3a3a'}}>+</Text>
                                 </View>
                                 <View>
                                     <Text style={styles.text}>Khác</Text>
