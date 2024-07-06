@@ -79,3 +79,12 @@ export const unlockAccount = async(userId) => {
         console.log("Error when unlocking account: ", err);
     }
 }
+
+export const handleMaintenence = async({ update }) => {
+    try {
+        const response = await httprequest.get('admin/maintenance', { params: { update } });
+        return response;
+    } catch (err) {
+        console.log("Error when handling maintenence: ", err);
+    }
+}

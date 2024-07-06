@@ -3,11 +3,11 @@ import { TextInput, Button, DefaultTheme } from "react-native-paper";
 import { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { getCodeForgotPassword } from "../../actions/authActions";
 import { login } from "../../actions/authActions";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const theme = {
     ...DefaultTheme,
@@ -51,10 +51,10 @@ function Login() {
             const notifyToken = await AsyncStorage.getItem('notifyToken')
             const response = await dispatch(login({ username, password, notifyToken, provider: 'LOCAL' }));
             if (response?.type.includes('fulfilled')) {      
-                if (response?.payload?.user?.profile) {
-                    if (response?.payload?.roles?.some((item) => item == 'ROLE_ADMIN')) {
-                        navigation.navigate('AdminNav');
-                    } else navigation.navigate('VendorNav');              
+                if (response?.payload?.roles?.some((item) => item == 'ROLE_ADMIN')) {
+                    navigation.navigate('AdminNav');
+                } else if (response?.payload?.roles?.some((item) => item == 'ROLE_VENDOR')) {
+                    navigation.navigate('VendorNav');              
                 } else {
                     navigation.navigate('ProfileUser');              
                 }
@@ -66,8 +66,9 @@ function Login() {
             setLoading(false);
             ToastAndroid.show('Mật khẩu không đúng, vui lòng nhập lại!', ToastAndroid.SHORT);
         }
-    };
+    }
 
+    
     return ( 
         <View style={styles.container}>
             <TouchableOpacity onPress={() => navigation.goBack()}>

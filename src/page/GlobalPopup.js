@@ -12,7 +12,7 @@ export const GlobalPopup = () => {
           <>
             <Modal visible={true} contentContainerStyle={containerStyle}>
               <View style={styles.container}>
-                  <View style={{ borderBottomColor: '#e2e5ea', borderBottomWidth: 1 }}>
+                  <View>
                       <Text style={{ fontWeight: 'bold', color: '#c10d0d', textAlign: 'center', fontSize: 16 }}>Thông báo</Text>
                       <Text style={styles.text_question}>{globalPopupData?.message}</Text>
                   </View>

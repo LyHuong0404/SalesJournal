@@ -32,7 +32,6 @@ function App() {
   const notificationListener = useRef();
   const responseListener = useRef(); 
   const [data, setData] = useState('');
-  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const getData = async(expireAt) => {
@@ -59,11 +58,9 @@ function App() {
             const rs = await profileInfo();
             parsedUserData.user.profile = rs; 
         }
-        if (
-          parsedUserData?.roles.some((item) => item == 'ROLE_ADMIN')
-        ) {
-            setIsAdmin(true);
-        }
+
+        
+        
         setData(parsedUserData);
         dispatch(updateUser(parsedUserData.user)); 
       }
@@ -156,16 +153,12 @@ function App() {
   return (
     <PaperProvider theme={DefaultTheme}>
       <NavigationContainer ref={navigationRef} linking={linking}>
-        {/* <ScreenShot/> */}
         {loading ? (
           <Intro /> 
-        ) : data?.user?.profile ? (
-          isAdmin ? <Router.AdminNav /> : <Router.VendorNav />
-        ) : data ? (
-          <Router.UserLoggedNav />
-        ) : (
-          <Router.LoginNav />
-        )}
+        ) : data?.roles?.some((item) => item == "ROLE_ADMIN") ? 
+          <Router.AdminNav /> : (data?.roles?.some((item) => item == "ROLE_VENDOR") ?
+          <Router.VendorNav /> : (data ? <Router.UserLoggedNav /> : <Router.LoginNav /> ))
+        }
         <ShowLogout/>
         <GlobalPopup/>
       </NavigationContainer>

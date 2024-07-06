@@ -2,11 +2,14 @@ import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Dimensions
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { FAB } from 'react-native-paper';
+import { FAB, Tooltip } from 'react-native-paper';
+import { Switch } from 'react-native-switch'; 
+
 
 import { logout } from '../../actions/authActions';
-import { getNewInfoToday, sendNotificationProductExpire, sendNotificationVendorExpire } from '../../actions/admin/otherActions';
+import { getNewInfoToday, handleMaintenence, sendNotificationProductExpire, sendNotificationVendorExpire } from '../../actions/admin/otherActions';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import ModalConfirmation from '../../components/Modal/ModalConfirmation';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -16,6 +19,9 @@ function AdminHome() {
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [statusSystem, setStatusSystem] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
 
   useEffect(() => {
     try{
@@ -27,11 +33,14 @@ function AdminHome() {
             } else {
                 ToastAndroid.show('Lỗi tải thông tin mới không thành công', ToastAndroid.SHORT);
             }
+            handleUpdateMaintenence(false);
             setLoading(false);
         }
         fetchAPI();
+
     } catch(e){
       setLoading(false);
+      handleUpdateMaintenence();
       ToastAndroid.show('Lỗi tải thông tin mới không thành công', ToastAndroid.SHORT);
     }
   }, [])
@@ -74,6 +83,21 @@ function AdminHome() {
     } catch(e) {
       setLoading(false);
       ToastAndroid.show('Gửi thông báo thất bại', ToastAndroid.SHORT);
+    }
+  }
+
+
+  const handleUpdateMaintenence = async(status) => {
+    try {
+        const response = await handleMaintenence({ update: status });
+        if (response?.code == 0) {      
+          setStatusSystem(response.data.maintenance);
+          setShowModal(false);
+        } else {
+          ToastAndroid.show('Cập nhật trạng thái hệ thống không thành công!', ToastAndroid.SHORT);
+        }
+    } catch(err) {
+        ToastAndroid.show('Cập nhật trạng thái hệ thống không thành công!', ToastAndroid.SHORT);
     }
   }
 
@@ -127,6 +151,20 @@ function AdminHome() {
               </View>       
             </View>
           </ScrollView>
+        </View>
+        <View style={{ margin: 20, marginBottom: 0, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Tooltip title='Dừng hoạt động của người dùng trong khi đang bảo trì'><Text style={{ color: '#000000', fontWeight: 'bold'}}>Hệ thống đang bảo trì</Text></Tooltip>
+          <Switch 
+              value={statusSystem} 
+              activeText={''}
+              inActiveText={''} 
+              switchLeftPx={4}  
+              circleSize={25}
+              barHeight={25} 
+              switchRightPx={4} 
+              backgroundInactive={'#e9e7e7'}
+              onValueChange={() => setShowModal(true)}
+          />
         </View>
         <View>
           <Text style={{ margin: 20, marginBottom: 0, color: '#000000', fontWeight: 'bold'}}>Quản lý</Text>
@@ -189,6 +227,16 @@ function AdminHome() {
           </View>
         </View>
       </ScrollView>
+      {showModal && 
+        <ModalConfirmation 
+            title="Thông báo?" 
+            question={statusSystem ? "Bạn có chắc rằng muốn dừng bảo trì hệ thống?" : "Bạn có chắc rằng muốn bảo trì hệ thống?"}
+            textYes="Đồng ý"
+            textNo="Hủy"
+            onPressCancel={() => setShowModal(false)}
+            onPressConfirm={() => handleUpdateMaintenence(true)}
+        />
+      }
       {loading && <LoadingSpinner />}
     </View>
   );
