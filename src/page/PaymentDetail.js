@@ -68,7 +68,7 @@ function PaymentDetail() {
                             <Text style={{ fontWeight: 'bold', color: '#3a3a3a' }}>{user?.profile?.nameStore}</Text>
                             <View style={[styles.display, {alignItems: 'center'}]}>
                                 <Image source={require('../assets/images/earth.png')} style={{ width: 17, height: 17, objectFit: 'contain', marginRight: 5 }} />
-                                <Text style={{ fontStyle: 'italic', color: '#565555', width: 240 }}>{user?.email}</Text>
+                                <Text style={{ fontStyle: 'italic', color: '#565555', width: 180 }}>{user?.email}</Text>
                             </View>
                         </View>
                     </View>
