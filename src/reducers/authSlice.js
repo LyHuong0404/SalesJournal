@@ -4,9 +4,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { login, logout } from '../actions/authActions';
 import { updateStore } from '../actions/authActions';
 import { updateProfile, registerStore, updateAvatar } from '../actions/user/authActions';
-import { showLogout } from '../utils/httprequest';
+import { showLogout, popupGlobal } from '../utils/httprequest';
 
 const initialState = {
+  globalPopupData: null,
   isShowLogout: false,
   loading: false,
   user: null,
@@ -141,14 +142,19 @@ const userSlice = createSlice({
         state.error = payload;
       })
       .addCase(showLogout.pending, (state) => {
-        console.log("showLogout.pending");
       })
       .addCase(showLogout.fulfilled, (state, { payload }) => {
-        console.log("showLogout.fulfilled", payload);
         state.isShowLogout = payload;
       })
       .addCase(showLogout.rejected, (state, { payload }) => {
-        console.log("showLogout.rejected", payload);
+        state.error = payload;
+      })
+      .addCase(popupGlobal.pending, (state) => {
+      })
+      .addCase(popupGlobal.fulfilled, (state, {payload} ) => {
+        state.globalPopupData = payload;
+      })
+      .addCase(popupGlobal.rejected, (state,  {payload} ) => {
         state.error = payload;
       })
       ;

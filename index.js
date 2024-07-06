@@ -12,6 +12,7 @@ import Intro from './src/page/Intro';
 import * as Router from './src/routers/Route';
 import { profileInfo, updateUser } from './src/actions/authActions';
 import { ShowLogout } from './src/page/ShowLogout';
+import { GlobalPopup } from './src/page/GlobalPopup';
 
 
 Notifications.setNotificationHandler({
@@ -166,6 +167,7 @@ function App() {
           <Router.LoginNav />
         )}
         <ShowLogout/>
+        <GlobalPopup/>
       </NavigationContainer>
     </PaperProvider>
   );
