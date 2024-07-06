@@ -33,15 +33,14 @@ export const checkCodeSignUp = async ({ username, code }) =>{
 }
 
 
-export const signUp = async ({ username, password, email, notifyId }) =>{
+export const signUp = async ({ username, password, email }) =>{
     try {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
             },
         }
-        notifyId = await AsyncStorage.getItem('notifyToken');
-        notifyId = JSON.parse(notifyId);
+        const notifyId = await AsyncStorage.getItem('notifyToken');
         const response = await httprequest.post('signup', { username, password, email, notifyId }, config);
         return response;
     } catch (err) {

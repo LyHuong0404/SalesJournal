@@ -75,9 +75,13 @@ function OTP() {
             else if (code.length === 6 && !isForgotPw){
                 const response = await checkCodeSignUp({username, code});
                 if (response?.code == 0) {
-                    await signUp({ username, password, email });
-                    ToastAndroid.show('Đăng ký thành công, vui lòng đăng nhập lại', ToastAndroid.SHORT);
-                    navigation.navigate("UsernameInput");
+                    const response = await signUp({ username, password, email });
+                    if (response?.code == 0) {
+                        ToastAndroid.show('Đăng ký thành công, vui lòng đăng nhập lại', ToastAndroid.SHORT);
+                        navigation.navigate("UsernameInput");
+                    } else {
+                        ToastAndroid.show('Mã OTP không hợp lệ', ToastAndroid.SHORT);
+                    }
                 } else {
                     ToastAndroid.show('Mã OTP không hợp lệ', ToastAndroid.SHORT);
                 }
