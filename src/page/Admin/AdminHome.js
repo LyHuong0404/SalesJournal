@@ -94,10 +94,10 @@ function AdminHome() {
           setStatusSystem(response.data.maintenance);
           setShowModal(false);
         } else {
-          ToastAndroid.show('Cập nhật trạng thái hệ thống không thành công!', ToastAndroid.SHORT);
+          ToastAndroid.show('System status update failed!', ToastAndroid.SHORT);
         }
     } catch(err) {
-        ToastAndroid.show('Cập nhật trạng thái hệ thống không thành công!', ToastAndroid.SHORT);
+        ToastAndroid.show('System status update failed!', ToastAndroid.SHORT);
     }
   }
 
