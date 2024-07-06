@@ -50,7 +50,7 @@ function OrderConfirmation({ onBack }) {
     useEffect(() => {
         let newArray = [];
         ArrayQRAndAmount.forEach(item => {
-            let existingProductIndex = newArray?.findIndex(newItem => newItem.product.id === item.product.id);
+            let existingProductIndex = newArray?.findIndex(newItem => newItem.code === item.product.code);
             
             if (existingProductIndex !== -1) {
                 newArray[existingProductIndex].amount += item.amount;
@@ -78,7 +78,7 @@ function OrderConfirmation({ onBack }) {
                 {
                     let totalAmountProduct = 0;
                     for(const p of products) {
-                        if(p.product.id === item.product.id) {
+                        if(p.product.product.id === item.product.product.id) {
                             totalAmountProduct = p.amount;
                         }
                     }
@@ -93,7 +93,7 @@ function OrderConfirmation({ onBack }) {
                 setLoading(true);
                 const response = await createReceipt({ paymentMethod: "DIRECT", buyerEmail, useBonusPoint: isEnabled, receiptDetailExportModels: newArray });
                 if (response?.code == 0) {
-                    navigation.navigate("PaymentDetail", { data: response?.data, buyerEmail });
+                    navigation.navigate("PaymentDetail", { data: response?.data, buyerEmail, useBonus: isEnabled });
                 } else {
                     ToastAndroid.show('Lỗi khi xác nhận đơn', ToastAndroid.SHORT);
                 }
@@ -106,7 +106,7 @@ function OrderConfirmation({ onBack }) {
         }
     }
 
-    const onScanSuccess = (data) => {     
+    const onScanSuccess = (data) => {  
         if (typeof(data) == 'object') {
             setArrayQRAndAmount(prev => [...prev, data]);
         } else if (typeof(data) == 'number'){

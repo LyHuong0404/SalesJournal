@@ -86,7 +86,7 @@ function Register() {
                                     <HelperText type="error" visible={true} style={{ marginLeft: -10 }}>
                                         Email không hợp lệ.
                                     </HelperText>
-                                    )}
+                                )}
                             </View>
 
                             <PasswordInput 
@@ -115,7 +115,7 @@ function Register() {
                 </View>
 
                 <ButtonCustom 
-                    disabled={passwordRef.current?.hasErrors()?.length > 0 || confirmPassword == '' || password != confirmPassword} 
+                    disabled={(email.trim() !== "" && !isValidEmail(email)) || passwordRef.current?.hasErrors()?.length > 0 || confirmPassword == '' || password != confirmPassword} 
                     onPress={handleGetCodeSignUp} 
                     customStyle={{ marginHorizontal: 15 }}
                     title="Đăng ký">

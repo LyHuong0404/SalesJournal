@@ -15,8 +15,10 @@ function PaymentDetail() {
     const route = useRoute();
     const [data, setData] = useState(route.params?.data || {});
     const [buyerEmail, setBuyerEmail] = useState(route.params?.buyerEmail || '');
+    const [useBonus, setUseBonus] = useState(route.params?.useBonus || '');
     const [status, requestPermission] = MediaLibrary.usePermissions();
     const viewRef = useRef();
+
     const takeScreenshot = async () => {
         try {
             let permission = status;
@@ -66,7 +68,7 @@ function PaymentDetail() {
                             <Text style={{ fontWeight: 'bold', color: '#3a3a3a' }}>{user?.profile?.nameStore}</Text>
                             <View style={[styles.display, {alignItems: 'center'}]}>
                                 <Image source={require('../assets/images/earth.png')} style={{ width: 17, height: 17, objectFit: 'contain', marginRight: 5 }} />
-                                <Text style={{ fontStyle: 'italic', color: '#565555', width: 240 }}>{user?.email}</Text>
+                                <Text style={{ fontStyle: 'italic', color: '#565555', width: 180 }}>{user?.email}</Text>
                             </View>
                         </View>
                     </View>
@@ -141,6 +143,7 @@ function PaymentDetail() {
                                 </View> 
                             </>}          
                         </View>
+                        {useBonus && <Text style={[styles.text_light, { color: '#565555' }]}>Dùng điểm tích lũy</Text>}                             
                         <View style={[styles.display, { justifyContent: 'space-between', marginBottom: 2 }]}>
                             <Text style={styles.text}>Tổng cộng</Text>
                             <Text style={[styles.text, { color: '#d81f1f' }]}>{`${data?.finalPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>

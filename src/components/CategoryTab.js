@@ -8,7 +8,7 @@ import HorizontalCategory from "./HorizontalCategory";
 import { filterCategory } from "../actions/seller/categoryActions";
 import LoadingSpinner from "../components/LoadingSpinner";
 
-function CategoryTab({ onSearchValue }) {
+function CategoryTab({ onSearchValue, onSelectedFilter }) {
     const navigation = useNavigation();
     const [pageIndex, setPageIndex] = useState(0);
     const [categories, setCategories] = useState([]);
@@ -25,7 +25,7 @@ function CategoryTab({ onSearchValue }) {
             const fetchCategories = async () => {
                 setLoading(true);
                 try {
-                    const response = await filterCategory({ pageIndex, pageSize: 100, keySearch: onSearchValue });                   
+                    const response = await filterCategory({ pageIndex, pageSize: 100, keySearch: null, orderBy: onSelectedFilter });               
                     if (pageIndex == 0) {
                         setCategories(response?.content);
                     } else {
@@ -41,7 +41,7 @@ function CategoryTab({ onSearchValue }) {
             setLoading(false);
             ToastAndroid.show('Lỗi khi tải sản phẩm', ToastAndroid.SHORT);
         }
-    }, [pageIndex, resetPageIndex, onSearchValue]);
+    }, [pageIndex, resetPageIndex, onSearchValue, onSelectedFilter]);
 
     const handleScroll = (event) => {
         const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;

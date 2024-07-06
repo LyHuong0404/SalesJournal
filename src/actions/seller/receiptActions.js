@@ -30,7 +30,16 @@ export const filterReceipt = async ({ pageIndex, pageSize, fromDate, toDate, pay
 export const filterReport = async({ fromDate, toDate }) => { 
     try {
         const response = await httprequest.get('revenue-info', { params: { fromDate, toDate } });
-        return response.data;
+        return response?.data;
+    }catch(err) {
+        console.log("Error when fitering report: ", err);
+    }
+}
+
+export const revenueDailyGross = async({ fromDate, toDate }) => { 
+    try {
+        const response = await httprequest.get('revenue-by-date', { params: { fromDate, toDate } });
+        return response?.data;
     }catch(err) {
         console.log("Error when fitering report: ", err);
     }
@@ -39,7 +48,7 @@ export const filterReport = async({ fromDate, toDate }) => {
 export const revenueOfProduct = async({ pageIndex, pageSize, fromDate, toDate }) => { 
     try {
         const response = await httprequest.get('revenue-of-product', { params: { pageIndex, pageSize, fromDate, toDate } });
-        return response.data;
+        return response?.data;
     }catch(err) {
         console.log("Error when getting revenue of product: ", err);
     }

@@ -7,7 +7,7 @@ import VerticalProduct from "./VerticalProduct";
 import { filterProduct } from "../actions/seller/productActions";
 import LoadingSpinner from "./LoadingSpinner";
 
-function ProductTab({ onSearchValue, onSelectedFilter }) {
+function ProductTab({ onSearchValue }) {
     const navigation = useNavigation();
     const [pageIndex, setPageIndex] = useState(0);
     const [resetPageIndex, setResetPageIndex] = useState(0);
@@ -19,7 +19,7 @@ function ProductTab({ onSearchValue, onSelectedFilter }) {
     useEffect(() => {
         setPageIndex(0);
         setProducts([]);
-    }, [resetPageIndex, onSearchValue, onSelectedFilter]);
+    }, [resetPageIndex, onSearchValue]);
     
     useEffect(() => {
         const fetchProducts = async () => {
@@ -27,24 +27,6 @@ function ProductTab({ onSearchValue, onSelectedFilter }) {
             try {
                 const response = await filterProduct({ pageIndex, pageSize: 50, keySearch: onSearchValue, productId: null, orderBy: null, fromDate: null, toDate: null });      
                 if (response) {
-                    if (onSelectedFilter == 'banchay') {
-                        response?.content?.sort(function(a, b) {
-                            return b.product?.totalSaleAmount - a.product?.totalSaleAmount;
-                        });
-                    }
-                    else if (onSelectedFilter == 'caothap') {
-                        response?.content?.sort(function(a, b) {
-                            return b.product?.salePrice - a.product?.salePrice;
-                        });
-                    }
-                    else if (onSelectedFilter == 'thapcao') {
-                        response?.content?.sort(function(a, b) {
-                            return a.product?.salePrice - b.product?.salePrice;
-                        });
-                    }
-                    else if (onSelectedFilter == 'giamgia') {
-                        response.content = response.content.filter((item) => item.product.isPromotion);
-                    }
                     if (pageIndex === 0) {
                         setProducts(response?.content);
                     } else {
@@ -58,7 +40,7 @@ function ProductTab({ onSearchValue, onSelectedFilter }) {
         };
     
         fetchProducts();
-    }, [pageIndex, resetPageIndex, onSearchValue, onSelectedFilter]);
+    }, [pageIndex, resetPageIndex, onSearchValue]);
 
 
     useFocusEffect(

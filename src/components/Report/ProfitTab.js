@@ -4,9 +4,8 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { DataTable } from "react-native-paper";
 import { format } from 'date-fns';
 import RBSheet from "react-native-raw-bottom-sheet";
-import { PermissionsAndroid, Platform } from 'react-native';
 
-import { filterReceipt, filterReport, revenueOfProduct } from "../../actions/seller/receiptActions";
+import { filterReceipt, filterReport, revenueDailyGross, revenueOfProduct } from "../../actions/seller/receiptActions";
 import ModalCalendar from "../Modal/ModalCalendar";
 import { convertTimeStamp, setDateFormat } from "../../utils/helper";
 import LoadingSpinner from "../LoadingSpinner";
@@ -24,13 +23,13 @@ function ProfitTab() {
     const [revenueOption, setRevenueOption] = useState('1');
     const [fromDate, setFromDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
     const [toDate, setToDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
-    const [revenue, setRevenue] = useState([]);
     const [loading, setLoading] = useState(false);
     const [buttonTimeType, setButtonTimeType] = useState('homnay'); 
     const [dropdown, setDropdown] = useState(false);
     const [profit, setProfit] = useState('');
     const [saleMoney, setSaleMoney] = useState('');
     const [spentMoney, setSpentMoney] = useState('');
+    const [expireMoney, setExpireMoney] = useState('');
     const [loadingTable, setLoadingTable] = useState(false);
     const [revenueByTable, setRevenueByTable] = useState([]);
     
@@ -38,12 +37,12 @@ function ProfitTab() {
         try{
             const fetchAPI = async()=> {
                 setLoading(true);
-                const response = await filterReport({ fromDate, toDate});
+                const response = await revenueDailyGross({ fromDate, toDate});
                 if (response) {
-                    handleTotalSpentMoney(response);
-                    handeTotalProfit(response);
-                    handeTotalSaleMoney(response);
-                    setRevenue(response);
+                    setProfit((response.totalExpireMoney ? (response.totalRevenue - response.totalExpireMoney).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '') : (response.totalRevenue ? response.totalRevenue.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '') : '0')));
+                    setExpireMoney(response.totalExpireMoney ? response.totalExpireMoney.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '') : '0');
+                    setSpentMoney(response.totalSpentMoney ? response.totalSpentMoney.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '') : '0');
+                    setSaleMoney(response.totalSaleMoney ? response.totalSaleMoney.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '') : '0');
                 } else {
                     ToastAndroid.show('Lỗi tải không thành công', ToastAndroid.SHORT);
                 }
@@ -93,6 +92,7 @@ function ProfitTab() {
         }
     }, [fromDate, toDate, revenueOption])
     
+    
 
     const handleChangeTime = (data) => {
         const time = setDateFormat(data.buttonType, data.startDate, data.endDate);
@@ -131,79 +131,6 @@ function ProfitTab() {
         }
     }
 
-    const handeTotalProfit = (revenue) => {
-        let amount = 0;
-        if (buttonTimeType == 'homnay') {
-            if (revenue.length > 0) {
-                if (revenue[1]?.totalRevenue) {
-                    amount = revenue[1]?.totalRevenue?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '');
-                } else if (revenue[0]?.totalRevenue) {
-                    amount = revenue[0]?.totalRevenue?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '');
-                }
-            }
-        } else {
-            amount = revenue?.reduce((total, item) => {
-                return total + (item?.totalRevenue);
-            }, 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '')
-        }
-        setProfit(amount);
-    }
-
-    const handeTotalSaleMoney = (revenue) => {
-        let amount = 0;
-        if (buttonTimeType == 'homnay') {
-            if (revenue.length > 0) {
-                if (revenue[1]?.totalSaleMoney) {
-                    amount = revenue[1]?.totalSaleMoney?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '');
-                } else if (revenue[0]?.totalSaleMoney) {
-                    amount = revenue[0]?.totalSaleMoney?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '');
-                }
-            }
-        } else {
-            amount = revenue?.reduce((total, item) => {
-                return total + (item?.totalSaleMoney);
-            }, 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '');
-        }
-        setSaleMoney(amount);
-    }
-
-    const handleTotalSpentMoney = (revenue) => {
-        let amount = 0;
-        if (buttonTimeType == 'homnay') {
-            if (revenue.length > 0) {
-                if (revenue[1]?.totalSpentMoney) {
-                    amount = revenue[1]?.totalSpentMoney?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '');
-                } else if (revenue[0]?.totalSpentMoney) {
-                    amount = revenue[0]?.totalSpentMoney?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '');
-                }
-            }
-        } else {
-            amount = revenue?.reduce((total, item) => {
-                return total + (item?.totalSpentMoney);
-            }, 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '');
-        }
-        setSpentMoney(amount);
-    }
-
-    const handleExportFile = async () => {
-        if (Platform.OS === 'android') {
-            const granted = await PermissionsAndroid.request(
-              PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-              {
-                title: 'Write Storage Permission',
-                message: 'App needs access to memory to download the file ',
-                buttonNeutral: 'Ask Me Later',
-                buttonNegative: 'Cancel',
-                buttonPositive: 'OK',
-              }
-            );
-            if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-              console.error('Write Storage permission denied');
-              return;
-            }
-          }
-          
-    };
 
     return (  
         <View>
@@ -220,9 +147,6 @@ function ProfitTab() {
                                         {labelOfTime()}
                                     </Text>
                                 </View>
-                                {/* <TouchableOpacity onPress={handleExportFile}>
-                                    <Image source={require('../../assets/images/download.png')} style={{ width:20, height: 20 }}/>
-                                </TouchableOpacity> */}
                             </View>
                         </View>
                         <View style={styles.box_container}>
@@ -243,6 +167,14 @@ function ProfitTab() {
                                     <Text style={styles.text}>Giá vốn</Text>
                                     <Text style={{ color: '#3a3a3a'}}>{spentMoney}</Text>
                                 </View>
+                                <View>
+                                    <Text></Text>
+                                    <Text style={{ color: '#3a3a3a'}}>+</Text>
+                                </View>
+                                <View>
+                                    <Text style={styles.text}>Khác</Text>
+                                    <Text style={{ color: '#3a3a3a'}}>{expireMoney}</Text>
+                                </View>
                             </View>
                         </View>
                     </View>
@@ -261,23 +193,14 @@ function ProfitTab() {
                             </DataTable.Cell>
                         </DataTable.Row>
                         {dropdown && 
-                            <>
-                                <DataTable.Row>
-                                    <DataTable.Cell style={[styles.cell, { flex: 1.5 }]}>
-                                        <Text style={[styles.text_cell, { paddingLeft: 20 }]}>Tổng bán ra</Text>
-                                    </DataTable.Cell>
-                                    <DataTable.Cell numeric>
-                                        <Text style={styles.cell_text_number}>{saleMoney}</Text>
-                                    </DataTable.Cell>
-                                </DataTable.Row>
-                                {/* <DataTable.Row>
-                                    <DataTable.Cell style={[styles.cell, { flex: 1.5 }]}>
-                                        <Text style={[styles.text_cell, { paddingLeft: 20 }]}>Khuyến mãi</Text></DataTable.Cell>
-                                    <DataTable.Cell numeric>
-                                        <Text style={styles.cell_text_number}>0</Text>
-                                    </DataTable.Cell>
-                                </DataTable.Row> */}
-                            </>
+                            <DataTable.Row>
+                                <DataTable.Cell style={[styles.cell, { flex: 1.5 }]}>
+                                    <Text style={[styles.text_cell, { paddingLeft: 20 }]}>Tổng bán ra</Text>
+                                </DataTable.Cell>
+                                <DataTable.Cell numeric>
+                                    <Text style={styles.cell_text_number}>{saleMoney}</Text>
+                                </DataTable.Cell>
+                            </DataTable.Row>
                          }
                         <DataTable.Row>
                             <DataTable.Cell style={[styles.cell, { flex: 1.5 }]}>
@@ -287,9 +210,19 @@ function ProfitTab() {
                                 <Text style={styles.cell_text_number}>{spentMoney}</Text>
                             </DataTable.Cell>
                         </DataTable.Row>
+                        {expireMoney && 
+                            <DataTable.Row>
+                                <DataTable.Cell style={[styles.cell, { flex: 1.5 }]}>
+                                    <Text style={styles.text_cell}>Sản phẩm hết hạn (3)</Text>
+                                </DataTable.Cell>
+                                <DataTable.Cell numeric>
+                                    <Text style={styles.cell_text_number}>{expireMoney}</Text>
+                                </DataTable.Cell>
+                            </DataTable.Row>
+                        }
                         <DataTable.Row>
                             <DataTable.Cell style={[styles.cell, { flex: 1.5 }]}>
-                                <Text style={styles.text_cell}>Lợi nhuận (3=1-2)</Text>
+                                <Text style={styles.text_cell}>Lợi nhuận (4=1-(2+3))</Text>
                             </DataTable.Cell>
                             <DataTable.Cell numeric>
                                 <Text style={styles.cell_text_number}>{profit}</Text>

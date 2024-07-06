@@ -18,7 +18,7 @@ function VerticalProduct({product}) {
                 </View>
                 <View style={{ margin: 8 }}>
                     <Text style={styles.name}>{product?.name}</Text>
-                    <Text style={styles.price}>{`${product?.product?.salePrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>
+                    <Text style={styles.price}>{`${product?.product?.salePrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                     <Text style={styles.text_light}>{`Có thể bán: ${product?.stockAmount}`}</Text>             
                     <Text style={styles.text_light}>{`Ngày nhập: ${convertTimeStamp(product?.importedAt, 'dd/MM/yyyy')}`}</Text>
                 </View>

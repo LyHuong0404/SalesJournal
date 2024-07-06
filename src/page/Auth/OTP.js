@@ -2,7 +2,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity, ToastAndroid} from "react-native";
 
-import { checkCodeForgotPassword, getCodeForgotPassword } from "../../actions/authActions";
+import { checkCodeForgotPassword, getCodeForgotPassword, getCodeSignUp } from "../../actions/authActions";
 import VerificationCodeInput from "../../components/VerificationCodeInput";
 import { checkCodeSignUp, signUp } from "../../actions/authActions";
 
@@ -11,9 +11,9 @@ function OTP() {
     const navigation = useNavigation();
     const route = useRoute();
     const [username, setUsername] = useState(route.params?.username || '');
-    const email = route.params?.email || '';
-    const password = route.params?.password || '';
-    const isForgotPw = route.params?.isForgotPw || false;
+    const [email, setEmail] = useState(route.params?.email || '');
+    const [password, setPassword] = useState(route.params?.password || '');
+    const [isForgotPw, setIsForgotPw] = useState(route.params?.isForgotPw || false);
     const [OTP, setOTP] = useState(['', '', '', '', '', '']);
     const [timer, setTimer] = useState(60);
 
@@ -38,8 +38,18 @@ function OTP() {
     
     const handleSendCodeAgain = async() => {
         try {
-            if (username) {
-                const response = await getCodeForgotPassword({ username });
+            if (isForgotPw) {
+                if (username) {
+                    const response = await getCodeForgotPassword({ username });
+                    if (response?.code == 0) {
+                        resetTimer();
+                        ToastAndroid.show('Đã gửi mã xác thực', ToastAndroid.SHORT);
+                    } else {
+                        ToastAndroid.show('Lỗi khi gửi mã xác thực', ToastAndroid.SHORT);
+                    }
+                }
+            } else {
+                const response = await getCodeSignUp({ username, email });
                 if (response?.code == 0) {
                     resetTimer();
                     ToastAndroid.show('Đã gửi mã xác thực', ToastAndroid.SHORT);
@@ -65,9 +75,13 @@ function OTP() {
             else if (code.length === 6 && !isForgotPw){
                 const response = await checkCodeSignUp({username, code});
                 if (response?.code == 0) {
-                    await signUp({ username, password, email });
-                    ToastAndroid.show('Đăng ký thành công, vui lòng đăng nhập lại', ToastAndroid.SHORT);
-                    navigation.navigate("UsernameInput");
+                    const response = await signUp({ username, password, email });
+                    if (response?.code == 0) {
+                        ToastAndroid.show('Đăng ký thành công, vui lòng đăng nhập lại', ToastAndroid.SHORT);
+                        navigation.navigate("UsernameInput");
+                    } else {
+                        ToastAndroid.show('Mã OTP không hợp lệ', ToastAndroid.SHORT);
+                    }
                 } else {
                     ToastAndroid.show('Mã OTP không hợp lệ', ToastAndroid.SHORT);
                 }

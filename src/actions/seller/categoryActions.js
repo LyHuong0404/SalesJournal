@@ -1,10 +1,14 @@
 import * as httprequest from '../../utils/httprequest';
 
 
-export const filterCategory = async ({ pageIndex, pageSize, keySearch }) => {
+export const filterCategory = async ({ pageIndex, pageSize, keySearch, orderBy }) => {
     try {
-        const response = await httprequest.get('filter-product', { params: { pageIndex, pageSize, keySearch } });
-        return response.data;
+        const filters = { pageIndex, pageSize, keySearch, orderBy };
+        const filteredParams = Object.fromEntries(
+            Object.entries(filters).filter(([_, value]) => value !== null && value !== undefined && value !== "null")
+        );
+        const response = await httprequest.get('filter-product', { params: filteredParams });
+        return response?.data;
     } catch (err) {
         console.log("Error when filtering category: ", err);
     }
