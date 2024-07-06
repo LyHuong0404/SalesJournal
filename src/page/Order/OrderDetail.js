@@ -4,7 +4,6 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import * as MediaLibrary from 'expo-media-library';
 import { captureRef } from 'react-native-view-shot';
 
-
 import { convertTimeStamp } from "../../utils/helper";
 
 function OrderDetail() {
@@ -13,7 +12,6 @@ function OrderDetail() {
     const [receipt, setReceipt] = useState(route.params?.receipt || {});
     const [status, requestPermission] = MediaLibrary.usePermissions();
     const viewRef = useRef();
-
 
     const takeScreenshot = async () => {
         try {
@@ -83,7 +81,11 @@ function OrderDetail() {
                                 </View>
                             </View>
                         )}
+                        {receipt?.receiptDetails.length == 0 && 
+                            <Text style={{ marginTop: 10 }}>Sản phẩm đã xóa</Text>
+                        }
                     </View>
+                    
                     <View style={styles.horizontalLine} />
                     <View style={{ marginVertical: 10 }}>
                         <View style={styles.price_container}>

@@ -93,7 +93,7 @@ function OrderConfirmation({ onBack }) {
                 setLoading(true);
                 const response = await createReceipt({ paymentMethod: "DIRECT", buyerEmail, useBonusPoint: isEnabled, receiptDetailExportModels: newArray });
                 if (response?.code == 0) {
-                    navigation.navigate("PaymentDetail", { data: response?.data, buyerEmail });
+                    navigation.navigate("PaymentDetail", { data: response?.data, buyerEmail, useBonus: isEnabled });
                 } else {
                     ToastAndroid.show('Lỗi khi xác nhận đơn', ToastAndroid.SHORT);
                 }

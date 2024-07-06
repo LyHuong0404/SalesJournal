@@ -40,7 +40,7 @@ function ProductManagement() {
     const [searchCategoryValue, setSearchCategoryValue] = useState(null);
     const debounceProductValue = useDebounce(searchProductValue, 500);
     const debounceCategoryValue = useDebounce(searchCategoryValue, 500);
-    const [filterValue, setFilterValue] = useState('moinhat');
+    const [filterValue, setFilterValue] = useState('null');
 
     const [index, setIndex] = useState(paramIndex || 0);
     const [routes] = useState([
@@ -51,9 +51,9 @@ function ProductManagement() {
     const renderScene = ({ route }) => {
         switch (route.key) {
             case 'first':
-                return <ProductTab onSearchValue={debounceProductValue} onSelectedFilter={filterValue}/>;
+                return <ProductTab onSearchValue={debounceProductValue} />;
             case 'second':
-                return <CategoryTab onSearchValue={debounceCategoryValue}/>;
+                return <CategoryTab onSearchValue={debounceCategoryValue} onSelectedFilter={filterValue}/>;
             default:
                 return null;
         }
@@ -107,12 +107,11 @@ function ProductManagement() {
                             <Image source={require('../../assets/images/close.png')} style={{ width: 25, height: 20, objectFit: 'contain', marginRight: 15, tintColor: '#000000' }}/>
                         </TouchableOpacity>)}
                     {index == 0 && (
-                        <>
-                            <TouchableOpacity onPress={() => refRBSheetCamera.current?.open()}><Image source={require('../../assets/images/barcode.png')} style={{ width: 25, height: 25, objectFit: 'contain', marginRight: 15, tintColor: '#000000' }}/></TouchableOpacity>
-                            <TouchableOpacity onPress={() => refRBSheet.current?.open()}><Image source={require('../../assets/images/arrange.png')} style={{ width: 25, height: 20, objectFit: 'contain', tintColor: '#000000' }}/></TouchableOpacity>
-                        </>
+                        <TouchableOpacity onPress={() => refRBSheetCamera.current?.open()}><Image source={require('../../assets/images/barcode.png')} style={{ width: 25, height: 25, objectFit: 'contain', marginRight: 15, tintColor: '#000000' }}/></TouchableOpacity>
                     )}
-
+                    {index == 1 && (
+                        <TouchableOpacity onPress={() => refRBSheet.current?.open()}><Image source={require('../../assets/images/arrange.png')} style={{ width: 25, height: 20, objectFit: 'contain', tintColor: '#000000' }}/></TouchableOpacity>
+                    )}
                 </View>
             </View>
             {searchbarVisible &&(<Animatable.View animation="zoomIn" duration={50} style={{ backgroundColor: 'white' }}>
