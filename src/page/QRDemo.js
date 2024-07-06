@@ -1,6 +1,6 @@
 import { CameraView, useCameraPermissions } from 'expo-camera/next';
-import { useEffect, useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View, Image, ToastAndroid } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View, Image, ToastAndroid } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 
 
@@ -103,7 +103,7 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
                         const fetchData = async() => {
                             setLoading(true);
                             const response = await getImportProductByCode(scanningResult);
-                            if (response) {
+                            if (response?.success) {
                                 const newFormatProductDisplay = { product: response.data, amount: 1 }
                                 if (ArrayQRAndAmount == undefined) {
                                     onScanSuccess();

@@ -143,7 +143,7 @@ function PaymentDetail() {
                                 </View> 
                             </>}          
                         </View>
-                        {useBonus && <Text style={[styles.text_light, { color: '#565555', width: '40%' }]}>Dùng điểm tích lũy</Text>}                             
+                        {useBonus && <Text style={[styles.text_light, { color: '#565555' }]}>Dùng điểm tích lũy</Text>}                             
                         <View style={[styles.display, { justifyContent: 'space-between', marginBottom: 2 }]}>
                             <Text style={styles.text}>Tổng cộng</Text>
                             <Text style={[styles.text, { color: '#d81f1f' }]}>{`${data?.finalPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>
