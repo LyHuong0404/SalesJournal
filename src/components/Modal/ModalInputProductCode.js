@@ -18,7 +18,7 @@ function ModalInputProductCode({ ArrayQRAndAmount, onScanSuccess }) {
 
     const submitForm = () => {   
         try {
-            const index = Array.isArray(ArrayQRAndAmount) ? ArrayQRAndAmount.findIndex((item) => item?.code == code) : -1;
+            const index = Array.isArray(ArrayQRAndAmount) ? ArrayQRAndAmount.findIndex((item) => item?.product?.code == code) : -1;
             if (index == -1) {
                 try {
                     const fetchData = async() => {
