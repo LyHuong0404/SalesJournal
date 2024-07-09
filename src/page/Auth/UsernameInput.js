@@ -49,6 +49,7 @@ function UsernameInput() {
                 } else {
                     navigation.navigate('ProfileUser');              
                 }
+                setLoading(false);
                 return response.payload;
             } else {
                 ToastAndroid.show('Đăng nhập không thành công, vui lòng nhập lại!', ToastAndroid.SHORT);

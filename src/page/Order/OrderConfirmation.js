@@ -222,7 +222,7 @@ function OrderConfirmation({ onBack }) {
                             <Text style={{ color: '#252424' }}>{item?.product?.name}</Text>
                             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                                 <Text style={{ color: '#1d7ebf', fontSize: 14, fontWeight: '500' }}>{`${item?.product?.product?.salePrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
-                                <View style={{ display: 'flex', width: '40%', flexDirection: 'row', paddingVertical: 4, alignItems: 'center', justifyContent: 'space-around', borderColor: '#e5e5e2', borderWidth: 1, borderRadius: 5 }}>
+                                <View style={{ display: 'flex', width: '35%', flexDirection: 'row', paddingVertical: 4, alignItems: 'center', justifyContent: 'space-around', borderColor: '#e5e5e2', borderWidth: 1, borderRadius: 5 }}>
                                     <TouchableOpacity onPress={() => handleDecrease(index)}>
                                         <Image source={require('../../assets/images/minus.png')} style={{ width: 12, height: 15, objectFit: 'contain', tintColor: '#7a7a7a' }}/>
                                     </TouchableOpacity>

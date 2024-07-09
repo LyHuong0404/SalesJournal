@@ -121,11 +121,11 @@ function CreateCoupon() {
                         })
                     }
                     if (response?.code == 0) {
-                        ToastAndroid.show('Lưu mã khuyến mãi thành công', ToastAndroid.SHORT);
+                        ToastAndroid.show('Lưu khuyến mãi thành công', ToastAndroid.SHORT);
                         navigation.navigate('SaleManagement');
                     } else 
                     {
-                        ToastAndroid.show('Lưu mã khuyến mãi thất bại', ToastAndroid.SHORT);
+                        ToastAndroid.show('Lưu khuyến mãi thất bại', ToastAndroid.SHORT);
                     }
                     setLoading(false);
                 }
@@ -231,7 +231,7 @@ function CreateCoupon() {
                                         <Text style={styles.text_amount_category}>{productIds?.length} sản phẩm được chọn</Text>
                                     </View>
                                 }
-                                <View style={{ width: '52%', marginTop: 20 }}>
+                                <View style={{ width: '57%', marginTop: 20 }}>
                                     <TextInputCustom 
                                         label='Số lượng mua tối thiểu' 
                                         placeholder='0'

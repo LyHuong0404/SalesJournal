@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { View, Image, StyleSheet, TouchableOpacity, ToastAndroid, ScrollView } from "react-native";
 import { Text } from "react-native-paper";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -23,24 +23,26 @@ function Order() {
   const [total, setTotal] = useState(0);
   const previousOffsetY = useRef(0);
 
+    const getAllReceipts = async() => {
+        setLoading(true);
+        const response = await filterReceipt({ pageIndex, pageSize: 100, fromDate: startDate, toDate: endDate, paymentMethod: null});
+        if (response?.code == 0) {
+            if (pageIndex == 0) {
+                setReceipts(response?.data?.content);
+            } else {
+                setReceipts(prev => [...prev, ...response?.data?.content]);
+            }
+            setTotal(response.data.totalElement);
+        } else {
+            ToastAndroid.show('Lỗi khi tải hóa đơn', ToastAndroid.SHORT);
+        }
+        setLoading(false);
+    }
+
   useEffect(() => {
     try{
-        const fetchAPI = async() => {
-            setLoading(true);
-            const response = await filterReceipt({ pageIndex, pageSize: 100, fromDate: startDate, toDate: endDate, paymentMethod: null});
-            if (response?.code == 0) {
-                if (pageIndex == 0) {
-                    setReceipts(response?.data?.content);
-                } else {
-                    setReceipts(prev => [...prev, ...response?.data?.content]);
-                }
-                setTotal(response.data.totalElement)
-            } else {
-                ToastAndroid.show('Lỗi khi tải hóa đơn', ToastAndroid.SHORT);
-            }
-            setLoading(false);
-        }
-        fetchAPI();
+        
+        getAllReceipts();
     } catch(err) {
         setLoading(false);
         ToastAndroid.show('Lỗi khi tải hóa đơn', ToastAndroid.SHORT);
@@ -101,7 +103,13 @@ function Order() {
         }
     }
 
-
+    useFocusEffect(
+        useCallback(() => {
+            if(pageIndex === 0) {
+                getAllReceipts();
+            } else setPageIndex(0);
+        }, [])
+    );
   return ( 
     <View style={styles.container}>
         <View style={styles.header}>

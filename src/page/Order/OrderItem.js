@@ -5,15 +5,16 @@ import { convertTimeStamp } from "../../utils/helper";
 
 function OrderItem({ receipt }) {
     const navigation = useNavigation();
-    
     return (  
-        <TouchableOpacity style={styles.container} onPress={() => navigation.navigate('OrderDetail', { receipt })}>
+        <TouchableOpacity style={styles.container} onPress={() => navigation.navigate(receipt?.returnProducts.length > 0 ? 'ReturnOrderDetail' : 'OrderDetail', { receipt })}>
             <View style={[styles.display, styles.content_above]}>
                 <View>
                     <Text style={styles.text_customer}>{`#${receipt?.id}`}</Text>
                     <Text style={styles.text_info_order}>{`${convertTimeStamp(receipt?.createdAtDate, 'dd/MM')} ${receipt?.createdAtTime} - HD${receipt?.id}`}</Text>
                 </View>
-                {(receipt?.receiptDetails.some((item) => item.coupon != null) || receipt?.coupon) && <Image source={require('../../assets/images/sale.png')} style={{ width: 24, height: 24, objectFit: 'cover'}} />}
+                {receipt?.returnProducts?.length > 0 && 
+                    <Text style={styles.status}>Trả hàng</Text>
+                }
             </View>
             <View style={styles.content_below}>
                 <View style={styles.display}>
@@ -62,6 +63,15 @@ const styles = StyleSheet.create({
         color: '#565555', 
         fontSize: 12
     },
+    status: {
+        backgroundColor: '#a9a8a8',
+        color: 'white',
+        paddingHorizontal: 5,
+        paddingVertical: 3,
+        borderRadius: 7,
+        fontWeight: '500',
+        height: 25
+    }
 });
 
 export default OrderItem;

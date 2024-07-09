@@ -54,4 +54,19 @@ export const revenueOfProduct = async({ pageIndex, pageSize, fromDate, toDate })
     }
 }
 
+export const returnReceipt = async({ receiptId, productInfos }) => { 
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+
+    try {
+        const response = await httprequest.post('return-product', { receiptId, productInfos }, config);
+        return response;
+    }catch(err) {
+        console.log("Error when returning receipt: ", err);
+    }
+}
+
 

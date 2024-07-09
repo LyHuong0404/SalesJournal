@@ -11,6 +11,7 @@ import TextInputCustom from "../../components/TextInputCustom";
 import { addProduct } from "../../actions/seller/productActions";
 import QRDemo from "../QRDemo";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import { copyToClipboard } from "../../utils/helper";
 
 
 function ImportProductInfo() {
@@ -75,7 +76,6 @@ function ImportProductInfo() {
             ToastAndroid.show('Nhập sản phẩm thất bại', ToastAndroid.SHORT);
         }
     }
-
     
     return ( 
         <View style={styles.container}>
@@ -188,6 +188,9 @@ function ImportProductInfo() {
                                 onChange={(text) => setQR(text)} 
                                 keyboardType='default' />
                         </View>
+                        <TouchableOpacity onPress={() => copyToClipboard(QR)}>
+                            <Image source={require('../../assets/images/copy.png')} style={{ width: 20, height: 20 }} />
+                        </TouchableOpacity>
                         <TouchableOpacity onPress={handleRandomBarCode}>
                             <Image source={require('../../assets/images/pen.png')} style={styles.image_qr} />
                         </TouchableOpacity>
