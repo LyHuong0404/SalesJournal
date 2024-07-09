@@ -50,7 +50,7 @@ function OrderConfirmation({ onBack }) {
     useEffect(() => {
         let newArray = [];
         ArrayQRAndAmount.forEach(item => {
-            let existingProductIndex = newArray?.findIndex(newItem => newItem.code === item.product.code);
+            let existingProductIndex = newArray?.findIndex(newItem => newItem.product.productId === item.product.productId);
             
             if (existingProductIndex !== -1) {
                 newArray[existingProductIndex].amount += item.amount;
@@ -78,7 +78,7 @@ function OrderConfirmation({ onBack }) {
                 {
                     let totalAmountProduct = 0;
                     for(const p of products) {
-                        if(p.product.product.id === item.product.product.id) {
+                        if(p.product.productId === item.product.productId) {
                             totalAmountProduct = p.amount;
                         }
                     }
@@ -147,7 +147,7 @@ function OrderConfirmation({ onBack }) {
     }
 
     const handleDeleteProductFromCart = (productDelete) => {
-        const updatedProducts = products.filter(item => item.product.code !== productDelete.product.code);      
+        const updatedProducts = products.filter(item => item.product.productId !== productDelete.product.productId);      
         setArrayQRAndAmount(updatedProducts);
     }
 
@@ -217,11 +217,11 @@ function OrderConfirmation({ onBack }) {
                 {products?.map((item, index) => 
                     <View key={index} style={{ display: 'flex', flexDirection: 'row', paddingVertical: 10, backgroundColor: '#ffffff', height: 90, borderBottomWidth: 0.6, borderColor: '#e5e5ea' }}>
                         <TouchableOpacity onPress={() => handleDeleteProductFromCart(item)}><Image source={require('../../assets/images/close_circle.png')} style={{ width: 20, height: 20, objectFit: 'contain' }} /></TouchableOpacity>
-                        <Image source={{ uri: item?.product?.product?.avatar }} style={{ width: 50, height: 50, marginRight: 10, objectFit: 'cover', borderRadius: 10 }} />
+                        <Image source={{ uri: item?.product?.avatar }} style={{ width: 50, height: 50, marginRight: 10, objectFit: 'cover', borderRadius: 10 }} />
                         <View style={{ flex: 1, justifyContent: 'space-between' }}>
                             <Text style={{ color: '#252424' }}>{item?.product?.name}</Text>
                             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                                <Text style={{ color: '#1d7ebf', fontSize: 14, fontWeight: '500' }}>{`${item?.product?.product?.salePrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
+                                <Text style={{ color: '#1d7ebf', fontSize: 14, fontWeight: '500' }}>{`${item?.product?.salePrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                                 <View style={{ display: 'flex', width: '40%', flexDirection: 'row', paddingVertical: 4, alignItems: 'center', justifyContent: 'space-around', borderColor: '#e5e5e2', borderWidth: 1, borderRadius: 5 }}>
                                     <TouchableOpacity onPress={() => handleDecrease(index)}>
                                         <Image source={require('../../assets/images/minus.png')} style={{ width: 12, height: 15, objectFit: 'contain', tintColor: '#7a7a7a' }}/>

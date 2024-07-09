@@ -102,9 +102,9 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
                     try {
                         const fetchData = async() => {
                             setLoading(true);
-                            const response = await getImportProductByCode(scanningResult);
-                            if (response?.success) {
-                                const newFormatProductDisplay = { product: response.data, amount: 1 }
+                            const response = await getProductByCode(scanningResult);
+                            if (response) {
+                                const newFormatProductDisplay = { product: response, amount: 1 }
                                 if (ArrayQRAndAmount == undefined) {
                                     onScanSuccess();
                                     navigation.navigate('OrderConfirmation', { firstProduct: [newFormatProductDisplay] })
