@@ -81,7 +81,7 @@ function OrderDetail() {
                                 <View key={index} style={{ display: 'flex', flexDirection: 'row', marginHorizontal: 15, paddingVertical: 15, backgroundColor: '#ffffff', minHeight: 90, borderBottomWidth: 0.8, borderColor: '#e5e5ea' }}>
                                     <Image source={{ uri: item?.productAvatar }} style={{ width: 60, height: '100%', marginRight: 10, objectFit: 'cover', borderRadius: 5 }} />
                                     <View style={{ flex: 1 }}>
-                                        <Text style={{ color: '#252424' }}>{item.productName}</Text>
+                                        <Text style={{ color: '#252424' }}>{item.productName}: {item.productCode}</Text>
                                         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
                                             <Text style={{ color: '#7c7b7b'}}>SL: <Text style={{ fontWeight: '500' }}>{item?.numberProduct}</Text></Text>
                                             <Text style={{ color: '#d81f1f', fontWeight: '500' }}>{`${item?.actualPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
