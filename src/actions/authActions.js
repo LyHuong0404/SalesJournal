@@ -118,15 +118,17 @@ export const login = createAsyncThunk('auth', async ({ username, password, notif
 export const logout = createAsyncThunk('logout', async (_, { rejectWithValue }) => {
     try {
         await GoogleSignin.signOut();
-        await AsyncStorage.removeItem('user');
         const config = {
             headers: {
-            'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
             },
         };
+        const user = await AsyncStorage.getItem('user');
+        const accessToken = (JSON.parse(user)).accessToken;
         const notifyToken = await AsyncStorage.getItem('notifyToken');
-        const { data, code } = await httprequest.post('logout', { notifyToken }, config);
+        const { data, code } = await httprequest.post('logout', { notifyToken, accessToken }, config);
         if (code == 0) {
+            await AsyncStorage.removeItem('user');
             return data;
         } else {
             return rejectWithValue('Logout unsuccessfully');
