@@ -9,7 +9,7 @@ import { convertTimeStamp } from "../../utils/helper";
 function ReturnOrderDetail() {
     const navigation = useNavigation();
     const route = useRoute();
-    const [receipt, setReceipt] = useState(route.params?.receipt || {});
+    const [receipt, setReceipt] = useState(JSON.parse(JSON.stringify(route.params?.receipt || {})));
     const [status, requestPermission] = MediaLibrary.usePermissions();
     const viewRef = useRef();
     
