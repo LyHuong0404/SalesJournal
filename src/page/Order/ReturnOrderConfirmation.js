@@ -171,7 +171,7 @@ function ReturnOrderConfirmation() {
                             <Checkbox color='#15803D' uncheckedColor='#a6a6a6' status={result[index]?.status ? 'checked' : 'unchecked'} onPress={() => handleChooseAProduct(index)} />
                             <Image source={{ uri: item?.productAvatar }} style={{ width: 70, height: '100%', marginRight: 10, objectFit: 'cover', borderRadius: 10 }} />
                             <View style={{ flex: 1, justifyContent: 'space-between' }}>
-                                <Text style={{ color: '#252424' }}>{item.productName}</Text>
+                                <Text style={{ color: '#252424' }}>{item.productName}: {item.productCode}</Text>
                                 <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end'}}>
                                     <View style={{ display: 'flex', width: '38%', flexDirection: 'row', paddingVertical: 2, alignItems: 'center', justifyContent: 'space-around', borderColor: '#e5e5e2', borderWidth: 1, borderRadius: 5 }}>
                                         <TouchableOpacity onPress={() => handleDecrease(index)}>
