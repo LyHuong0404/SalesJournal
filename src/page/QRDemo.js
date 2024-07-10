@@ -102,7 +102,7 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
                         setLoading(true);
                         const response = await getReceiptById(scanningResult);
                         if (response?.code == 0) {
-                            navigation.navigate('ReturnOrderDetail', { receipt: response?.data });
+                            navigation.navigate('ReturnOrderConfirmation', { receipt: response?.data });
                         } else {
                             ToastAndroid.show('Mã đơn hàng không tồn tại', ToastAndroid.SHORT);
                         }
