@@ -6,6 +6,7 @@ import { captureRef } from 'react-native-view-shot';
 
 import { convertTimeStamp } from "../../utils/helper";
 
+
 function ReturnOrderDetail() {
     const navigation = useNavigation();
     const route = useRoute();
@@ -18,9 +19,9 @@ function ReturnOrderDetail() {
             receipt.receiptDetails.map((item) => {
                 receipt.returnProducts.map((i) => {
                     if (i.productId == item.productId) {
-                        item.numberProduct = item.numberProduct + 1;
-                        receipt.finalPrice = receipt.finalPrice + item.actualPrice;
-                        receipt.totalSalePrice = receipt.totalSalePrice + item.salePrice;
+                        item.numberProduct = item.numberProduct + i.numberProduct;
+                        receipt.finalPrice = receipt.finalPrice + (item.actualPrice * i.numberProduct);
+                        receipt.totalSalePrice = receipt.totalSalePrice + (item.salePrice * i.numberProduct);
                     }
                 })
             })
@@ -88,6 +89,7 @@ function ReturnOrderDetail() {
         }, 0);
         return rs;
     }, [])
+
 
     return ( 
         <View style={styles.container} ref={viewRef}>
