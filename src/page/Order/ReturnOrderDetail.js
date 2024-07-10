@@ -1,18 +1,50 @@
 import { View, StyleSheet, Text, TouchableOpacity, Image, ScrollView, ToastAndroid } from "react-native";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import * as MediaLibrary from 'expo-media-library';
 import { captureRef } from 'react-native-view-shot';
 
 import { convertTimeStamp } from "../../utils/helper";
 
-function OrderDetail() {
+function ReturnOrderDetail() {
     const navigation = useNavigation();
     const route = useRoute();
-    const [receipt, setReceipt] = useState(route.params?.receipt || {});
+    const [receipt, setReceipt] = useState(JSON.parse(JSON.stringify(route.params?.receipt || {})));
     const [status, requestPermission] = MediaLibrary.usePermissions();
     const viewRef = useRef();
- 
+    
+    useEffect(() => {
+        if (receipt.returnProducts.length > 0 || receipt.receiptDetails.length > 0) {
+            receipt.receiptDetails.map((item) => {
+                receipt.returnProducts.map((i) => {
+                    if (i.productId == item.productId) {
+                        item.numberProduct = item.numberProduct + 1;
+                        receipt.finalPrice = receipt.finalPrice + item.actualPrice;
+                        receipt.totalSalePrice = receipt.totalSalePrice + item.salePrice;
+                    }
+                })
+            })
+           
+            const result = receipt.returnProducts.filter(a => !receipt.receiptDetails.some(b => b.productId === a.productId));
+            if (result.length > 0) {
+                result.map((product) => {
+                    receipt.receiptDetails.push(product);
+                    receipt.finalPrice = receipt.finalPrice + (product.actualPrice * product.numberProduct);
+                    receipt.totalSalePrice = receipt.totalSalePrice + (product.salePrice * product.numberProduct);
+                })
+            }
+            
+            if (receipt.receiptDetails.length == 0) {
+                receipt.receiptDetails = receipt.returnProducts;
+                receipt.receiptDetails.map((item) => {
+                    receipt.finalPrice = receipt.finalPrice + item.actualPrice;
+                    receipt.totalSalePrice = receipt.totalSalePrice + item.salePrice;
+                })
+            }
+            setReceipt(receipt);
+        }       
+    }, [])
+
     const takeScreenshot = async () => {
         try {
             let permission = status;
@@ -36,35 +68,102 @@ function OrderDetail() {
         }
     };
 
+    const handleCalAmountMoneyReturn = useCallback(() => {
+        const rs = receipt?.returnProducts?.reduce((total, item) => {
+            return total + (item.numberProduct * item?.actualPrice);
+        }, 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace('₫', '');
+        return rs;
+    }, [])
+
+    const handleCalNumberProductReturn = useCallback(() => {
+        const rs = receipt?.returnProducts?.reduce((total, item) => {
+            return total + item.numberProduct;
+        }, 0);
+        return rs;
+    }, [])
+
+    const handleCalNumberProduct = useCallback(() => {
+        const rs = receipt?.receiptDetails?.reduce((total, item) => {
+            return total + item.numberProduct;
+        }, 0);
+        return rs;
+    }, [])
+
     return ( 
         <View style={styles.container} ref={viewRef}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
+                <TouchableOpacity onPress={() => navigation.navigate('Order')}>
                     <Image source={require('../../assets/images/right_arrow.png')}  style={{ width: 17, height: 17, objectFit: 'contain', marginVertical: 15 }} />
                 </TouchableOpacity>
-                <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center', marginLeft: 50 }}>Chi tiết hóa đơn</Text>
+                <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center' }}>Chi tiết trả hàng</Text>
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
-                    {receipt?.returnProducts?.length == 0 &&
-                        <TouchableOpacity onPress={() => navigation.navigate('ReturnOrderConfirmation', { receipt })} style={{ alignItems: 'center', marginRight: 10 }}>
-                            <Image source={require('../../assets/images/return.png')} style={{ width: 15, height: 20, objectFit: 'contain'}}/>
-                            <Text style={{ fontSize: 6, color: '#3a3a3a' }}>Trả hàng</Text>
-                        </TouchableOpacity>
-                    }
                     <TouchableOpacity onPress={takeScreenshot} style={{ alignItems: 'center' }}>
                         <Image source={require('../../assets/images/download.png')} style={{ width: 20, height: 20, objectFit: 'contain', }}/>
-                        <Text style={{ fontSize: 6, color: '#3a3a3a' }}>Tải đơn</Text>
+                        <Text style={{ fontSize: 10, color: '#3a3a3a' }}>Tải đơn</Text>
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={styles.horizontalLine} />
+            <View style={{ height: 50, backgroundColor: '#f8f8fa', justifyContent: 'center', paddingHorizontal: 15 }} >
+                <Text style={{ fontWeight: '500', color: '#a9a8a8'}}>Trả đơn hàng từ <Text style={{ color: '#2083c5'}}>{`#HD${receipt?.id}`}</Text></Text>
+            </View>
             <ScrollView>
                 <View style={styles.content}>
                     <View style={[styles.display, styles.content_above, { justifyContent: 'space-between' }]}>
                         <View>
-                            <Text style={styles.text_customer}>{`HD${receipt?.id}`}</Text>
+                            <Text style={styles.text_customer}>{`HT#${receipt?.id}`}</Text>
                             <Text style={styles.text_info_order}>{`${receipt?.createdAtTime} - ${convertTimeStamp(receipt?.createdAtDate, 'dd/MM')}`}</Text>
                         </View>
-                        {(receipt?.receiptDetails?.some((item) => item.coupon != null) || receipt?.coupon) && <Image source={require('../../assets/images/sale.png')} style={{ width: 24, height: 24, objectFit: 'cover'}} />}
+                        <Text style={styles.status}>Trả hàng</Text>
+                    </View>
+                    <View style={styles.content_below}>
+                        <View style={[styles.display, { alignItems: 'center', justifyContent: 'space-between' }]}>
+                            <Text style={styles.total_price}>{handleCalAmountMoneyReturn()}</Text>
+                            <View style={styles.button_send}>
+                            </View>
+                        </View>
+                    </View>
+                    <View style={styles.horizontalLine} />
+                    <View style={{ marginBottom: 10 }}>
+                        {receipt?.returnProducts?.map((item, index) => 
+                            <View key={index} style={{ display: 'flex', flexDirection: 'row', marginHorizontal: 15, paddingVertical: 15, backgroundColor: '#ffffff', minHeight: 90, borderBottomWidth: 0.8, borderColor: '#e5e5ea' }}>
+                                <Image source={{ uri: item.productAvatar }} style={{ width: 60, height: '100%', marginRight: 10, objectFit: 'cover', borderRadius: 5 }} />
+                                <View style={{ flex: 1 }}>
+                                    <Text style={{ color: '#252424' }}>{item.productName}</Text>
+                                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
+                                        <Text style={{ color: '#7c7b7b'}}>SL: <Text style={{ fontWeight: '500' }}>{item?.numberProduct}</Text></Text>
+                                        <Text style={{ color: '#d81f1f', fontWeight: '500' }}>{`${item?.actualPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        )}
+                        
+                        {receipt?.returnProducts?.length == 0 && 
+                            <Text style={{ marginTop: 10, paddingHorizontal: 15 }}>Sản phẩm đã xóa</Text>
+                        }
+                    </View>
+                    
+                    <View style={[styles.horizontalLine, { marginTop: 10 }]} />
+                    <View style={{ marginVertical: 10, paddingHorizontal: 15 }}>
+                        <Text style={{ color: '#858585' }}>Tổng {handleCalNumberProductReturn()} sản phẩm</Text>  
+                    </View>
+                    <View style={[styles.display, { justifyContent: 'space-between', marginBottom: 15, paddingHorizontal: 15 }]}>
+                        <Text style={{ fontWeight: '500', fontSize: 18 }}>Tổng tiền trả khách</Text>
+                        <Text style={{ color: '#d81f1f', fontWeight: 'bold', fontSize: 18 }}>{handleCalAmountMoneyReturn()}</Text>
+                    </View>
+                </View>
+
+                <View style={{ height: 50, backgroundColor: '#f8f8fa', justifyContent: 'center', paddingHorizontal: 15 }} >
+                <Text style={{ fontWeight: '500', color: '#a9a8a8'}}>Đơn hàng <Text style={{ color: '#2083c5'}}>{`#HD${receipt?.id}`}</Text></Text>
+            </View>
+                <View style={styles.header}>
+                    <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center' }}>Chi tiết hóa đơn gốc</Text>
+                </View>
+                <View style={styles.content}>
+                    <View style={[styles.display, styles.content_above, { justifyContent: 'space-between' }]}>
+                        <View>
+                            <Text style={styles.text_customer}>{`HD#${receipt?.id}`}</Text>
+                            <Text style={styles.text_info_order}>{`${receipt?.createdAtTime} - ${convertTimeStamp(receipt?.createdAtDate, 'dd/MM')}`}</Text>
+                        </View>
                     </View>
                     <View style={styles.content_below}>
                         <View style={[styles.display, { alignItems: 'center', justifyContent: 'space-between' }]}>
@@ -72,7 +171,6 @@ function OrderDetail() {
                             <View style={styles.button_send}>
                             </View>
                         </View>
-                        {(receipt?.receiptDetails?.some((item) => item.coupon != null) || receipt?.coupon) && <Text style={{ color: '#cb870b', fontSize: 12 }}>Khuyến mãi</Text>}
                     </View>
                     <View style={styles.horizontalLine} />
                     <View style={{ marginBottom: 10 }}>
@@ -84,33 +182,30 @@ function OrderDetail() {
                                         <Text style={{ color: '#252424' }}>{item.productName}</Text>
                                         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
                                             <Text style={{ color: '#7c7b7b'}}>SL: <Text style={{ fontWeight: '500' }}>{item?.numberProduct}</Text></Text>
-                                            <Text style={{ color: '#d81f1f', fontWeight: '500' }}>{`${item?.actualPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
+                                            <Text style={{ color: '#d81f1f', fontWeight: '500' }}>{`${item?.salePrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                                         </View>
                                     </View>
                                 </View>
                             )
                         }
-                        {receipt?.receiptDetails.length == 0 && 
-                            <Text style={{ marginTop: 10 }}>Sản phẩm đã xóa</Text>
+                        {receipt?.receiptDetails?.length == 0 && 
+                            <Text style={{ marginTop: 10, paddingHorizontal: 15 }}>Sản phẩm đã xóa</Text>
                         }
                     </View>
                     
                     <View style={[styles.horizontalLine, { marginTop: 10 }]} />
-                    <View style={{ marginVertical: 10 }}>
+                    <View style={{ marginVertical: 10, paddingHorizontal: 15 }}>
                         <View style={styles.price_container}>
-                            <Text style={{ color: '#858585' }}>
-                                {`Tổng ${receipt?.receiptDetails.reduce((total, item) => {
-                                    return total + item?.numberProduct;
-                                }, 0)} sản phẩm`}</Text>
+                            <Text style={{ color: '#858585' }}>Tổng {handleCalNumberProduct()} sản phẩm</Text>
                             <Text style={{ color: '#565555'}}>{`${receipt?.totalSalePrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                         </View>
                         
-                        <View style={[styles.display, { marginBottom: 2, paddingHorizontal: 15 }]}>
+                        <View style={[styles.display, { marginBottom: 2 }]}>
                             <Text style={[styles.text_light, { color: '#565555', width: '40%', fontSize: 14, flex: 1 }]}>Giảm giá</Text>                              
                             {(receipt?.receiptDetails?.some((item) => item.coupon != null) || receipt?.coupon) ? 
                                 <>
                                     <View style={{ flex: 1 }}>
-                                        {receipt?.receiptDetails.map((item, index) =>
+                                        {receipt?.receiptDetails?.map((item, index) =>
                                             <View key={index} style={[styles.display, { justifyContent: 'space-between', marginBottom: 2 }]}>
                                                 {item.coupon && 
                                                     <>
@@ -136,10 +231,10 @@ function OrderDetail() {
                             }          
                         </View>                 
                     </View>
-                    <View style={[styles.display, { justifyContent: 'space-between', marginBottom: 5, paddingHorizontal: 15 }]}>
+                    <View style={[styles.display, { justifyContent: 'space-between', marginBottom: 20, paddingHorizontal: 15 }]}>
                         <Text style={{ fontWeight: '500', fontSize: 18 }}>Tổng cộng</Text>
                         <Text style={{ color: '#d81f1f', fontWeight: 'bold', fontSize: 18 }}>{`${receipt?.finalPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
-                    </View> 
+                    </View>
                 </View>
             </ScrollView>
         </View>
@@ -165,12 +260,11 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between', 
-        marginVertical: 5,
-        paddingHorizontal: 15
+        marginVertical: 5
     },
     horizontalLine: { 
         height: 10, 
-        backgroundColor: '#f6f6f8' 
+        backgroundColor: '#f8f8fa' 
     },
     button_payment: {
         borderWidth: 1,
@@ -179,7 +273,7 @@ const styles = StyleSheet.create({
         marginVertical: 10
     },
     content: {
-        flex: 1
+        flex: 1,
     },
     product_container: {
         marginTop: 10, 
@@ -283,6 +377,15 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         height: 15
     },
+    status: {
+        backgroundColor: '#a9a8a8',
+        color: 'white',
+        paddingHorizontal: 5,
+        paddingVertical: 3,
+        borderRadius: 7,
+        fontWeight: '500',
+        height: 25
+    }
 })
 
-export default OrderDetail;
+export default ReturnOrderDetail;

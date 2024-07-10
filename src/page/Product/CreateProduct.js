@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
+
 import TextInputPrice from "../../components/TextInputPrice";
 import ModalSelectCategory from "../../components/Modal/ModalSelectCategory";
 import ButtonCustom from "../../components/ButtonCustom";
@@ -13,7 +14,7 @@ import TextInputCustom from "../../components/TextInputCustom";
 import { addProduct, deleteProduct, updateProduct } from "../../actions/seller/productActions";
 import TwoButtonBottom from "../../components/TwoButtonBottom";
 import ModalConfirmation from "../../components/Modal/ModalConfirmation";
-import { convertTimeStamp } from "../../utils/helper";
+import { convertTimeStamp, copyToClipboard } from "../../utils/helper";
 import QRDemo from "../QRDemo";
 import LoadingSpinner from "../../components/LoadingSpinner";
 
@@ -127,6 +128,7 @@ function CreateProduct() {
             ToastAndroid.show('Xóa sản phẩm thành công', ToastAndroid.SHORT);
         }
     }
+
 
     return ( 
         <View style={styles.container}>
@@ -260,6 +262,9 @@ function CreateProduct() {
                                 onChange={(text) => setQR(text)} 
                                 keyboardType='default' />
                         </View>
+                        <TouchableOpacity onPress={() => copyToClipboard(QR)}>
+                            <Image source={require('../../assets/images/copy.png')} style={{ width: 20, height: 20 }} />
+                        </TouchableOpacity>
                         <TouchableOpacity onPress={handleRandomBarCode}>
                             <Image source={require('../../assets/images/pen.png')} style={styles.image_qr} />
                         </TouchableOpacity>

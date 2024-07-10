@@ -39,10 +39,10 @@ function Register() {
             if (response?.code == 0) {
                 navigation.navigate("OTP", { username, email, password });
             } else {
-                ToastAndroid.show('Thất bại!', ToastAndroid.SHORT);
+                ToastAndroid.show('Email đã tồn tại!', ToastAndroid.SHORT);
             }
         } catch(e){
-            ToastAndroid.show('Thất bại!', ToastAndroid.SHORT);
+            ToastAndroid.show('Email đã tồn tại!', ToastAndroid.SHORT);
         }
     }
 

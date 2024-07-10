@@ -223,11 +223,11 @@ function CouponDetail() {
                     })
                 }
                 if (response?.code == 0) {
-                    ToastAndroid.show('Lưu mã khuyến mãi thành công', ToastAndroid.SHORT);
+                    ToastAndroid.show('Lưu khuyến mãi thành công', ToastAndroid.SHORT);
                     navigation.navigate('SaleManagement');
                 } else 
                 {
-                    ToastAndroid.show('Lưu mã khuyến mãi thất bại', ToastAndroid.SHORT);
+                    ToastAndroid.show('Lưu khuyến mãi thất bại', ToastAndroid.SHORT);
                 }
                 setLoading(false);
             }

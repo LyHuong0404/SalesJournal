@@ -44,14 +44,12 @@ function PaymentDetail() {
 
     return ( 
         <View ref={viewRef} style={styles.container}>
-            <TouchableOpacity onPress={() => navigation.navigate('DrawerNav')}>
-                <View style={styles.header}>
-                    <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center', marginLeft: 25 }}>Chi tiết hóa đơn</Text>
-                    <TouchableOpacity onPress={takeScreenshot}>
-                        <Image source={require('../assets/images/download.png')} style={{ width: 26, height: 26, objectFit: 'contain' }}/>
-                    </TouchableOpacity>
-                </View>
-            </TouchableOpacity>
+            <View style={styles.header}>
+                <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center', marginLeft: 25 }}>Chi tiết hóa đơn</Text>
+                <TouchableOpacity onPress={takeScreenshot}>
+                    <Image source={require('../assets/images/download.png')} style={{ width: 26, height: 26, objectFit: 'contain' }}/>
+                </TouchableOpacity>
+            </View>
             <View style={styles.horizontalLine} />
             <ScrollView>
                 <View style={styles.content}>
@@ -202,7 +200,7 @@ const styles = StyleSheet.create({
     },
     horizontalLine: { 
         height: 10, 
-        backgroundColor: '#f2f2f5' 
+        backgroundColor: '#f8f8fa' 
     },
     content: {
         flex: 1,

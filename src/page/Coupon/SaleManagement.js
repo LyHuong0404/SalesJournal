@@ -143,7 +143,7 @@ function SaleManagement() {
                                                     <Text style={[styles.text_light, { marginBottom: 5 }]}>{`Giảm ${coupon?.value * 100}% khi mua từ ${coupon?.provisoMinAmount} sản phẩm`}</Text>
                                                 ) :
                                                 (coupon?.type == 'NUMBER' ? 
-                                                    <Text style={[styles.text_light, { marginBottom: 5 }]}>{`Giảm ${coupon?.value} khi mua đơn từ ${coupon?.provisoMinPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`}</Text> : 
+                                                    <Text style={[styles.text_light, { marginBottom: 5 }]}>{`Giảm ${coupon?.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')} khi mua đơn từ ${coupon?.provisoMinPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`}</Text> : 
                                                     <Text style={[styles.text_light, { marginBottom: 5 }]}>{`Giảm ${coupon?.value *100}% khi mua đơn từ ${coupon?.provisoMinPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`}</Text>
                                                 ) 
                                             }

@@ -1,4 +1,7 @@
 import { startOfWeek, endOfWeek, subWeeks, format, startOfMonth, subMonths, endOfMonth } from 'date-fns';
+import { ToastAndroid, Platform, NativeModules } from 'react-native';
+
+const { Clipboard } = NativeModules;
 
 export const convertTimeStamp = (timestamp, format) => {
     const date = new Date(timestamp);
@@ -70,3 +73,10 @@ export const setDateFormat = (buttonType, startDate, endDate) => {
     return [newStartDate, newEndDate];
 
 }
+
+export const copyToClipboard = (text) => {
+    if (Platform.OS === 'android' || Platform.OS === 'ios') {
+        Clipboard.setString(text);
+        ToastAndroid.show('Văn bản đã được sao chép!', ToastAndroid.SHORT);
+    } 
+};
