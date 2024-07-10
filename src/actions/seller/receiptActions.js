@@ -69,4 +69,18 @@ export const returnReceipt = async({ receiptId, productInfos }) => {
     }
 }
 
+export const getReceiptById = async(receiptId) => { 
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+
+        const response = await httprequest.get(`/receipt/${receiptId}`, config);
+        return response;
+    }catch(err) {
+        console.log("Error when getting receipt: ", err);
+    }
+}
 

@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { getImportProductByCode, getProductByCode } from '../actions/seller/productActions';
 import { Audio } from 'expo-av';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { getReceiptById } from '../actions/seller/receiptActions';
 
 export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close }) {
     const navigation = useNavigation();
@@ -95,6 +96,25 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
                 }
             } else if (action == 'ScanCustomerInfo') {
                 onScanSuccess(scanningResult);
+            }  else if (action == 'returnOrder') {
+                try {
+                    const fetchData = async () => {
+                        setLoading(true);
+                        const response = await getReceiptById(scanningResult);
+                        if (response?.code == 0) {
+                            navigation.navigate('ReturnOrderDetail', { receipt: response?.data });
+                        } else {
+                            ToastAndroid.show('Mã đơn hàng không tồn tại', ToastAndroid.SHORT);
+                        }
+                        onScanSuccess();
+                        setLoading(false);
+                    }
+                    fetchData();
+                } catch (err) {
+                    close();
+                    setLoading(false);
+                    ToastAndroid.show('Mã đơn hàng không tồn tại', ToastAndroid.SHORT);
+                }
             } else {
                 //check exist code 
                 const index = Array.isArray(ArrayQRAndAmount) ? ArrayQRAndAmount.findIndex((item) => item?.product?.code == scanningResult) : -1;
@@ -139,7 +159,7 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
                 <TouchableOpacity onPress={close}>
                     <Image source={require('../assets/images/right_arrow.png')}  style={{ width: 17, height: 17, objectFit: 'contain', marginVertical: 15 }} />
                 </TouchableOpacity>
-                <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center'}}>{action == 'ScanCustomerInfo' ? 'Quét mã khách hàng' : 'Quét mã sản phẩm'}</Text>
+                <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center'}}>{action == 'ScanCustomerInfo' ? 'Quét mã khách hàng' : 'Quét mã'}</Text>
             </View>
             {cameraOpen && 
                 <CameraView 

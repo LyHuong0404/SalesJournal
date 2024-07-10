@@ -11,6 +11,7 @@ import { convertTimeStamp } from '../utils/helper';
 import ModalSell from '../components/Modal/ModalSell';
 import ModalExpire from '../components/Modal/ModalExpire';
 import { utils } from '../utils/utils';
+import QRDemo from './QRDemo';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -18,6 +19,7 @@ function Home() {
   const { user } = useSelector((state) => state.auth);
   const navigation = useNavigation();
   const refRBSheet = useRef();
+  const refRBSheetCamera = useRef();
   const [date, setDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
   const [revenue, setRevenue] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -47,7 +49,7 @@ function Home() {
     useCallback(() => {
         fetchAPI();
     }, [])
-);
+  );
 
   return (
     <View style={styles.container}>   
@@ -156,21 +158,26 @@ function Home() {
                 <Image source={require('../assets/images/increasing.png')} style={{width: 30, height: 30, objectFit: 'contain'}} />
                 <Text style={styles.text}>Báo cáo</Text>
               </TouchableOpacity>
+
               <TouchableOpacity onPress={() => navigation.navigate('ImportProduct')} style={{flex: 1, marginHorizontal: 5, backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent:'center', borderRadius: 7}}>
                 <Image source={require('../assets/images/product_in.png')} style={{width: 30, height: 30, objectFit: 'contain'}} />
                 <Text style={styles.text}>Nhập hàng</Text>
               </TouchableOpacity> 
 
-              <TouchableOpacity onPress={() => navigation.navigate('Customers')} style={{flex: 1, marginHorizontal: 5, backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent:'center', borderRadius: 7}}>
-                <Image source={require('../assets/images/customer.png')} style={{width: 30, height: 30, objectFit: 'contain', tintColor: '#491CDE'}} />
-                <Text style={styles.text}>Khách hàng</Text>
+              <TouchableOpacity onPress={() => refRBSheetCamera.current?.open()} style={{flex: 1, marginHorizontal: 5, backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent:'center', borderRadius: 7}}>
+                <Image source={require('../assets/images/cash-flow.png')} style={{width: 30, height: 30, objectFit: 'contain' }} />
+                <Text style={styles.text}>Trả hàng</Text>
               </TouchableOpacity>
             </View>
           </View>
 
           <View style={[styles.centeredBox, { margin: 20, marginTop: 0 }]}>  
-            <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', height: 90 }}>                              
-              <TouchableOpacity onPress={() => navigation.navigate('SaleManagement')} style={{flex: 0.31, marginHorizontal: 5, backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent:'center', borderRadius: 7}}>
+            <View style={{display: 'flex', flexDirection: 'row', width: '100%', height: 90 }}>   
+              <TouchableOpacity onPress={() => navigation.navigate('Customers')} style={{flex: 0.32, marginHorizontal: 5, backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent:'center', borderRadius: 7}}>
+                <Image source={require('../assets/images/customer.png')} style={{width: 30, height: 30, objectFit: 'contain', tintColor: '#491CDE'}} />
+                <Text style={styles.text}>Khách hàng</Text>
+              </TouchableOpacity>                           
+              <TouchableOpacity onPress={() => navigation.navigate('SaleManagement')} style={{flex: 0.32, marginHorizontal: 5, backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent:'center', borderRadius: 7}}>
                 <Image source={require('../assets/images/gift.png')} style={{width: 30, height: 30, objectFit: 'contain'}} />
                 <Text style={styles.text}>Khuyến mãi</Text>
               </TouchableOpacity>
@@ -196,6 +203,20 @@ function Home() {
             }}
           >
               <ModalSell onClose={() => refRBSheet?.current.close()}/>
+          </RBSheet>
+          <RBSheet
+              ref={refRBSheetCamera}
+              customStyles={{
+                  container: {
+                      height: '100%'
+                  }
+              }}
+          >
+              <QRDemo 
+                  action="returnOrder" 
+                  onScanSuccess={() => refRBSheetCamera.current?.close()} 
+                  close={() => refRBSheetCamera.current?.close()}
+              />
           </RBSheet>
       </ScrollView>
       {showModal && <ModalExpire />}
