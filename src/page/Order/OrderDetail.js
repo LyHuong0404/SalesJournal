@@ -5,8 +5,11 @@ import * as MediaLibrary from 'expo-media-library';
 import { captureRef } from 'react-native-view-shot';
 
 import { convertTimeStamp } from "../../utils/helper";
+import { useSelector } from "react-redux";
+import QRCode from "react-native-qrcode-svg";
 
 function OrderDetail() {
+    const { user } = useSelector((state) => state.auth);
     const navigation = useNavigation();
     const route = useRoute();
     const [receipt, setReceipt] = useState(route.params?.receipt || {});
@@ -44,7 +47,7 @@ function OrderDetail() {
                 </TouchableOpacity>
                 <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center', marginLeft: 50 }}>Chi tiết hóa đơn</Text>
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
-                    {receipt?.returnProducts?.length == 0 &&
+                    {(receipt?.returnProducts?.length == 0 && user?.profile) && 
                         <TouchableOpacity onPress={() => navigation.navigate('ReturnOrderConfirmation', { receipt })} style={{ alignItems: 'center', marginRight: 10 }}>
                             <Image source={require('../../assets/images/return.png')} style={{ width: 15, height: 20, objectFit: 'contain'}}/>
                             <Text style={{ fontSize: 6, color: '#3a3a3a' }}>Trả hàng</Text>
@@ -60,9 +63,17 @@ function OrderDetail() {
             <ScrollView>
                 <View style={styles.content}>
                     <View style={[styles.display, styles.content_above, { justifyContent: 'space-between' }]}>
-                        <View>
-                            <Text style={styles.text_customer}>{`HD${receipt?.id}`}</Text>
-                            <Text style={styles.text_info_order}>{`${receipt?.createdAtTime} - ${convertTimeStamp(receipt?.createdAtDate, 'dd/MM')}`}</Text>
+                    <View style={[styles.display]}>
+                            <QRCode
+                                value={receipt?.id.toString()}
+                                size={60}
+                                color="black"
+                                backgroundColor="white"
+                            />
+                            <View style={{ marginLeft: 15 }}>
+                                <Text style={styles.text_customer}>{`HD#${receipt?.id}`}</Text>
+                                <Text style={styles.text_info_order}>{`${receipt?.createdAtTime} - ${convertTimeStamp(receipt?.createdAtDate, 'dd/MM')}`}</Text>
+                            </View>
                         </View>
                         {(receipt?.receiptDetails?.some((item) => item.coupon != null) || receipt?.coupon) && <Image source={require('../../assets/images/sale.png')} style={{ width: 24, height: 24, objectFit: 'cover'}} />}
                     </View>

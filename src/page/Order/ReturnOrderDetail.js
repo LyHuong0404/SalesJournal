@@ -5,6 +5,7 @@ import * as MediaLibrary from 'expo-media-library';
 import { captureRef } from 'react-native-view-shot';
 
 import { convertTimeStamp } from "../../utils/helper";
+import QRCode from "react-native-qrcode-svg";
 
 function ReturnOrderDetail() {
     const navigation = useNavigation();
@@ -109,9 +110,17 @@ function ReturnOrderDetail() {
             <ScrollView>
                 <View style={styles.content}>
                     <View style={[styles.display, styles.content_above, { justifyContent: 'space-between' }]}>
-                        <View>
-                            <Text style={styles.text_customer}>{`HT#${receipt?.id}`}</Text>
-                            <Text style={styles.text_info_order}>{`${receipt?.createdAtTime} - ${convertTimeStamp(receipt?.createdAtDate, 'dd/MM')}`}</Text>
+                        <View style={[styles.display]}>
+                            <QRCode
+                                value={receipt?.id.toString()}
+                                size={60}
+                                color="black"
+                                backgroundColor="white"
+                            />
+                            <View style={{ marginLeft: 15 }}>
+                                <Text style={styles.text_customer}>{`HT#${receipt?.id}`}</Text>
+                                <Text style={styles.text_info_order}>{`${receipt?.createdAtTime} - ${convertTimeStamp(receipt?.createdAtDate, 'dd/MM')}`}</Text>
+                            </View>
                         </View>
                         <Text style={styles.status}>Trả hàng</Text>
                     </View>
