@@ -47,7 +47,7 @@ function OrderDetail() {
                 </TouchableOpacity>
                 <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center', marginLeft: 50 }}>Chi tiết hóa đơn</Text>
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
-                    {(receipt?.returnProducts?.length == 0 && user?.profile) && 
+                    {(receipt?.returnProducts?.length == 0 && receipt?.receiptDetails?.length > 0 && user?.profile) && 
                         <TouchableOpacity onPress={() => navigation.navigate('ReturnOrderConfirmation', { receipt })} style={{ alignItems: 'center', marginRight: 10 }}>
                             <Image source={require('../../assets/images/return.png')} style={{ width: 15, height: 20, objectFit: 'contain'}}/>
                             <Text style={{ fontSize: 6, color: '#3a3a3a' }}>Trả hàng</Text>

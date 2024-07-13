@@ -142,7 +142,7 @@ function OrderHistory() {
                             <DataTable.Title>Khuyến mãi</DataTable.Title>
                         </DataTable.Header>
                         {orders.map((item, index) => 
-                            <TouchableOpacity key={index} onPress={() => navigation.navigate('OrderDetail', { receipt: item })}>
+                            <TouchableOpacity key={index} onPress={() => navigation.navigate(item?.returnProducts?.length > 0 ? 'ReturnOrderDetail' : 'OrderDetail' , { receipt: item })}>
                                 <DataTable.Row key={index}>
                                     <DataTable.Cell><Text style={styles.cell_text_number}>{`#HD${item.id}`}</Text></DataTable.Cell>
                                     <DataTable.Cell><Text style={styles.cell_text_number}>{convertTimeStamp(item.createdAtDate, 'dd/MM/yyyy')} {item.createdAtTime}</Text></DataTable.Cell>

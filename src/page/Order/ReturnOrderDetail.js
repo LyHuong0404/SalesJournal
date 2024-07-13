@@ -6,13 +6,16 @@ import { captureRef } from 'react-native-view-shot';
 
 import { convertTimeStamp } from "../../utils/helper";
 import QRCode from "react-native-qrcode-svg";
+import { useSelector } from "react-redux";
 
 function ReturnOrderDetail() {
+    const { user } = useSelector((state) => state.auth);
     const navigation = useNavigation();
     const route = useRoute();
     const [receipt, setReceipt] = useState(JSON.parse(JSON.stringify(route.params?.receipt || {})));
     const [status, requestPermission] = MediaLibrary.usePermissions();
     const viewRef = useRef();
+    console.log(receipt)
     
     useEffect(() => {
         if (receipt.returnProducts.length > 0 || receipt.receiptDetails.length > 0) {
@@ -93,7 +96,7 @@ function ReturnOrderDetail() {
     return ( 
         <View style={styles.container} ref={viewRef}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.navigate('Order')}>
+                <TouchableOpacity onPress={() => { user?.profile ? navigation.navigate('Order') : navigation.goBack()}}>
                     <Image source={require('../../assets/images/right_arrow.png')}  style={{ width: 17, height: 17, objectFit: 'contain', marginVertical: 15 }} />
                 </TouchableOpacity>
                 <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'center' }}>Chi tiết trả hàng</Text>
@@ -137,7 +140,7 @@ function ReturnOrderDetail() {
                             <View key={index} style={{ display: 'flex', flexDirection: 'row', marginHorizontal: 15, paddingVertical: 15, backgroundColor: '#ffffff', minHeight: 90, borderBottomWidth: 0.8, borderColor: '#e5e5ea' }}>
                                 <Image source={{ uri: item.productAvatar }} style={{ width: 60, height: '100%', marginRight: 10, objectFit: 'cover', borderRadius: 5 }} />
                                 <View style={{ flex: 1 }}>
-                                    <Text style={{ color: '#252424' }}>{item.productName}</Text>
+                                    <Text style={{ color: '#252424' }}>{item.productName}: {item.productCode}</Text>
                                     <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
                                         <Text style={{ color: '#7c7b7b'}}>SL: <Text style={{ fontWeight: '500' }}>{item?.numberProduct}</Text></Text>
                                         <Text style={{ color: '#d81f1f', fontWeight: '500' }}>{`${item?.actualPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
@@ -188,7 +191,7 @@ function ReturnOrderDetail() {
                                 <View key={index} style={{ display: 'flex', flexDirection: 'row', marginHorizontal: 15, paddingVertical: 15, backgroundColor: '#ffffff', minHeight: 90, borderBottomWidth: 0.8, borderColor: '#e5e5ea' }}>
                                     <Image source={{ uri: item?.productAvatar }} style={{ width: 60, height: '100%', marginRight: 10, objectFit: 'cover', borderRadius: 5 }} />
                                     <View style={{ flex: 1 }}>
-                                        <Text style={{ color: '#252424' }}>{item.productName}</Text>
+                                        <Text style={{ color: '#252424' }}>{item.productName}: {item.productCode}</Text>
                                         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
                                             <Text style={{ color: '#7c7b7b'}}>SL: <Text style={{ fontWeight: '500' }}>{item?.numberProduct}</Text></Text>
                                             <Text style={{ color: '#d81f1f', fontWeight: '500' }}>{`${item?.salePrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
