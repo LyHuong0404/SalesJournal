@@ -264,7 +264,7 @@ function WarehouseTab() {
                                             <View style={[styles.display, { flex: 1, marginTop: 10, marginBottom: 5 }]}>
                                                 <View style={styles.row}>
                                                     <Image source={require('../../assets/images/product_light.png')} style={styles.icon}  />
-                                                    <Text style={[styles.text_light, { fontSize: 13, marginHorizontal: 5 }]}>{`SP00${product?.id}`}</Text>
+                                                    <Text style={[styles.text_light, { fontSize: 13, marginHorizontal: 5 }]}>{`ID: ${product?.id}`}</Text>
                                                 </View>
                                                 <Text style={[styles.text_light, { fontSize: 12, fontWeight: 500 }]}>{`SL: ${product?.stockAmount}`}</Text>
                                             </View>

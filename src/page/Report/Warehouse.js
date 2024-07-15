@@ -191,7 +191,7 @@ function Warehouse() {
                                     </View>
                                     <View style={[styles.display, { flex: 1, marginTop: 10}]}>
                                         <View style={styles.row}>
-                                            <Text style={styles.text_light}>{`SP00${product?.id}`}</Text>
+                                            <Text style={styles.text_light}>{`MSP: ${product?.id}`}</Text>
                                         </View>
                                         <Text style={styles.product_price}>{`${product.importPrice * product?.stockAmount}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                                     </View>

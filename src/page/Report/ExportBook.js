@@ -138,7 +138,7 @@ function ExportBook() {
                         <View style={styles.item_container} key={index}>
                             <Text>{item.product.name}</Text>
                             <View style={[styles.display, { marginVertical: 6 }]}>
-                                <Text style={{ color: '#969696', fontSize: 12 }}>{`#SP00${item.product.id}`}</Text>                
+                                <Text style={{ color: '#969696', fontSize: 12 }}>{`ID: ${item.product.id}`}</Text>                
                                 <Text style={{ color: '#3a3a3a', fontSize: 12, fontWeight: '500' }}>SL: - {item.totalSaleAmount}</Text>                
                             </View>              
                         </View>
