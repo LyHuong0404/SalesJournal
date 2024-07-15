@@ -258,14 +258,11 @@ function WarehouseTab() {
                                         <Image source={{ uri: product?.product?.avatar }} style={styles.image_product}  />
                                         <View style={{ flex: 1 }}>
                                             <View style={[styles.display, { flex: 1 }]}>
-                                                <Text style={{ fontWeight: '500', color: '#3a3a3a' }}>{product.name}</Text>
+                                                <Text style={{ fontWeight: '500', color: '#3a3a3a', flex: 0.8 }}>{product.name}</Text>
                                                 <Text style={styles.product_price}>{`${product.importPrice}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</Text>
                                             </View>
                                             <View style={[styles.display, { flex: 1, marginTop: 10, marginBottom: 5 }]}>
-                                                <View style={styles.row}>
-                                                    <Image source={require('../../assets/images/product_light.png')} style={styles.icon}  />
-                                                    <Text style={[styles.text_light, { fontSize: 13, marginHorizontal: 5 }]}>{`ID: ${product?.id}`}</Text>
-                                                </View>
+                                                <Text style={[styles.text_light, { fontSize: 13, marginHorizontal: 5 }]}>{`ID: ${product?.id}`}</Text>
                                                 <Text style={[styles.text_light, { fontSize: 12, fontWeight: 500 }]}>{`SL: ${product?.stockAmount}`}</Text>
                                             </View>
                                             {active == 4 && <Text style={[styles.text_light, { fontSize: 12, marginBottom: 5 }]}>HSD: {convertTimeStamp(product.expireAt, 'dd/MM')}</Text>}

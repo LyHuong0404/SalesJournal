@@ -57,7 +57,7 @@ function Search() {
                 />
                 <TextInput
                     ref={searchRef}
-                    placeholder="Tìm kiếm theo tên sản phẩm"
+                    placeholder="Tìm kiếm theo tên"
                     placeholderTextColor="#8e8e93"
                     value={searchValue}
                     autoFocus
@@ -76,14 +76,7 @@ function Search() {
                     />
                 )}
                 </View>
-                {/* <TouchableOpacity>
-                    <Image source={require('../assets/images/qr_code.png')} style={{ width: 25, height: 25, objectFit: 'contain', marginLeft: 15 }}/>
-                </TouchableOpacity> */}
             </View>
-        {/* label_search */}
-            {/* <View style={styles.label_search}>
-                <Text style={{ color: '#a6a6a6', textAlign: 'center', fontSize: 12 }}>Tìm sản phẩm, đơn hàng, khách hàng...</Text>
-            </View> */}
 
         {/* search_results */}
             <ScrollView>
@@ -167,7 +160,7 @@ const styles = StyleSheet.create({
         width: 200, 
         height: 200, 
         objectFit: 'contain', 
-        marginBottom: 10
+        marginVertical: 50
     }
 })
 
