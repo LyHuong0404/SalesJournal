@@ -48,6 +48,7 @@ import MyQR from '../page/Auth/MyQR';
 import AboutUs from '../page/AboutUs';
 import ReturnOrderConfirmation from '../page/Order/ReturnOrderConfirmation';
 import ReturnOrderDetail from '../page/Order/ReturnOrderDetail';
+import Payment from '../page/Payment';
 
 
 const Tab = createBottomTabNavigator();
@@ -74,6 +75,7 @@ export const LoginNav = () => {
           <Stack.Screen name="CouponDetail" component={CouponDetail} options={{ headerShown: false }}/>
           <Stack.Screen name="ReturnOrderConfirmation" component={ReturnOrderConfirmation} options={{ headerShown: false }}/>
           <Stack.Screen name="ReturnOrderDetail" component={ReturnOrderDetail} options={{ headerShown: false }}/>
+          <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }}/>
       </Stack.Navigator>
     )
 }
@@ -101,6 +103,7 @@ export const UserLoggedNav = () => {
         <Stack.Screen name="CouponDetail" component={CouponDetail} options={{ headerShown: false }}/>
         <Stack.Screen name="ReturnOrderConfirmation" component={ReturnOrderConfirmation} options={{ headerShown: false }}/>
         <Stack.Screen name="ReturnOrderDetail" component={ReturnOrderDetail} options={{ headerShown: false }}/>
+        <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }}/>
     </Stack.Navigator>
   )
 }
@@ -124,6 +127,7 @@ export const AdminNav = () => {
         <Stack.Screen name="AboutUs" component={AboutUs} options={{ headerShown: false }}/>
         <Stack.Screen name="ReturnOrderConfirmation" component={ReturnOrderConfirmation} options={{ headerShown: false }}/>
         <Stack.Screen name="ReturnOrderDetail" component={ReturnOrderDetail} options={{ headerShown: false }}/>
+        <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }}/>
       </Stack.Navigator>
   )
 }
@@ -168,6 +172,7 @@ export const VendorNav = () => {
         <Stack.Screen name="AboutUs" component={AboutUs} options={{ headerShown: false }}/>
         <Stack.Screen name="ReturnOrderConfirmation" component={ReturnOrderConfirmation} options={{ headerShown: false }}/>
         <Stack.Screen name="ReturnOrderDetail" component={ReturnOrderDetail} options={{ headerShown: false }}/>
+        <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }}/>
       </Stack.Navigator>
   )
 }

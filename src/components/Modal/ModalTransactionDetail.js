@@ -21,10 +21,8 @@ function ModalTransactionDetail() {
             <View style={{ marginVertical: 10, flex: 1 }}>
                 <View style={styles.header}>
                     <View style={styles.display}>
-                        {/* <Image source={require('../assets/images/plus_circle_outline.png')} style={styles.icon_plus} /> */}
                         <Image source={require('../../assets/images/minus_circle_outline.png')} style={styles.icon_plus} />
                         <View>
-                            {/* <Text style={{ fontWeight: 'bold', color: '#3a3a3a' }}>Tôi đã nhận</Text> */}
                             <Text style={{ fontWeight: 'bold', color: '#3a3a3a' }}>Tôi đã đưa</Text>
                             <Text style={{ color: '#6f6f6f', fontSize: 10 }}>11:00 - 17/03/24</Text>
                         </View>

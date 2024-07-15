@@ -103,7 +103,7 @@ function ServicePackage() {
                     }
                 }}
             >
-                <ModalServicePackage servicePackage={serviceSelected} />
+                <ModalServicePackage servicePackage={serviceSelected} onNavigation={() => refRBSheet.current?.close()}/>
             </RBSheet>
             {loading && <LoadingSpinner />}
         </View>

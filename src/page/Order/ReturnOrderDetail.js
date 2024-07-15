@@ -15,7 +15,6 @@ function ReturnOrderDetail() {
     const [receipt, setReceipt] = useState(JSON.parse(JSON.stringify(route.params?.receipt || {})));
     const [status, requestPermission] = MediaLibrary.usePermissions();
     const viewRef = useRef();
-    console.log(receipt)
     
     useEffect(() => {
         if (receipt.returnProducts.length > 0 || receipt.receiptDetails.length > 0) {

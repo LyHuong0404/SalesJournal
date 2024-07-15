@@ -31,7 +31,7 @@ export const filterServicePackage = async({ pageIndex, pageSize, orderBy }) => {
 }
 
 
-export const createURLPayment = async({ servicePackageId, bankCode }) => { 
+export const createURLPaymentVNP = async({ servicePackageId, bankCode }) => { 
     const config = {
         headers: {
             'Content-Type': 'application/json',
@@ -42,6 +42,21 @@ export const createURLPayment = async({ servicePackageId, bankCode }) => {
         const response = await httprequest.post('create-url-payment', { servicePackageId, bankCode } , config);
         return response;
     } catch(err) {
-        console.log("Error when creating URL payment: ", err);
+        console.log("Error when creating URL payment (VNP): ", err);
+    }
+}
+
+export const createURLPaymentMomo = async({ servicePackageId, bankCode }) => { 
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+    
+    try {
+        const response = await httprequest.post('momo/create-url-payment', { servicePackageId, bankCode } , config);
+        return response;
+    } catch(err) {
+        console.log("Error when creating URL payment (momo): ", err);
     }
 }

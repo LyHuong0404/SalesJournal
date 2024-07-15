@@ -1,68 +1,48 @@
 import { memo, useState } from "react";
-import { StyleSheet, View, Text, Linking } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import { Button } from "react-native-paper";
-
-import { createURLPayment } from "../../actions/otherActions";
-import LoadingSpinner from "../LoadingSpinner";
+import { useNavigation } from "@react-navigation/native";
 
 
-function ModalServicePackage({ servicePackage }) {
+
+function ModalServicePackage({ servicePackage, onNavigation }) {
+    const navigation = useNavigation();
     const [data, setData] = useState(servicePackage || {});
-    const [loading, setLoading] = useState(false);
 
-    const handlePayment = () =>{
-        try {
-            const fetchAPI = async() => {
-                setLoading(true);
-                const response = await createURLPayment({ servicePackageId: data.id, bankCode: "NCB" });
-                if (response?.code == 0) {
-                    const url = response.data.urlPayment;
-                    Linking.openURL(url);
-                }
-                setLoading(false);
-            }
-            fetchAPI();
-        } catch (err) {
-            setLoading(false);
-            ToastAndroid.show('Lỗi khi chuyển trang thanh toán', ToastAndroid.SHORT);
-        }
-    }
     
     return ( 
-        <>
-            <View style={styles.container}>
-                <View style={{ borderBottomWidth: 1, borderBottomColor: '#e2e5ea'}}>
-                    <Text style={{ fontWeight: '600', textAlign: 'center', marginBottom: 10 }}>Đăng ký gói gia hạn</Text>
-                </View>
-               
-                <View style={{ flex: 1 }}>
-                    <View style={{ marginVertical: 10, borderBottomWidth: 1, borderBottomColor: '#e2e5ea' }}>
-                        <View style={styles.box_container}>
-                            <Text style={{ color: '#838383' }}>HSD</Text>
-                            <Text style={{ color: '#e19610', fontWeight: '600' }}>{`${data.day} ngày`}</Text>
-                        </View>
-                        <Text style={{ marginVertical: 20, color: '#838383', fontSize: 13 }}>Bạn đang thực hiện đăng ký gói 
-                            <Text style={{ color: '#3a3a3a' }}>{` GNC${data.id}`}</Text>
-                        </Text>
-                    </View>
-                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={{ marginBottom: 20, color: '#838383', fontSize: 13 }}>Thanh toán VNPAY</Text>
-                        <Text style={{ marginBottom: 20, color: '#838383', fontSize: 13 }}>Giá gói:  
-                            <Text style={{ color: '#3a3a3a' }}>{` ${data?.price}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>
-                        </Text>
-                    </View>
-                    <Button  
-                        mode="contained" 
-                        buttonColor="#e19610" 
-                        style={styles.button}
-                        onPress={handlePayment}
-                    >
-                        Thanh toán
-                    </Button>
-                </View>
+        <View style={styles.container}>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: '#e2e5ea'}}>
+                <Text style={{ fontWeight: '600', textAlign: 'center', marginBottom: 10 }}>Đăng ký gói gia hạn</Text>
             </View>
-            {loading && <LoadingSpinner />}
-        </>
+            <View style={{ flex: 1 }}>
+                <View style={{ marginVertical: 10, borderBottomWidth: 1, borderBottomColor: '#e2e5ea' }}>
+                    <View style={styles.box_container}>
+                        <Text style={{ color: '#838383' }}>HSD</Text>
+                        <Text style={{ color: '#e19610', fontWeight: '600' }}>{`${data.day} ngày`}</Text>
+                    </View>
+                    <Text style={{ marginVertical: 20, color: '#838383', fontSize: 13 }}>Bạn đang thực hiện đăng ký gói 
+                        <Text style={{ color: '#3a3a3a' }}>{` GNC${data.id}`}</Text>
+                    </Text>
+                </View>
+                <View style={{ alignItems: 'flex-end' }}>
+                    <Text style={{ marginBottom: 20, color: '#838383', fontSize: 13 }}>Giá gói:  
+                        <Text style={{ color: '#3a3a3a' }}>{` ${data?.price}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}₫</Text>
+                    </Text>
+                </View>
+                <Button  
+                    mode="contained" 
+                    buttonColor="#e19610" 
+                    style={styles.button}
+                    onPress={() => {
+                        navigation.navigate("Payment", { servicePackage: data });
+                        onNavigation();
+                    }}
+                >
+                    Thanh toán
+                </Button>
+            </View>
+        </View>
     );
 }
 
