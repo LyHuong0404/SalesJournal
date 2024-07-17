@@ -3,8 +3,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 const httprequest = axios.create({
-    baseURL: "https://apisalesjournal.cfapps.ap21.hana.ondemand.com/api/",
+    // baseURL: "https://apisalesjournal.cfapps.ap21.hana.ondemand.com/api/",
     // baseURL: "http://192.168.1.57:8888/api/",
+    baseURL: "http://192.168.11.126:8888/api/",
 
 });
 

@@ -22,7 +22,7 @@ function Home() {
   const refRBSheetCamera = useRef();
   const [date, setDate] = useState(format(new Date(Date.now()), 'yyyy-MM-dd'));
   const [revenue, setRevenue] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
 
   const fetchAPI = async()=> {
     const response = await filterReport({ fromDate: date, toDate: date});
@@ -37,11 +37,11 @@ function Home() {
       const expireAt = utils.endOfDate(new Date(user?.profile?.expireAt))
       const currentDate = new Date();
       if(currentDate.getTime() > expireAt.getTime()) {
-        setShowModal(true);
+        // setShowModal(true);
       }
       else {
         fetchAPI();
-        setShowModal(false);
+        // setShowModal(false);
       };
   }, [])
 
@@ -219,7 +219,8 @@ function Home() {
               />
           </RBSheet>
       </ScrollView>
-      {showModal && <ModalExpire />}
+      {/* {showModal && <ModalExpire />} */}
+      <ModalExpire />
     </View>
   );
 }
