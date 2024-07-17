@@ -77,23 +77,24 @@ function SaleManagement() {
 
     return ( 
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-                <View style={styles.header}>
+            <View style={styles.header}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image source={require('../../assets/images/right_arrow.png')} style={{ width: 17, height: 17, objectFit: 'contain' }}/>
-                    <Text style={{ fontWeight: 'bold' }}>Quản lý khuyến mãi</Text>            
-                    {!searchbarVisible ? 
-                        (<TouchableOpacity onPress={() => setSearchbarVisible(true)}>
-                            <Image source={require('../../assets/images/search.png')} style={{ width: 25, height: 20, objectFit: 'contain', marginRight: 15, tintColor: '#000000' }}/>
-                        </TouchableOpacity>) : 
-                        (<TouchableOpacity onPress={() => {
-                                setSearchbarVisible(false);
-                                setSearchValue(null);
-                            }}>
-                            <Image source={require('../../assets/images/close.png')} style={{ width: 25, height: 20, objectFit: 'contain', marginRight: 15, tintColor: '#000000' }}/>
-                        </TouchableOpacity>
-                    )} 
-                </View>
-            </TouchableOpacity>
+                </TouchableOpacity>
+
+                <Text style={{ fontWeight: 'bold' }}>Quản lý khuyến mãi</Text>            
+                {!searchbarVisible ? 
+                    (<TouchableOpacity onPress={() => setSearchbarVisible(true)}>
+                        <Image source={require('../../assets/images/search.png')} style={{ width: 25, height: 20, objectFit: 'contain', marginRight: 15, tintColor: '#000000' }}/>
+                    </TouchableOpacity>) : 
+                    (<TouchableOpacity onPress={() => {
+                            setSearchbarVisible(false);
+                            setSearchValue(null);
+                        }}>
+                        <Image source={require('../../assets/images/close.png')} style={{ width: 25, height: 20, objectFit: 'contain', marginRight: 15, tintColor: '#000000' }}/>
+                    </TouchableOpacity>
+                )} 
+            </View>
             {searchbarVisible &&(<Animatable.View animation="zoomIn" duration={50} style={{ backgroundColor: 'white' }}>
                 <View style={{ marginHorizontal: 15, borderRadius: 5, backgroundColor: '#f8f9fa', borderColor: '#15803D', borderWidth: 1, height: 40, flexDirection: 'row', alignItems: 'center' }}>
                     <Searchbar

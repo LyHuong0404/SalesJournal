@@ -192,7 +192,7 @@ function AdminHome() {
 
         <View style={{ marginBottom: 20 }}>
           <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-              <View style={{ marginLeft: 20, flex: 0.7 }}>
+              <View style={{ marginLeft: 20, flex: 0.7}}>
                   <Text style={{ marginBottom: 0, color: '#000000', fontWeight: 'bold'}}>Thông báo</Text>
                   <Text style={styles.text_light}>Bấm Gửi để gửi thông báo đến những tài khoản người dùng sắp hết hạn</Text> 
               </View>
@@ -212,17 +212,6 @@ function AdminHome() {
                 style={styles.fab}
                 onPress={handleSendNotificationProductExpire}
                 variant='primary'
-              />
-          </View>
-          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 25 }}>
-              <View style={{ marginLeft: 20, flex: 0.7 }}>
-                  <Text style={styles.text_light}>Bấm Gửi để gửi thông báo đến những người mua hàng</Text> 
-              </View>
-              <FAB
-                icon="send"
-                style={styles.fab}
-                onPress={handleSendNotificationProductExpire}
-                variant='tertiary'
               />
           </View>
         </View>
