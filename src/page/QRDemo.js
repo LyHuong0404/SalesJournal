@@ -104,7 +104,7 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
                         if (response?.code == 0) {
                             navigation.navigate('ReturnOrderConfirmation', { receipt: response?.data });
                         } else {
-                            ToastAndroid.show('Mã đơn hàng không tồn tại', ToastAndroid.SHORT);
+                            ToastAndroid.show('Mã đơn hàng không hợp lệ', ToastAndroid.SHORT);
                         }
                         onScanSuccess();
                         setLoading(false);
@@ -113,7 +113,7 @@ export default function QRDemo({ ArrayQRAndAmount, onScanSuccess, action, close 
                 } catch (err) {
                     close();
                     setLoading(false);
-                    ToastAndroid.show('Mã đơn hàng không tồn tại', ToastAndroid.SHORT);
+                    ToastAndroid.show('Mã đơn hàng không hợp lệ', ToastAndroid.SHORT);
                 }
             } else {
                 //check exist code 

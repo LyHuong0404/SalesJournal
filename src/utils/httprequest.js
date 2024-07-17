@@ -68,7 +68,6 @@ const waitProcessComplete = async () => {
 
 const middlewareRefreshToken = async (code, args) => {
     if(code === 503) {
-        console.log("okokok");
         (await import('../store')).default.dispatch(popupGlobal({open: true, message: "Hệ thống đang bảo trì"}));
         return null;
     }

@@ -23,7 +23,6 @@ function ModalInputProductCode({ ArrayQRAndAmount, onScanSuccess }) {
                 try {
                     const fetchData = async() => {
                         const response = await getProductByCode(code);
-                        console.log(response)
                         if (response) {
                             const newFormatProductDisplay = { product: response, amount: 1 }
                             onScanSuccess(newFormatProductDisplay)
