@@ -5,7 +5,6 @@ import { memo } from "react";
 const options = [
     {value: 'null', title: "Mới nhất"},
     {value: 'desc_totalSaleAmount', title: "Sản phẩm bán chạy"},
-    {value: 'giamgia', title: "Sản phẩm giảm giá"},
     {value: 'desc_salePrice', title: "Giá từ cao đến thấp"},
     {value: 'salePrice', title: "Giá từ thấp đến cao"},
 ]
