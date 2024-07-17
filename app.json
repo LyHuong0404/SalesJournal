@@ -25,14 +25,15 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.lyhuong.SoBanHang",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "usesCleartextTraffic": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "01af01a1-f80b-4ad9-9fc1-87771bba6e12"
+        "projectId": "0e674e53-ee33-403b-bb4b-7eac26af598e"
       }
     }
   }
