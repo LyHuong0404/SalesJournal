@@ -95,7 +95,7 @@ function CreateProduct() {
                 if (response?.code == 0) {
                     ToastAndroid.show('Lưu sản phẩm thành công', ToastAndroid.SHORT);
                     navigation.navigate('ProductManagement');
-                } else if (!response) {
+                } else if (response?.success == false) {
                     ToastAndroid.show('Mã sản phẩm đã tồn tại', ToastAndroid.SHORT);
                 } else {
                     ToastAndroid.show('Lưu sản phẩm không thành công', ToastAndroid.SHORT);
