@@ -65,6 +65,8 @@ function ImportProductInfo() {
                 if (response?.code == 0) {
                     ToastAndroid.show('Nhập sản phẩm thành công', ToastAndroid.SHORT);
                     navigation.navigate('ImportProduct');
+                } else if (response?.code == 400) {
+                    ToastAndroid.show('Mã sản phẩm đã tồn tại', ToastAndroid.SHORT);
                 } else {
                     ToastAndroid.show('Nhập sản phẩm không thành công', ToastAndroid.SHORT);
                 }
