@@ -195,7 +195,8 @@ async function registerForPushNotificationsAsync() {
     // token = (await Notifications.getDevicePushTokenAsync({ projectId: '02b29ea0-5b32-4138-babf-8f739813e5a6' })).data; //lyhuong2002@gmail.com
     // token = (await Notifications.getDevicePushTokenAsync({ projectId: '01af01a1-f80b-4ad9-9fc1-87771bba6e12' })).data; //tienhkdev
     // token = (await Notifications.getDevicePushTokenAsync({ projectId: '0e674e53-ee33-403b-bb4b-7eac26af598e' })).data; //hokimtien2002@gmail.com
-    token = (await Notifications.getDevicePushTokenAsync({ projectId: 'b6a9ea24-72c4-4797-92ae-f2f408de0cf1' })).data; // 20110572@student.hcmute.edu.vn
+    // token = (await Notifications.getDevicePushTokenAsync({ projectId: 'b6a9ea24-72c4-4797-92ae-f2f408de0cf1' })).data; // 20110572@student.hcmute.edu.vn
+    token = (await Notifications.getDevicePushTokenAsync({ projectId: 'f874688a-2ed1-4437-884e-8e750dc1adfa' })).data; // hokimtien0202
     //https://docs.expo.dev/push-notifications/fcm-credentials/
     //https://docs.expo.dev/versions/latest/sdk/notifications/
     //https://docs.expo.dev/push-notifications/sending-notifications-custom/

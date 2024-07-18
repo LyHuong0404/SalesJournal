@@ -25,15 +25,24 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.lyhuong.SoBanHang",
-      "googleServicesFile": "./google-services.json",
-      "usesCleartextTraffic": true
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
+    ],
     "extra": {
       "eas": {
-        "projectId": "b6a9ea24-72c4-4797-92ae-f2f408de0cf1"
+        "projectId": "f874688a-2ed1-4437-884e-8e750dc1adfa"
       }
     }
   }
